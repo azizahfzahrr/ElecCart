@@ -27,7 +27,6 @@
                     android:layout_height="100dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/airpodsmax" />
-
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
@@ -154,5 +153,4 @@
                 </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

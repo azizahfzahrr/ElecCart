@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.azizahfzahrr.eleccart.databinding.ActivityMainBinding
+import com.azizahfzahrr.eleccart.presentation.view.cart.CartFragment
 import com.azizahfzahrr.eleccart.presentation.view.home.HomeFragment
 import dagger.hilt.android.AndroidEntryPoint
 

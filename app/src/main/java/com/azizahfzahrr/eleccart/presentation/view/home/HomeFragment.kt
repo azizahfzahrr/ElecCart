@@ -8,14 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.azizahfzahrr.eleccart.DetailProductActivity
 import com.azizahfzahrr.eleccart.databinding.FragmentHomeBinding
-import com.azizahfzahrr.eleccart.presentation.adapter.ProductsAdapter
+import com.azizahfzahrr.eleccart.presentation.adapter.HomeFragmentAdapter
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
+import com.azizahfzahrr.eleccart.data.source.local.CartManager
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -23,7 +26,8 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
-    private lateinit var productsAdapter: ProductsAdapter
+    private lateinit var homeFragmentAdapter: HomeFragmentAdapter
+    private lateinit var cartManager: CartManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,18 +40,25 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        cartManager = CartManager(requireContext())
         setupUI()
         observeViewModel()
-        viewModel.loadAllProducts()
+        viewModel.loadAllProducts() // Load all products initially
         setupCategoryChips()
     }
 
     private fun setupCategoryChips() {
-        binding.chipCategoryTv.setOnClickListener { onCategorySelected("TV", binding.chipCategoryTv) }
-        binding.chipCategoryAudio.setOnClickListener { onCategorySelected("Audio", binding.chipCategoryAudio) }
-        binding.chipCategorySmartphone.setOnClickListener { onCategorySelected("Smartphone", binding.chipCategorySmartphone) }
-        binding.chipCategoryGaming.setOnClickListener { onCategorySelected("Gaming", binding.chipCategoryGaming) }
-        binding.chipCategoryAppliance.setOnClickListener { onCategorySelected("Appliance", binding.chipCategoryAppliance) }
+        val chips = listOf(
+            binding.chipCategoryTv to "TV",
+            binding.chipCategoryAudio to "Audio",
+            binding.chipCategorySmartphone to "Smartphone",
+            binding.chipCategoryGaming to "Gaming",
+            binding.chipCategoryAppliance to "Appliance"
+        )
+
+        chips.forEach { (chip, category) ->
+            chip.setOnClickListener { onCategorySelected(category, chip) }
+        }
     }
 
     private fun onCategorySelected(category: String, selectedChip: Chip) {
@@ -55,40 +66,54 @@ class HomeFragment : Fragment() {
         selectedChip.isChecked = true
         viewModel.clearProducts()
         viewModel.resetPagination()
-        Log.d("Selected Category", "Category selected: $category")
+        Log.d("HomeFragment", "Category selected: $category")
         viewModel.loadProductsByCategory(category)
     }
 
-
     private fun clearAllChipSelections() {
-        binding.chipCategoryTv.isChecked = false
-        binding.chipCategoryAudio.isChecked = false
-        binding.chipCategorySmartphone.isChecked = false
-        binding.chipCategoryGaming.isChecked = false
-        binding.chipCategoryAppliance.isChecked = false
+        listOf(
+            binding.chipCategoryTv,
+            binding.chipCategoryAudio,
+            binding.chipCategorySmartphone,
+            binding.chipCategoryGaming,
+            binding.chipCategoryAppliance
+        ).forEach { it.isChecked = false }
     }
 
     private fun setupUI() {
         val layoutManager = GridLayoutManager(context, 2)
         binding.rvListProducts.layoutManager = layoutManager
-        productsAdapter = ProductsAdapter { product ->
-            val intent = Intent(requireContext(), DetailProductActivity::class.java)
-            intent.putExtra("product", product)
-            startActivity(intent)
-        }
-        binding.rvListProducts.adapter = productsAdapter
+
+        homeFragmentAdapter = HomeFragmentAdapter(object : HomeFragmentAdapter.OnAddToCartClickListener {
+            override fun onAddToCartClick(product: ProductsResponse.Product) {
+                lifecycleScope.launch {
+                    if (!cartManager.isProductInCart(product)) {
+                        cartManager.addProductToCart(product)
+                        Log.d("HomeFragment", "Product added to cart: ${product.title}")
+                    } else {
+                        Log.d("HomeFragment", "Product is already in the cart: ${product.title}")
+                    }
+                }
+            }
+            override fun onProductClick(product: ProductsResponse.Product) {
+                val intent = Intent(requireContext(), DetailProductActivity::class.java)
+                intent.putExtra("product", product) // Pass the product to the activity
+                startActivity(intent)
+            }
+        })
+
+        binding.rvListProducts.adapter = homeFragmentAdapter
+        binding.rvListProducts.adapter = homeFragmentAdapter
 
         binding.rvListProducts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0) {
+                if (dy > 0 && !viewModel.loading.value!! && !viewModel.isLastPage) {
                     val visibleItemCount = layoutManager.childCount
                     val totalItemCount = layoutManager.itemCount
                     val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-                    if (!viewModel.loading.value!! && !viewModel.isLastPage &&
-                        (visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0
-                    ) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
                         viewModel.loadAllProducts()
                     }
                 }
@@ -96,14 +121,11 @@ class HomeFragment : Fragment() {
         })
     }
 
-
     private fun observeViewModel() {
         viewModel.products.observe(viewLifecycleOwner) { products ->
             Log.d("HomeFragment", "Observed products: $products")
-            productsAdapter.submitList(products)
-            productsAdapter.notifyDataSetChanged()
+            homeFragmentAdapter.submitList(products)
         }
-
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
                 Log.e("HomeFragment", "Error: $it")

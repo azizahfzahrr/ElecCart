@@ -76,8 +76,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
-
     fun clearProducts() {
         _products.value = emptyList()
     }

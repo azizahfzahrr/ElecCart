@@ -1,6 +1,7 @@
 package com.azizahfzahrr.eleccart.data.repository
 
 import android.util.Log
+import com.azizahfzahrr.eleccart.data.model.CartResponse
 import com.azizahfzahrr.eleccart.data.model.ProductRequest
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.data.source.remote.RemoteDataSource
@@ -59,7 +60,7 @@ class ProductRepositoryImpl @Inject constructor(
             remoteDataSource.postProduct(productRequest)
         } catch (e: Exception) {
             Log.e("ProductRepositoryImpl", "Error posting new product: ${e.message}")
-            throw e 
+            throw e
         }
     }
 }
