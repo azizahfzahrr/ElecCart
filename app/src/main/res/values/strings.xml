@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">ElecCart</string>
+    <string name="eleccart">ElecCart</string>
+    <string name="tv_subtitle_onboard">We Provide The Best\nElectronic Product From Great Brands</string>
+    <string name="tv_subtitle_onboard_2">You will be able to find a wide selection\nof electrics from top brands</string>
+    <string name="create_account">Create Account</string>
+    <string name="create_an_account_so_you_can_explore_all_the_electronic_products">Create an account so you can explore all the\nelectronic products</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="or_continue_with">Or continue with</string>
+    <string name="login_here">Login here</string>
+    <string name="welcome_back_you_ve_been_missed">Welcome back you\'ve been missed!</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="sign_in">Sign in</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="cart">Cart</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="price_format">$%1$.2f</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_here">Search here...</string>
+    <string name="recent_added">Recent Added</string>
+    <string name="list_products">List Products</string>
+    <string name="description_fill_detail_product">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="buy_now">Buy Now</string>
+</resources>

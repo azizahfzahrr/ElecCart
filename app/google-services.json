@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "990817310007",
+    "project_id": "final-project-eleccart",
+    "storage_bucket": "final-project-eleccart.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990817310007:android:71de9f251cb33eea7736b2",
+        "android_client_info": {
+          "package_name": "com.azizahfzahrr.eleccart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPDdIUpUYQzyrsHJITUKdcRtns1BcVnoU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

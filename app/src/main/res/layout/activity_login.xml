@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+    <TextView
+        android:id="@+id/tv_title_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="94dp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="@string/login_here"
+        android:textColor="@color/color_primary"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_subtitle_signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppins"
+        android:text="@string/welcome_back_you_ve_been_missed"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title_login"
+        app:layout_constraintStart_toStartOf="@+id/tv_title_login"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_login" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_email_signup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="24dp"
+        android:hint="@string/email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_subtitle_signup">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_email_signup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_password_signup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:hint="@string/password"
+        app:endIconMode="password_toggle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/til_email_signup">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_password_signup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_forgot_password_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Forgot your password?"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="@+id/til_password_signup"
+        app:layout_constraintTop_toBottomOf="@+id/til_password_signup" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_signin"
+        android:layout_width="357dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/color_primary"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/sign_in"
+        android:textSize="20sp"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/til_password_signup"
+        app:layout_constraintStart_toStartOf="@+id/til_password_signup"
+        app:layout_constraintTop_toBottomOf="@+id/tv_forgot_password_login" />
+
+    <TextView
+        android:id="@+id/tv_already_have_an_account_signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/create_new_account"
+        android:textColor="@color/black_200"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_signin"
+        app:layout_constraintStart_toStartOf="@+id/btn_signin"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signin" />
+
+    <TextView
+        android:id="@+id/tv_or_continue_with_signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="62dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/or_continue_with"
+        android:textColor="@color/color_secondary"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_already_have_an_account_signup"
+        app:layout_constraintStart_toStartOf="@+id/tv_already_have_an_account_signup"
+        app:layout_constraintTop_toBottomOf="@+id/tv_already_have_an_account_signup" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_google_login"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="62dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_or_continue_with_signup"
+        app:layout_constraintStart_toStartOf="@+id/tv_or_continue_with_signup"
+        app:layout_constraintTop_toBottomOf="@+id/tv_or_continue_with_signup">
+
+        <ImageView
+            android:id="@+id/iv_google_signin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src="@drawable/google" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
