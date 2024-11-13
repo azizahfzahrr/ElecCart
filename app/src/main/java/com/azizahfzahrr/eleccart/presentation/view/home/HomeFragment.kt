@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
         cartManager = CartManager(requireContext())
         setupUI()
         observeViewModel()
-        viewModel.loadAllProducts() // Load all products initially
+        viewModel.loadAllProducts()
         setupCategoryChips()
     }
 
@@ -97,7 +97,7 @@ class HomeFragment : Fragment() {
             }
             override fun onProductClick(product: ProductsResponse.Product) {
                 val intent = Intent(requireContext(), DetailProductActivity::class.java)
-                intent.putExtra("product", product) // Pass the product to the activity
+                intent.putExtra("product", product)
                 startActivity(intent)
             }
         })
@@ -123,12 +123,23 @@ class HomeFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.products.observe(viewLifecycleOwner) { products ->
-            Log.d("HomeFragment", "Observed products: $products")
-            homeFragmentAdapter.submitList(products)
+            Log.d("HomeFragment", "Observed products: ${products.size} items")
+
+            if (products.isNullOrEmpty()) {
+                binding.rvListProducts.visibility = View.GONE
+                binding.tvNoDataHome.visibility = View.VISIBLE
+            } else {
+                binding.rvListProducts.visibility = View.VISIBLE
+                binding.tvNoDataHome.visibility = View.GONE
+                homeFragmentAdapter.submitList(products)
+            }
         }
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
                 Log.e("HomeFragment", "Error: $it")
+                binding.tvNoDataHome.text = "Failed to load products"
+                binding.tvNoDataHome.visibility = View.VISIBLE
+                binding.rvListProducts.visibility = View.GONE
             }
         }
     }

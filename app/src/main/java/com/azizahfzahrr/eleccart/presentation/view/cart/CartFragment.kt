@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.data.local.entity.CartItem
 import com.azizahfzahrr.eleccart.databinding.FragmentCartBinding
 import com.azizahfzahrr.eleccart.presentation.adapter.CartAdapter
@@ -23,9 +24,11 @@ class CartFragment : Fragment() {
 
     private lateinit var cartAdapter: CartAdapter
     private var productsResponse: ProductsResponse? = null
-
     private lateinit var binding: FragmentCartBinding
     private val viewModel: CartViewModel by viewModels()
+
+    private val selectedItems = mutableListOf<CartItem>()
+    private var isOrderSummaryVisible = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,8 +62,36 @@ class CartFragment : Fragment() {
                     binding.rvProductCart.visibility = View.VISIBLE
                     cartAdapter.submitList(cartItems)
                 }
+                updateOrderSummary()
             }
         }
+        binding.ivArrowUpProductCart.setOnClickListener {
+            isOrderSummaryVisible = !isOrderSummaryVisible
+            updateOrderSummaryVisibility()
+        }
+        updateOrderSummaryVisibility()
+    }
+
+    private fun updateOrderSummaryVisibility() {
+        if (isOrderSummaryVisible) {
+            binding.tvOrderSummary.visibility = View.VISIBLE
+            binding.tvTotalProductCart.visibility = View.VISIBLE
+            binding.tvTotalPriceCart.visibility = View.VISIBLE
+            binding.tvTotalItemsCart.visibility = View.VISIBLE
+            binding.tvFillTotalItemsCart.visibility = View.VISIBLE
+            binding.ivArrowUpProductCart.setImageResource(R.drawable.arrow_up)
+        } else {
+            binding.tvOrderSummary.visibility = View.VISIBLE
+            binding.tvTotalProductCart.visibility = View.GONE
+            binding.tvTotalPriceCart.visibility = View.GONE
+            binding.tvTotalItemsCart.visibility = View.GONE
+            binding.tvFillTotalItemsCart.visibility = View.GONE
+            binding.ivArrowUpProductCart.setImageResource(R.drawable.arrow_down)
+        }
+        val visibility = if (isOrderSummaryVisible) View.VISIBLE else View.GONE
+        binding.tvTotalProductCart.visibility = visibility
+        binding.tvTotalPriceCart.visibility = visibility
+        binding.tvTotalItemsCart.visibility = visibility
     }
 
     private fun removeProductFromCart(product: CartItem) {
@@ -79,5 +110,15 @@ class CartFragment : Fragment() {
         val updatedItem = product.copy(isSelected = !product.isSelected)
         viewModel.updateItemInCart(updatedItem)
     }
-}
 
+    private fun updateOrderSummary() {
+        val totalAmount = selectedItems.sumByDouble {
+            (it.price!!.toDouble()) * (it.quantity ?: 1)
+        }
+        val totalItems = selectedItems.size
+
+        binding.tvTotalPriceCart.text = "$${"%.2f".format(totalAmount)}"
+        binding.tvFillTotalItemsCart.text = "$totalItems items"
+    }
+
+}

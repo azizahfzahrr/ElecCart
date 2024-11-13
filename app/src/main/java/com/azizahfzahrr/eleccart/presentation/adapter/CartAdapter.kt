@@ -18,17 +18,16 @@ class CartAdapter(
 
         fun bind(product: CartItem) {
             binding.tvNameProductCart.text = product.title
-            binding.tvPriceProductCart.text = product.price.toString()
-            binding.tvFillAmountProductCart.text = product.quantity?.toString() ?: "1" // Menampilkan kuantitas yang benar
+            binding.tvPriceProductCart.text = "$${product.price?.let { "%.2f".format(it.toDouble()) }}"
+            binding.tvFillAmountProductCart.text = product.quantity?.toString() ?: "1"
 
             Glide.with(binding.ivProductCart.context)
                 .load(product.image)
                 .into(binding.ivProductCart)
 
-            // Menyesuaikan status checkbox dengan data produk
             binding.checkboxProductCart.isChecked = product.isSelected
             binding.checkboxProductCart.setOnCheckedChangeListener { _, isChecked ->
-                onCheckboxClick(product.copy(isSelected = isChecked)) // Memperbarui status isSelected
+                onCheckboxClick(product.copy(isSelected = isChecked))
             }
 
             binding.cardviewDeleteCart.setOnClickListener {
@@ -36,11 +35,11 @@ class CartAdapter(
             }
 
             binding.cardviewMinusCart.setOnClickListener {
-                onQuantityChange(product, -1) // Menurunkan kuantitas
+                onQuantityChange(product, -1)
             }
 
             binding.cardviewPlusCart.setOnClickListener {
-                onQuantityChange(product, 1) // Menambah kuantitas
+                onQuantityChange(product, 1)
             }
         }
     }

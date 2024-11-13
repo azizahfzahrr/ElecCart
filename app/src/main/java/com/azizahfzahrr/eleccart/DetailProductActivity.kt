@@ -47,7 +47,7 @@ class DetailProductActivity : AppCompatActivity() {
 
 
         binding.cardWishlistDetailProduct.setOnClickListener {
-            // Handle wishlist item click
+
         }
 
         binding.btnAddToCartDetailProduct.setOnClickListener {

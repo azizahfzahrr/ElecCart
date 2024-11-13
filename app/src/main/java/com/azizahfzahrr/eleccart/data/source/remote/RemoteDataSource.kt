@@ -9,7 +9,7 @@ import javax.inject.Inject
 interface RemoteDataSource {
     suspend fun fetchAllProducts(page: Int, limit: Int? = null, sort: String? = null): ProductsResponse
     suspend fun fetchProductDetail(id: Int): ProductsResponse.Product
-    suspend fun fetchProductsByCategory(category: String, page: Int): ProductsResponse
+    suspend fun fetchProductsByCategory(category: String): ProductsResponse
     suspend fun fetchAllCategories(): List<String>
     suspend fun postProduct(productRequest: ProductRequest)
 }
@@ -27,10 +27,16 @@ class RemoteDataSourceImpl @Inject constructor(
         return apiService.getProductsDetail(id)
     }
 
-    override suspend fun fetchProductsByCategory(category: String, page: Int): ProductsResponse {
-        val response = apiService.getProductsByCategory(category, page)
-        Log.d("RemoteDataSourceImpl", "Fetched products for category $category: ${response.products}")
-        return response
+//    override suspend fun fetchProductsByCategory(category: String): ProductsResponse {
+//        val response = apiService.getProductsByCategory(category)
+//        Log.d("RemoteDataSourceImpl", "Fetched products for category $category: ${response.products}")
+//        return response
+//    }
+    override suspend fun fetchProductsByCategory(category: String): ProductsResponse {
+        val response = apiService.getProductsByCategory(category)
+        val products = response.products?.filterNotNull() ?: emptyList()
+        Log.d("RemoteDataSourceImpl", "Fetched products for category $category: $products")
+        return response.copy(products = products)
     }
 
 

@@ -53,11 +53,14 @@ class HomeViewModel @Inject constructor(
     }
 
     fun loadProductsByCategory(category: String) {
+        if (_loading.value == true || isLastPage) return
+
         _loading.value = true
         resetPagination()
         viewModelScope.launch {
             try {
-                val productsResponse = productUseCase.getProductsByCategory(category, page = currentPage)
+                Log.d("HomeViewModel", "Fetching products for category: $category")
+                val productsResponse = productUseCase.getProductsByCategory(category)
                 val newProducts = productsResponse.products?.filterNotNull() ?: emptyList()
 
                 Log.d("HomeViewModel", "Fetched products for category $category: $newProducts")

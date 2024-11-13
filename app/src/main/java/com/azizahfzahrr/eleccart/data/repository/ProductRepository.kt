@@ -10,7 +10,7 @@ import javax.inject.Inject
 interface ProductRepository {
     suspend fun getAllProducts(page: Int, limit: Int? = null, sort: String? = null): ProductsResponse
     suspend fun getProductDetail(id: Int): ProductsResponse.Product
-    suspend fun getProductsByCategory(category: String, page: Int): ProductsResponse
+    suspend fun getProductsByCategory(category: String): ProductsResponse
     suspend fun getAllCategories(): List<String>
     suspend fun addProduct(productRequest: ProductRequest)
 }
@@ -37,12 +37,15 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getProductsByCategory(category: String, page: Int): ProductsResponse {
+    override suspend fun getProductsByCategory(category: String): ProductsResponse {
         return try {
-            remoteDataSource.fetchProductsByCategory(category, page)
+            val formattedCategory = category.trim().lowercase()
+            val response = remoteDataSource.fetchProductsByCategory(formattedCategory)
+            Log.d("ProductRepositoryImpl", "Fetched products for category $formattedCategory: ${response.products}")
+            response
         } catch (e: Exception) {
             Log.e("ProductRepositoryImpl", "Error fetching products for category $category: ${e.message}")
-            ProductsResponse(message = "Error fetching category products", products = emptyList(), status = "error")
+            return ProductsResponse(message = "Error fetching category products", products = emptyList(), status = "error")
         }
     }
 

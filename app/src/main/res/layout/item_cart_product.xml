@@ -31,13 +31,15 @@
 
         <TextView
             android:id="@+id/tv_name_product_cart"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:ellipsize="end"
             android:fontFamily="@font/poppins_bold"
+            android:maxLines="1"
             android:text="Apple Airpods Max"
             android:textColor="@color/black_200"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@id/cv_image_cart"
             app:layout_constraintTop_toTopOf="@id/cv_image_cart" />
 
@@ -153,4 +155,5 @@
                 </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

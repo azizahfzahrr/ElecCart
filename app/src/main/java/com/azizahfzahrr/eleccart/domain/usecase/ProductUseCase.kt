@@ -17,8 +17,8 @@ class ProductUseCase @Inject constructor(
         return productRepository.getProductDetail(id)
     }
 
-    suspend fun getProductsByCategory(category: String, page: Int): ProductsResponse {
-        return productRepository.getProductsByCategory(category, page)
+    suspend fun getProductsByCategory(category: String): ProductsResponse {
+        return productRepository.getProductsByCategory(category)
     }
 
     suspend fun getAllCategories(): List<String> {

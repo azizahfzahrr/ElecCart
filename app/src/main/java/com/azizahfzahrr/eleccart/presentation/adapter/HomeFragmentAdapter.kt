@@ -26,7 +26,6 @@ class HomeFragmentAdapter(
                 .load(product.image)
                 .into(binding.ivProductImage)
 
-            // Set click listener on product item
             binding.root.setOnClickListener {
                 listener.onProductClick(product)
             }
