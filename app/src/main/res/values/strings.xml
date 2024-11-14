@@ -27,4 +27,17 @@
     <string name="description_fill_detail_product">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
     <string name="add_to_cart">Add to Cart</string>
     <string name="buy_now">Buy Now</string>
+    <string name="details_product">Details Product</string>
+    <string name="apple_airpods_max">Apple Airpods Max</string>
+    <string name="_199_99">$199,99</string>
+    <string name="description_of_product">Description of product</string>
+    <string name="type_product_wishlist">Model: WH-1000XM4, Black</string>
+    <string name="checkout">Checkout</string>
+    <string name="cart_is_empty">Cart is empty</string>
+    <string name="payment_now">Payment Now</string>
+    <string name="_3_items">3 items</string>
+    <string name="total_items">Total Items</string>
+    <string name="total">Total</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="my_cart">My Cart</string>
 </resources>

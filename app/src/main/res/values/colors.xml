@@ -4,9 +4,12 @@
     <color name="black_200">#494949</color>
     <color name="black_300">#200E32</color>
     <color name="grey">#DFE6E9</color>
+    <color name="grey_100">#F5F5F5</color>
     <color name="grey_300">#939393</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey_200">#C8C8CB</color>
     <color name="color_primary">#16C782</color>
     <color name="color_secondary">#0ACF83</color>
+    <color name="wishlist_filled">#DC143C</color>
+    <color name="wishlist_empty">#FFFFFF</color>
 </resources>

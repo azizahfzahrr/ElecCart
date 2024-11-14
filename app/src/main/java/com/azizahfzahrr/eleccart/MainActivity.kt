@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import com.azizahfzahrr.eleccart.databinding.ActivityMainBinding
 import com.azizahfzahrr.eleccart.presentation.view.cart.CartFragment
 import com.azizahfzahrr.eleccart.presentation.view.home.HomeFragment
+import com.azizahfzahrr.eleccart.presentation.view.wishlist.WishlistFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        replaceFragment(HomeFragment())
 
         binding.bottomNavigationView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId){

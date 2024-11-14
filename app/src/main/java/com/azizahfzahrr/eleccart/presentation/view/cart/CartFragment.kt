@@ -54,15 +54,26 @@ class CartFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.allCartItems.collect { cartItems ->
-                if (cartItems.isEmpty()) {
+                if (cartItems.isNullOrEmpty()) {
                     binding.tvNoData.visibility = View.VISIBLE
+                    binding.ivDataEmpty.visibility = View.VISIBLE
                     binding.rvProductCart.visibility = View.GONE
+
+                    binding.tvOrderSummary.visibility = View.GONE
+                    binding.tvTotalProductCart.visibility = View.GONE
+                    binding.tvTotalPriceCart.visibility = View.GONE
+                    binding.tvTotalItemsCart.visibility = View.GONE
+                    binding.tvFillTotalItemsCart.visibility = View.GONE
+                    binding.ivArrowUpProductCart.visibility = View.GONE
+                    binding.btnPaymentNow.visibility = View.GONE
                 } else {
                     binding.tvNoData.visibility = View.GONE
+                    binding.ivDataEmpty.visibility = View.GONE
                     binding.rvProductCart.visibility = View.VISIBLE
+
                     cartAdapter.submitList(cartItems)
+                    updateOrderSummary()
                 }
-                updateOrderSummary()
             }
         }
         binding.ivArrowUpProductCart.setOnClickListener {
@@ -96,6 +107,8 @@ class CartFragment : Fragment() {
 
     private fun removeProductFromCart(product: CartItem) {
         viewModel.deleteItemFromCart(product)
+        selectedItems.remove(product)
+        updateOrderSummary()
     }
 
     private fun updateQuantity(product: CartItem, quantityChange: Int) {
@@ -103,22 +116,31 @@ class CartFragment : Fragment() {
         if (updatedQuantity > 0) {
             val updatedItem = product.copy(quantity = updatedQuantity)
             viewModel.updateItemInCart(updatedItem)
+            if (product.isSelected){
+                selectedItems.find { it.productId == product.productId }?.quantity = updatedQuantity
+                updateOrderSummary()
+            }
         }
     }
 
     private fun toggleProductSelection(product: CartItem) {
+        if (product.isSelected){
+            selectedItems.add(product)
+        } else {
+            selectedItems.removeAll { it.productId == product.productId }
+        }
+        updateOrderSummary()
         val updatedItem = product.copy(isSelected = !product.isSelected)
         viewModel.updateItemInCart(updatedItem)
     }
 
     private fun updateOrderSummary() {
-        val totalAmount = selectedItems.sumByDouble {
-            (it.price!!.toDouble()) * (it.quantity ?: 1)
+        val totalAmount = selectedItems.sumOf {
+            it.price?.times(it.quantity ?: 1) ?: 0
         }
-        val totalItems = selectedItems.size
+        val totalItems = selectedItems.sumOf { it.quantity ?: 1 }
 
-        binding.tvTotalPriceCart.text = "$${"%.2f".format(totalAmount)}"
+        binding.tvTotalPriceCart.text = "$${"%.2f".format(totalAmount.toDouble())}"
         binding.tvFillTotalItemsCart.text = "$totalItems items"
     }
-
 }

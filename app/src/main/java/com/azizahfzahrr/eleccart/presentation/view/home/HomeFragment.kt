@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.azizahfzahrr.eleccart.DetailProductActivity
+import com.azizahfzahrr.eleccart.presentation.view.detailproduct.DetailProductActivity
 import com.azizahfzahrr.eleccart.databinding.FragmentHomeBinding
 import com.azizahfzahrr.eleccart.presentation.adapter.HomeFragmentAdapter
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse

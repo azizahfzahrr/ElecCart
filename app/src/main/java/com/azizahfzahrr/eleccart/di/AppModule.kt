@@ -5,8 +5,11 @@ import androidx.room.Room
 import com.azizahfzahrr.eleccart.data.repository.CartRepository
 import com.azizahfzahrr.eleccart.data.repository.ProductRepository
 import com.azizahfzahrr.eleccart.data.repository.ProductRepositoryImpl
+import com.azizahfzahrr.eleccart.data.repository.WishlistRepository
 import com.azizahfzahrr.eleccart.data.source.local.CartDao
 import com.azizahfzahrr.eleccart.data.source.local.CartDatabase
+import com.azizahfzahrr.eleccart.data.source.local.WishlistDao
+import com.azizahfzahrr.eleccart.data.source.local.WishlistDatabase
 import com.azizahfzahrr.eleccart.data.source.remote.ApiService
 import com.azizahfzahrr.eleccart.data.source.remote.NetworkConfig
 import com.azizahfzahrr.eleccart.data.source.remote.RemoteDataSource
@@ -61,5 +64,21 @@ object AppModule {
     @Provides
     fun provideCartRepository(cartDao: CartDao): CartRepository {
         return CartRepository(cartDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWishlistDatabase(@ApplicationContext context: Context): WishlistDatabase {
+        return Room.databaseBuilder(context, WishlistDatabase::class.java, "wishlist_database").build()
+    }
+
+    @Provides
+    fun provideWishlistDao(wishlistDatabase: WishlistDatabase): WishlistDao {
+        return wishlistDatabase.wishlistDao()
+    }
+
+    @Provides
+    fun provideWishlistRepository(wishlistDao: WishlistDao): WishlistRepository {
+        return WishlistRepository(wishlistDao)
     }
 }

@@ -18,8 +18,9 @@ class CartAdapter(
 
         fun bind(product: CartItem) {
             binding.tvNameProductCart.text = product.title
-            binding.tvPriceProductCart.text = "$${product.price?.let { "%.2f".format(it.toDouble()) }}"
-            binding.tvFillAmountProductCart.text = product.quantity?.toString() ?: "1"
+            val totalPrice = (product.price ?: 0) * (product.quantity ?: 1)
+            binding.tvPriceProductCart.text = "$${"%.2f".format(totalPrice / 100.0)}"
+            binding.tvFillAmountProductCart.text = product.quantity.toString()
 
             Glide.with(binding.ivProductCart.context)
                 .load(product.image)
@@ -35,7 +36,9 @@ class CartAdapter(
             }
 
             binding.cardviewMinusCart.setOnClickListener {
-                onQuantityChange(product, -1)
+                if ((product.quantity ?: 1) > 1) {
+                    onQuantityChange(product, -1)
+                }
             }
 
             binding.cardviewPlusCart.setOnClickListener {
