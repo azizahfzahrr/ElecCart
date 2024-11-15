@@ -1,16 +1,19 @@
 package com.azizahfzahrr.eleccart.data.repository
 
 import android.util.Log
+import android.widget.Toast
 import com.azizahfzahrr.eleccart.data.model.CartResponse
+import com.azizahfzahrr.eleccart.data.model.CategoryDto
+import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductRequest
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.data.source.remote.RemoteDataSource
 import javax.inject.Inject
 
 interface ProductRepository {
-    suspend fun getAllProducts(page: Int, limit: Int? = null, sort: String? = null): ProductsResponse
+    suspend fun getAllProducts(): ProductDto
     suspend fun getProductDetail(id: Int): ProductsResponse.Product
-    suspend fun getProductsByCategory(category: String): ProductsResponse
+    suspend fun getCategory(category: String): CategoryDto
     suspend fun getAllCategories(): List<String>
     suspend fun addProduct(productRequest: ProductRequest)
 }
@@ -19,14 +22,15 @@ class ProductRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) : ProductRepository {
 
-    override suspend fun getAllProducts(page: Int, limit: Int?, sort: String?): ProductsResponse {
+    override suspend fun getAllProducts(): ProductDto {
         return try {
-            remoteDataSource.fetchAllProducts(page, limit, sort)
+            remoteDataSource.fetchAllProducts()
         } catch (e: Exception) {
             Log.e("ProductRepositoryImpl", "Error fetching all products: ${e.message}")
-            ProductsResponse(message = "Error fetching products", products = emptyList(), status = "error")
+            ProductDto(message = "Error fetching products", data = emptyList(), status = "error", totalPages = 0, totalProducts = 0, code = 0)
         }
     }
+
 
     override suspend fun getProductDetail(id: Int): ProductsResponse.Product {
         return try {
@@ -37,15 +41,12 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getProductsByCategory(category: String): ProductsResponse {
+    override suspend fun getCategory(category: String): CategoryDto {
         return try {
-            val formattedCategory = category.trim().lowercase()
-            val response = remoteDataSource.fetchProductsByCategory(formattedCategory)
-            Log.d("ProductRepositoryImpl", "Fetched products for category $formattedCategory: ${response.products}")
-            response
-        } catch (e: Exception) {
-            Log.e("ProductRepositoryImpl", "Error fetching products for category $category: ${e.message}")
-            return ProductsResponse(message = "Error fetching category products", products = emptyList(), status = "error")
+            remoteDataSource.fetchProductsByCategory(category)
+    } catch (e: Exception){
+        Log.e("ProductRepositoryImpl", "Error fetching products by category: ${e.message}")
+            CategoryDto(message = "Error fetching products", data = emptyList(), status = "error", totalProducts = 0, code = 0)
         }
     }
 

@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.azizahfzahrr.eleccart.data.model.CategoryData
+import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.domain.usecase.ProductUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +18,11 @@ class HomeViewModel @Inject constructor(
     private val productUseCase: ProductUseCase
 ) : ViewModel() {
 
-    private val _products = MutableLiveData<List<ProductsResponse.Product>>()
-    val products: LiveData<List<ProductsResponse.Product>> = _products
+    private val _products = MutableLiveData<List<ProductDto.Data?>>()
+    val products: LiveData<List<ProductDto.Data?>> = _products
+
+    private val _categoryData = MutableLiveData<List<CategoryData.Product?>>()
+    val categoryData: LiveData<List<CategoryData.Product?>> = _categoryData
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -29,14 +34,14 @@ class HomeViewModel @Inject constructor(
     private var currentPage = 1
     private val pageSize = 10
 
-    fun loadAllProducts(limit: Int? = pageSize, sort: String? = null) {
+    fun loadAllProducts() {
         if (_loading.value == true || isLastPage) return
 
         _loading.value = true
         viewModelScope.launch {
             try {
-                val productsResponse = productUseCase.getAllProducts(page = currentPage, limit = limit, sort = sort)
-                val newProducts = productsResponse.products?.filterNotNull() ?: emptyList()
+                val productsResponse = productUseCase.getAllProducts()
+                val newProducts = productsResponse.data ?: emptyList()
 
                 if (newProducts.isNotEmpty()) {
                     _products.value = (_products.value ?: emptyList()) + newProducts
@@ -59,17 +64,19 @@ class HomeViewModel @Inject constructor(
         resetPagination()
         viewModelScope.launch {
             try {
-                Log.d("HomeViewModel", "Fetching products for category: $category")
+                Log.d("HomeViewModel", "Fetching products for category:")
                 val productsResponse = productUseCase.getProductsByCategory(category)
-                val newProducts = productsResponse.products?.filterNotNull() ?: emptyList()
+                val newProducts: List<CategoryData.Product?>? = productsResponse.data?.get(0)?.products
 
-                Log.d("HomeViewModel", "Fetched products for category $category: $newProducts")
+                Log.d("HomeViewModel", "Fetched products for category: $newProducts")
 
-                if (newProducts.isNotEmpty()) {
-                    _products.value = newProducts
-                    currentPage++
-                } else {
-                    isLastPage = true
+                if (newProducts != null) {
+                    if (newProducts.isNotEmpty()) {
+                        _categoryData.value = newProducts
+                        currentPage++
+                    } else {
+                        isLastPage = true
+                    }
                 }
             } catch (e: Exception) {
                 _errorMessage.value = e.message

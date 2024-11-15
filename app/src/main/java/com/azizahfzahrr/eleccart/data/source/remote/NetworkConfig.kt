@@ -1,22 +1,38 @@
 package com.azizahfzahrr.eleccart.data.source.remote
 
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class NetworkConfig {
-    private fun getInterceptor(): OkHttpClient{
-        val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BODY
-        return OkHttpClient.Builder().addInterceptor(logging).build()
+    private fun Interceptor(): Interceptor {
+        return Interceptor {
+            val chain = it.request()
+            val logging = HttpLoggingInterceptor()
+            logging.level = HttpLoggingInterceptor.Level.BODY
+            val token = "n..\$kYi[a4vWeZVhyDp3H4M|:*c<7]"
+            val requestHeaders = chain.newBuilder()
+                .addHeader("accept", "/")
+                .addHeader("x-secret-app", token)
+                .build()
+            it.proceed(requestHeaders)
+        }
     }
-    private fun getRetrofit(): Retrofit{
+
+    private fun getIntraCeptor(): OkHttpClient {
+        return OkHttpClient.Builder().addInterceptor(Interceptor()).build()
+    }
+
+    private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://fakestoreapi.in/api/")
-            .client(getInterceptor())
+            .baseUrl("https://phincon-academy-api.onrender.com/phincon/api/")
+            .client(getIntraCeptor())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-    fun getApiService() = getRetrofit().create(ApiService::class.java)
+
+    fun getApiService(): ApiService = getRetrofit().create(ApiService::class.java)
+
 }

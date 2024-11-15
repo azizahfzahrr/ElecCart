@@ -37,22 +37,21 @@ class WishlistAdapter(private val wishlistViewModel: WishlistViewModel) :
                 .load(product.image)
                 .into(binding.ivProductCart)
 
-            val color = if (product.isInWishlist) {
-                ContextCompat.getColor(binding.root.context, R.color.wishlist_filled)
-            } else {
-                ContextCompat.getColor(binding.root.context, R.color.wishlist_empty)
+            wishlistViewModel.isInWishlist(product.productId).observeForever { isInWishlist ->
+                val color = if (isInWishlist) {
+                    ContextCompat.getColor(binding.root.context, R.color.wishlist_filled)
+                } else {
+                    ContextCompat.getColor(binding.root.context, R.color.wishlist_empty)
+                }
+                binding.ivCartWishlist.setColorFilter(color)
             }
 
-            binding.ivCartWishlist.setColorFilter(color)
-
             binding.ivCartWishlist.setOnClickListener {
-                if (product.isInWishlist) {
+                if (product.productId.isNotEmpty()) {
                     wishlistViewModel.removeProductFromWishlist(product.productId)
                 } else {
                     wishlistViewModel.addProductToWishlist(product)
                 }
-                product.isInWishlist = !product.isInWishlist
-                notifyItemChanged(adapterPosition)
             }
         }
     }

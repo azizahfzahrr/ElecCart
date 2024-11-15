@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.presentation.view.detailproduct.DetailProductActivity
 import com.azizahfzahrr.eleccart.databinding.FragmentHomeBinding
 import com.azizahfzahrr.eleccart.presentation.adapter.HomeFragmentAdapter
@@ -57,7 +58,7 @@ class HomeFragment : Fragment() {
         )
 
         chips.forEach { (chip, category) ->
-            chip.setOnClickListener { onCategorySelected(category, chip) }
+            chip.setOnClickListener { onCategorySelected(category.uppercase(), chip) }
         }
     }
 
@@ -85,17 +86,18 @@ class HomeFragment : Fragment() {
         binding.rvListProducts.layoutManager = layoutManager
 
         homeFragmentAdapter = HomeFragmentAdapter(object : HomeFragmentAdapter.OnAddToCartClickListener {
-            override fun onAddToCartClick(product: ProductsResponse.Product) {
+            override fun onAddToCartClick(product: ProductDto.Data) {
                 lifecycleScope.launch {
                     if (!cartManager.isProductInCart(product)) {
                         cartManager.addProductToCart(product)
-                        Log.d("HomeFragment", "Product added to cart: ${product.title}")
+                        Log.d("HomeFragment", "Product added to cart: ${product.pdName}")
                     } else {
-                        Log.d("HomeFragment", "Product is already in the cart: ${product.title}")
+                        Log.d("HomeFragment", "Product is already in the cart: ${product.pdName}")
                     }
                 }
             }
-            override fun onProductClick(product: ProductsResponse.Product) {
+
+            override fun onProductClick(product: ProductDto.Data) {
                 val intent = Intent(requireContext(), DetailProductActivity::class.java)
                 intent.putExtra("product", product)
                 startActivity(intent)
@@ -132,6 +134,30 @@ class HomeFragment : Fragment() {
                 binding.rvListProducts.visibility = View.VISIBLE
                 binding.tvNoDataHome.visibility = View.GONE
                 homeFragmentAdapter.submitList(products)
+            }
+        }
+        viewModel.categoryData.observe(viewLifecycleOwner){items ->
+            if (items.isNullOrEmpty()) {
+                binding.rvListProducts.visibility = View.GONE
+                binding.tvNoDataHome.visibility = View.VISIBLE
+            } else {
+                val productList: List<ProductDto.Data> = items.filterNotNull().map { product ->
+                    ProductDto.Data(
+                        pdId = product.pdId,
+                        pdName = product.pdName,
+                        pdImageUrl = product.pdImageUrl,
+                        pdPrice = product.pdPrice,
+                        pdDescription = product.pdDescription,
+                        pdQuantity = product.pdQuantity,
+                        totalAverageRating = product.totalAverageRating,
+                        totalReviews = product.totalReviews,
+                        pdData = product.pdData
+                    )
+                }
+
+                binding.rvListProducts.visibility = View.VISIBLE
+                binding.tvNoDataHome.visibility = View.GONE
+                homeFragmentAdapter.submitList(productList)
             }
         }
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->

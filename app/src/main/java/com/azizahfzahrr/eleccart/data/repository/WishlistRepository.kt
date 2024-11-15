@@ -17,6 +17,10 @@ class WishlistRepository @Inject constructor(private val wishlistDao: WishlistDa
     suspend fun removeProductFromWishlist(product: WishlistEntity) {
         wishlistDao.removeProductFromWishlist(product)
     }
+
+    suspend fun isProductInWishlist(productId: String): Boolean {
+        return wishlistDao.isProductInWishlist(productId)
+    }
 }
 
 

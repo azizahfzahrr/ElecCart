@@ -53,7 +53,8 @@ class CartAdapter(
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        holder.bind(products[position])
+        val product = products[position]
+        holder.bind(product)
     }
 
     override fun getItemCount(): Int = products.size

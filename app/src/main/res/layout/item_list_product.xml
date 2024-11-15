@@ -43,17 +43,6 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:fontFamily="@font/poppins_semibold" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_add_to_cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="@color/color_primary"
-            app:cornerRadius="10dp"
-            android:text="Add to Cart"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

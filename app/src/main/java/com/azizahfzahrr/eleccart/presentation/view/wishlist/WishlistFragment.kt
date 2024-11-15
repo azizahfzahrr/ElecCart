@@ -37,10 +37,11 @@ class WishlistFragment : Fragment() {
         binding.rvProductWishlist.layoutManager = LinearLayoutManager(requireContext())
         binding.rvProductWishlist.adapter = wishlistAdapter
 
-        wishlistViewModel.wishlistProducts.observe(viewLifecycleOwner) { products ->
+        wishlistViewModel.wishlistProducts.observe(viewLifecycleOwner, Observer { products ->
             wishlistAdapter.wishlistProducts = products
             wishlistAdapter.notifyDataSetChanged()
-        }
+        })
+        wishlistViewModel.loadWishlistProducts()
 
         binding.ivLeftArrowWishlist.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()

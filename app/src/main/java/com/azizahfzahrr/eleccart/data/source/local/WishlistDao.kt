@@ -17,4 +17,7 @@ interface WishlistDao {
 
     @Delete
     suspend fun removeProductFromWishlist(product: WishlistEntity)
+
+    @Query("SELECT EXISTS(SELECT 1 FROM wishlist_database WHERE productId = :productId LIMIT 1)")
+    suspend fun isProductInWishlist(productId: String): Boolean
 }
