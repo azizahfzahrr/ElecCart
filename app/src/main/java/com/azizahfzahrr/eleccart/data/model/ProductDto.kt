@@ -45,7 +45,7 @@ data class ProductDto(
             val ctId: Int?,
             @SerializedName("ct_name")
             val ctName: String?
-        )
+        ) : Serializable
 
         data class PdData(
             @SerializedName("brand")
@@ -60,6 +60,6 @@ data class ProductDto(
             val onSale: String?,
             @SerializedName("popular")
             val popular: String?
-        )
+        ) : Serializable
     }
 }

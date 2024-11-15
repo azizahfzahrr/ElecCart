@@ -3,6 +3,7 @@ package com.azizahfzahrr.eleccart
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -31,11 +32,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
 
-    companion object {
-        private const val TAG = "LoginActivity"
-        private const val SERVER_CLIENT_ID = "990817310007-uvp04lq7hgnvd0fn3ukfidti6i2sovaj.apps.googleusercontent.com"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -53,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
 
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(SERVER_CLIENT_ID)
+            .setServerClientId("990817310007-uvp04lq7hgnvd0fn3ukfidti6i2sovaj.apps.googleusercontent.com")
             .build()
 
         val request = GetCredentialRequest.Builder()
@@ -68,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
                 )
                 handleSignIn(result)
             } catch (e: GetCredentialException) {
-                Log.e(TAG, "Error retrieving credentials: ${e.message}")
+                Log.d("Error", e.message.toString())
             }
         }
     }
@@ -81,39 +77,37 @@ class LoginActivity : AppCompatActivity() {
                         val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                         firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
                     } catch (e: Exception) {
-                        Log.e(TAG, "Error parsing Google ID token: ${e.message}")
+                        Log.e("TAG", "Error parsing Google ID token", e)
                     }
                 } else {
-                    Log.e(TAG, "Unexpected credential type")
+                    Log.e("TAG", "Unexpected credential type")
                 }
             }
             else -> {
-                Log.e(TAG, "Unexpected credential type")
+                Log.e("TAG", "Unexpected credential type")
             }
         }
     }
 
     private fun firebaseAuthWithGoogle(idToken: String?) {
         if (idToken != null) {
-            val credential: AuthCredential = GoogleAuthProvider.getCredential(idToken, null)
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
             auth.signInWithCredential(credential)
-                .addOnCompleteListener(object : OnCompleteListener<AuthResult> {
-                    override fun onComplete(task: Task<AuthResult>) {
-                        if (task.isSuccessful) {
-                            Log.d(TAG, "signInWithCredential: success")
-                            navigateToHome()
-                        } else {
-                            Log.w(TAG, "signInWithCredential: failure", task.exception)
-                        }
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Log.d("TAG", "signInWithCredential:success")
+                        Toast.makeText(this@LoginActivity, "Login Success!", Toast.LENGTH_SHORT)
+                            .show()
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        Log.w("TAG", "signInWithCredential:failure", task.exception)
+                        Toast.makeText(this@LoginActivity, "Login Failed! Check again your connection", Toast.LENGTH_SHORT).show()
                     }
-                })
+                }
         } else {
-            Log.e(TAG, "ID Token is null")
+            Log.e("TAG", "ID Token is null")
         }
-    }
-
-    private fun navigateToHome() {
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
     }
 }
