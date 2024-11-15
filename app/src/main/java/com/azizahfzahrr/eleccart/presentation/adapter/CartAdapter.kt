@@ -2,6 +2,8 @@ package com.azizahfzahrr.eleccart.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.azizahfzahrr.eleccart.data.local.entity.CartItem
 import com.azizahfzahrr.eleccart.databinding.ItemCartProductBinding
@@ -11,10 +13,13 @@ class CartAdapter(
     private var products: List<CartItem>,
     private val onRemoveClick: (CartItem) -> Unit,
     private val onQuantityChange: (CartItem, Int) -> Unit,
-    private val onCheckboxClick: (CartItem) -> Unit
-) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+    private val onCheckboxClick: (CartItem, Boolean) -> Unit
+) : ListAdapter<CartItem, CartAdapter.CartViewHolder>(CartItemDiffCallback()) {
 
-    inner class CartViewHolder(private val binding: ItemCartProductBinding) : RecyclerView.ViewHolder(binding.root) {
+    private val selectedItems = mutableListOf<CartItem>()
+
+    inner class CartViewHolder(private val binding: ItemCartProductBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(product: CartItem) {
             binding.tvNameProductCart.text = product.title
@@ -26,9 +31,11 @@ class CartAdapter(
                 .load(product.image)
                 .into(binding.ivProductCart)
 
-            binding.checkboxProductCart.isChecked = product.isSelected
             binding.checkboxProductCart.setOnCheckedChangeListener { _, isChecked ->
-                onCheckboxClick(product.copy(isSelected = isChecked))
+                onCheckboxClick(product, isChecked)
+                binding.root.post {
+                    updateSelection(product, isChecked)
+                }
             }
 
             binding.cardviewDeleteCart.setOnClickListener {
@@ -48,19 +55,26 @@ class CartAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        val binding = ItemCartProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemCartProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CartViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        val product = products[position]
+        val product = getItem(position)
         holder.bind(product)
     }
 
-    override fun getItemCount(): Int = products.size
+    fun getSelectedItems(): List<CartItem> = selectedItems
 
-    fun submitList(newProducts: List<CartItem>) {
-        products = newProducts
-        notifyDataSetChanged()
+    private fun updateSelection(product: CartItem, isSelected: Boolean) {
+        val updatedProducts = currentList.toMutableList().apply {
+            val index = indexOfFirst { it.productId == product.productId }
+            if (index >= 0) {
+                val updatedProduct = get(index).copy(isSelected = isSelected)
+                set(index, updatedProduct)
+            }
+        }
+        submitList(updatedProducts)
     }
 }

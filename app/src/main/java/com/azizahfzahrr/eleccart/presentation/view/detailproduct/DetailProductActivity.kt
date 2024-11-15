@@ -1,5 +1,6 @@
 package com.azizahfzahrr.eleccart.presentation.view.detailproduct
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -13,6 +14,7 @@ import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.data.source.local.WishlistEntity
 import com.azizahfzahrr.eleccart.databinding.ActivityDetailProductBinding
+import com.azizahfzahrr.eleccart.presentation.view.cart.CartFragment
 import com.azizahfzahrr.eleccart.presentation.view.cart.CartViewModel
 import com.azizahfzahrr.eleccart.presentation.view.wishlist.WishlistViewModel
 import com.bumptech.glide.Glide

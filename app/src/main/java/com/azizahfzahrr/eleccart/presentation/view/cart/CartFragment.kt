@@ -1,13 +1,12 @@
 package com.azizahfzahrr.eleccart.presentation.view.cart
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,34 +17,25 @@ import com.azizahfzahrr.eleccart.data.model.Item
 import com.azizahfzahrr.eleccart.data.model.Order
 import com.azizahfzahrr.eleccart.databinding.FragmentCartBinding
 import com.azizahfzahrr.eleccart.presentation.adapter.CartAdapter
-import com.azizahfzahrr.eleccart.data.model.ProductCart
-import com.azizahfzahrr.eleccart.data.model.ProductDto
-import com.azizahfzahrr.eleccart.data.model.ProductsResponse
-import com.azizahfzahrr.eleccart.data.repository.CartRepository
 import com.azizahfzahrr.eleccart.presentation.view.payment.PaymentActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CartFragment : Fragment() {
-
     private lateinit var cartAdapter: CartAdapter
-    private var productsResponse: ProductDto? = null
     private lateinit var binding: FragmentCartBinding
     private val viewModel: CartViewModel by viewModels()
-
     private val selectedItems = mutableListOf<CartItem>()
+    private var cartItems: List<CartItem> = emptyList()
     private var isOrderSummaryVisible = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCartBinding.inflate(inflater, container, false)
-        arguments?.let {
-            productsResponse = it.getSerializable("products_response") as? ProductDto
-        }
         setupRecyclerView()
         return binding.root
     }
@@ -55,39 +45,18 @@ class CartFragment : Fragment() {
             products = emptyList(),
             onRemoveClick = { product -> removeProductFromCart(product) },
             onQuantityChange = { product, quantityChange -> updateQuantity(product, quantityChange) },
-            onCheckboxClick = { product -> toggleProductSelection(product) }
+            onCheckboxClick = { product, isChecked -> toggleProductSelection(product, isChecked) }
         )
         binding.rvProductCart.adapter = cartAdapter
         binding.rvProductCart.layoutManager = LinearLayoutManager(requireContext())
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.allCartItems.collect { cartItems ->
+            viewModel.allCartItems.collect { items ->
+                cartItems = items
                 if (cartItems.isNullOrEmpty()) {
-                    binding.tvNoData.visibility = View.VISIBLE
-                    binding.ivDataEmpty.visibility = View.VISIBLE
-                    binding.rvProductCart.visibility = View.GONE
-                    binding.tvOrderSummary.visibility = View.GONE
-                    binding.tvTotalProductCart.visibility = View.GONE
-                    binding.tvTotalPriceCart.visibility = View.GONE
-                    binding.tvTotalItemsCart.visibility = View.GONE
-                    binding.tvFillTotalItemsCart.visibility = View.GONE
-                    binding.ivArrowUpProductCart.visibility = View.GONE
-                    binding.btnPaymentNow.visibility = View.GONE
+                    showEmptyCartUI()
                 } else {
-                    binding.tvNoData.visibility = View.GONE
-                    binding.ivDataEmpty.visibility = View.GONE
-                    binding.rvProductCart.visibility = View.VISIBLE
-
-                    cartAdapter.submitList(cartItems)
-                    updateOrderSummary()
-
-                    binding.tvOrderSummary.visibility = View.VISIBLE
-                    binding.tvTotalProductCart.visibility = View.VISIBLE
-                    binding.tvTotalPriceCart.visibility = View.VISIBLE
-                    binding.tvTotalItemsCart.visibility = View.VISIBLE
-                    binding.tvFillTotalItemsCart.visibility = View.VISIBLE
-                    binding.ivArrowUpProductCart.visibility = View.VISIBLE
-                    binding.btnPaymentNow.visibility = View.VISIBLE
+                    showCartWithDataUI(cartItems)
                 }
             }
         }
@@ -102,6 +71,46 @@ class CartFragment : Fragment() {
         }
 
         updateOrderSummaryVisibility()
+        updatePaymentButtonState()
+    }
+
+    private fun showEmptyCartUI() {
+        binding.apply {
+            tvNoData.visibility = View.VISIBLE
+            ivDataEmpty.visibility = View.VISIBLE
+            rvProductCart.visibility = View.GONE
+            tvOrderSummary.visibility = View.GONE
+            tvTotalProductCart.visibility = View.GONE
+            tvTotalPriceCart.visibility = View.GONE
+            tvTotalItemsCart.visibility = View.GONE
+            tvFillTotalItemsCart.visibility = View.GONE
+            ivArrowUpProductCart.visibility = View.GONE
+            btnPaymentNow.visibility = View.GONE
+        }
+    }
+
+    private fun showCartWithDataUI(cartItems: List<CartItem>) {
+        binding.apply {
+            tvNoData.visibility = View.GONE
+            ivDataEmpty.visibility = View.GONE
+            rvProductCart.visibility = View.VISIBLE
+            tvOrderSummary.visibility = View.VISIBLE
+            tvTotalProductCart.visibility = View.VISIBLE
+            tvTotalPriceCart.visibility = View.VISIBLE
+            tvTotalItemsCart.visibility = View.VISIBLE
+            tvFillTotalItemsCart.visibility = View.VISIBLE
+            ivArrowUpProductCart.visibility = View.VISIBLE
+            btnPaymentNow.visibility = View.VISIBLE
+        }
+        if (binding.rvProductCart.isComputingLayout) {
+            binding.rvProductCart.post {
+                cartAdapter.submitList(cartItems)
+                updateOrderSummary()
+            }
+        } else {
+            cartAdapter.submitList(cartItems)
+            updateOrderSummary()
+        }
     }
 
     private fun navigateToPayment() {
@@ -149,27 +158,38 @@ class CartFragment : Fragment() {
         }
     }
 
-    private fun toggleProductSelection(product: CartItem) {
-        if (product.isSelected) {
-            selectedItems.add(product)
+    private fun toggleProductSelection(product: CartItem, isChecked: Boolean) {
+        val updatedItem = product.copy(isSelected = isChecked)
+
+        viewModel.updateItemInCart(updatedItem)
+        if (isChecked) {
+            selectedItems.add(updatedItem)
         } else {
-            selectedItems.removeAll { it.productId == product.productId }
+            selectedItems.remove(updatedItem)
         }
+        cartAdapter.notifyItemChanged(cartItems.indexOf(product))
         updateOrderSummary()
 
-        // Update product selection state in the database
-        val updatedItem = product.copy(isSelected = !product.isSelected)
-        viewModel.updateItemInCart(updatedItem)
+        updatePaymentButtonState()
     }
 
     private fun updateOrderSummary() {
-        val totalAmount = selectedItems.sumOf {
-            it.price?.times(it.quantity ?: 1) ?: 0
-        }
+        val totalAmount = selectedItems.sumOf { it.price?.times(it.quantity ?: 1) ?: 0 }
         val totalItems = selectedItems.sumOf { it.quantity ?: 1 }
 
         binding.tvTotalPriceCart.text = "$${"%.2f".format(totalAmount.toDouble())}"
         binding.tvFillTotalItemsCart.text = "$totalItems items"
+        updatePaymentButtonState()
+    }
+
+    private fun updatePaymentButtonState() {
+        binding.btnPaymentNow.isEnabled = selectedItems.isNotEmpty()
+        binding.btnPaymentNow.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                if (selectedItems.isEmpty()) R.color.grey_300 else R.color.color_primary
+            )
+        )
     }
 
     private fun updateOrderSummaryVisibility() {
