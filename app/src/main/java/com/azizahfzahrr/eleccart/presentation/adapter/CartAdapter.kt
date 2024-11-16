@@ -24,20 +24,25 @@ class CartAdapter(
         fun bind(product: CartItem) {
             binding.tvNameProductCart.text = product.title
             val totalPrice = (product.price ?: 0) * (product.quantity ?: 1)
-            binding.tvPriceProductCart.text = "$${"%.2f".format(totalPrice / 100.0)}"
+            binding.tvPriceProductCart.text = "$${totalPrice}"
             binding.tvFillAmountProductCart.text = product.quantity.toString()
 
             Glide.with(binding.ivProductCart.context)
                 .load(product.image)
                 .into(binding.ivProductCart)
 
+            binding.checkboxProductCart.isChecked = product.isSelected
             binding.checkboxProductCart.setOnCheckedChangeListener { _, isChecked ->
                 onCheckboxClick(product, isChecked)
+
+                binding.cardviewDeleteCart.isEnabled = isChecked
+                binding.cardviewMinusCart.isEnabled = isChecked
+                binding.cardviewPlusCart.isEnabled = isChecked
+
                 binding.root.post {
-                    updateSelection(product, isChecked)
+                    notifyItemChanged(bindingAdapterPosition)
                 }
             }
-
             binding.cardviewDeleteCart.setOnClickListener {
                 onRemoveClick(product)
             }
@@ -62,7 +67,7 @@ class CartAdapter(
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         val product = getItem(position)
-        holder.bind(product)
+        holder.bind(product.copy(isSelected = false))
     }
 
     fun getSelectedItems(): List<CartItem> = selectedItems

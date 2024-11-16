@@ -52,7 +52,9 @@ class CartFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.allCartItems.collect { items ->
-                cartItems = items
+                val updatedItems = items.map { it.copy(isSelected = false) }
+                cartItems = updatedItems
+            //    cartItems = items
                 if (cartItems.isNullOrEmpty()) {
                     showEmptyCartUI()
                 } else {
@@ -163,13 +165,13 @@ class CartFragment : Fragment() {
 
         viewModel.updateItemInCart(updatedItem)
         if (isChecked) {
-            selectedItems.add(updatedItem)
+            if (!selectedItems.contains(updatedItem)) {
+                selectedItems.add(updatedItem)
+            }
         } else {
             selectedItems.remove(updatedItem)
         }
-        cartAdapter.notifyItemChanged(cartItems.indexOf(product))
         updateOrderSummary()
-
         updatePaymentButtonState()
     }
 
@@ -177,7 +179,7 @@ class CartFragment : Fragment() {
         val totalAmount = selectedItems.sumOf { it.price?.times(it.quantity ?: 1) ?: 0 }
         val totalItems = selectedItems.sumOf { it.quantity ?: 1 }
 
-        binding.tvTotalPriceCart.text = "$${"%.2f".format(totalAmount.toDouble())}"
+        binding.tvTotalPriceCart.text = "$${totalAmount}"
         binding.tvFillTotalItemsCart.text = "$totalItems items"
         updatePaymentButtonState()
     }

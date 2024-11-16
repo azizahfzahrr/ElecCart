@@ -1,10 +1,8 @@
 package com.azizahfzahrr.eleccart.presentation.view.payment
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.data.model.Item
 import com.azizahfzahrr.eleccart.data.model.Order
 import com.azizahfzahrr.eleccart.databinding.ActivityPaymentBinding
@@ -52,13 +50,10 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun updateUI() {
         binding.apply {
-            tvTotalProductPayment.text = formatCurrency(totalAmount)
-            tvTotalItemsPayment.text = "$totalItems items"
+            tvTotalProductPayment.text = "Total"
+            tvFillTotalItemsPayment.text = "$totalItems items"
+            tvTotalPricePayment.text = "$${totalAmount}"
         }
         paymentProductAdapter.submitList(selectedItems)
-    }
-
-    private fun formatCurrency(amount: Int): String {
-        return "$${"%.2f".format(amount / 100.0)}"
     }
 }

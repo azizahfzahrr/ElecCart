@@ -16,6 +16,9 @@
         android:theme="@style/Theme.ElecCart"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.view.profile.DetailProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.view.payment.PaymentActivity"
             android:exported="false" />
         <activity

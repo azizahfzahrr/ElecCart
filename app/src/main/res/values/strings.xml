@@ -41,4 +41,8 @@
     <string name="order_summary">Order Summary</string>
     <string name="my_cart">My Cart</string>
     <string name="quantity">Quantity:</string>
+    <string name="phone_number">Phone</string>
+    <string name="default_name">Azizah Fathimatuzzahro</string>
+    <string name="default_email">afathimatuzzahro@gmail.com</string>
+    <string name="default_phone">08123456789</string>
 </resources>

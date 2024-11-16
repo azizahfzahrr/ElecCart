@@ -3,7 +3,7 @@ package com.azizahfzahrr.eleccart.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class OrderResponse(
+data class OrderDto(
     @SerializedName("code")
     val code: Int?,
     @SerializedName("data")

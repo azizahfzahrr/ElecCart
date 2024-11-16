@@ -1,10 +1,9 @@
 package com.azizahfzahrr.eleccart.data.source.remote
 
-import com.azizahfzahrr.eleccart.data.model.CartResponse
 import com.azizahfzahrr.eleccart.data.model.CategoryDto
 import com.azizahfzahrr.eleccart.data.model.CategoryResponse
 import com.azizahfzahrr.eleccart.data.model.Order
-import com.azizahfzahrr.eleccart.data.model.OrderResponse
+import com.azizahfzahrr.eleccart.data.model.OrderDto
 import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductRequest
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
@@ -16,7 +15,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ApiService {
 
@@ -52,7 +50,7 @@ interface ApiService {
     @POST("order/snap")
     suspend fun createOrder(
         @Body orderRequest: Order
-    ): OrderResponse
+    ): OrderDto
 
     @GET("users")
     suspend fun getAllUsers(): List<UserResponse>
