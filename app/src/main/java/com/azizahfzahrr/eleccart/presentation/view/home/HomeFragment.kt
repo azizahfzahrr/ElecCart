@@ -127,6 +127,9 @@ class HomeFragment : Fragment() {
         viewModel.products.observe(viewLifecycleOwner) { products ->
             Log.d("HomeFragment", "Observed products: ${products.size} items")
 
+            binding.shimmerLayout.stopShimmer()
+            binding.shimmerLayout.visibility = View.GONE
+
             if (products.isNullOrEmpty()) {
                 binding.rvListProducts.visibility = View.GONE
                 binding.tvNoDataHome.visibility = View.VISIBLE
@@ -137,6 +140,10 @@ class HomeFragment : Fragment() {
             }
         }
         viewModel.categoryData.observe(viewLifecycleOwner){items ->
+
+            binding.shimmerLayout.stopShimmer()
+            binding.shimmerLayout.visibility = View.GONE
+
             if (items.isNullOrEmpty()) {
                 binding.rvListProducts.visibility = View.GONE
                 binding.tvNoDataHome.visibility = View.VISIBLE
@@ -166,6 +173,14 @@ class HomeFragment : Fragment() {
                 binding.tvNoDataHome.text = "Failed to load products"
                 binding.tvNoDataHome.visibility = View.VISIBLE
                 binding.rvListProducts.visibility = View.GONE
+            }
+        }
+        viewModel.loading.observe(viewLifecycleOwner){ isLoading ->
+            if (isLoading){
+                binding.shimmerLayout.startShimmer()
+                binding.shimmerLayout.visibility = View.VISIBLE
+                binding.rvListProducts.visibility = View.GONE
+                binding.tvNoDataHome.visibility = View.GONE
             }
         }
     }
