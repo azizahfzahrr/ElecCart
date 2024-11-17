@@ -1,4 +1,4 @@
-package com.azizahfzahrr.eleccart.presentation.view.payment.adapter
+package com.azizahfzahrr.eleccart.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

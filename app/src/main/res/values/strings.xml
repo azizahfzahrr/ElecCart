@@ -45,4 +45,10 @@
     <string name="default_name">Azizah Fathimatuzzahro</string>
     <string name="default_email">afathimatuzzahro@gmail.com</string>
     <string name="default_phone">08123456789</string>
+    <string name="add_address">Add Address</string>
+    <string name="full_name">Full Name</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="no_address_found">No Address Found</string>
+    <string name="no_address_selected">No Address Selected</string>
+    <string name="choose_address">Choose Address</string>
 </resources>

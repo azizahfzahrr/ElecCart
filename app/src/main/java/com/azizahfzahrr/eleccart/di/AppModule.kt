@@ -2,10 +2,13 @@ package com.azizahfzahrr.eleccart.di
 
 import android.content.Context
 import androidx.room.Room
+import com.azizahfzahrr.eleccart.data.repository.AddressRepository
 import com.azizahfzahrr.eleccart.data.repository.CartRepository
 import com.azizahfzahrr.eleccart.data.repository.ProductRepository
 import com.azizahfzahrr.eleccart.data.repository.ProductRepositoryImpl
 import com.azizahfzahrr.eleccart.data.repository.WishlistRepository
+import com.azizahfzahrr.eleccart.data.source.local.AddressDao
+import com.azizahfzahrr.eleccart.data.source.local.AddressDatabase
 import com.azizahfzahrr.eleccart.data.source.local.CartDao
 import com.azizahfzahrr.eleccart.data.source.local.CartDatabase
 import com.azizahfzahrr.eleccart.data.source.local.WishlistDao
@@ -81,4 +84,20 @@ object AppModule {
     fun provideWishlistRepository(wishlistDao: WishlistDao): WishlistRepository {
         return WishlistRepository(wishlistDao)
     }
+
+    @Provides
+    fun provideAddressDatabase(@ApplicationContext context: Context): AddressDatabase {
+        return Room.databaseBuilder(context, AddressDatabase::class.java, "address_database").build()
+    }
+
+    @Provides
+    fun provideAddressDao(addressDatabase: AddressDatabase): AddressDao {
+        return addressDatabase.addressDao()
+    }
+
+    @Provides
+    fun provideAddressRepository(addressDao: AddressDao): AddressRepository {
+        return AddressRepository(addressDao)
+    }
+
 }

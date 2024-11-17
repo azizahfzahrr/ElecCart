@@ -41,7 +41,6 @@ class RemoteDataSourceImpl @Inject constructor(
         return response.copy(data = products)
     }
 
-
     override suspend fun fetchAllCategories(): List<String> {
         val response = apiService.getAllCategories()
         return response.categories?.filterNotNull() ?: emptyList()
