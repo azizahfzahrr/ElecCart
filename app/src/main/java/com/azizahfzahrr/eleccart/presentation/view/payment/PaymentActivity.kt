@@ -2,21 +2,30 @@ package com.azizahfzahrr.eleccart.presentation.view.payment
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.data.model.Item
 import com.azizahfzahrr.eleccart.data.model.Order
 import com.azizahfzahrr.eleccart.data.source.local.AddressEntity
 import com.azizahfzahrr.eleccart.databinding.ActivityPaymentBinding
+import com.azizahfzahrr.eleccart.domain.model.OrderState
 import com.azizahfzahrr.eleccart.presentation.adapter.PaymentProductAdapter
 import com.azizahfzahrr.eleccart.presentation.view.address.ChooseAddressActivity
+import com.azizahfzahrr.eleccart.presentation.view.cart.CartViewModel
+import com.azizahfzahrr.eleccart.presentation.view.order.OrderViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PaymentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPaymentBinding
     private lateinit var paymentProductAdapter: PaymentProductAdapter
+    private val viewModel: CartViewModel by viewModels()
+    private val orderViewModel: OrderViewModel by viewModels()
     private var selectedItems: List<Item> = emptyList()
     private var totalAmount = 0
     private var totalItems = 0
@@ -49,12 +58,47 @@ class PaymentActivity : AppCompatActivity() {
             totalItems = selectedItems.size
             updateUI()
         }
-
         setupRecyclerView()
 
         binding.btnContinuePayment.setOnClickListener {
-            val intent = Intent(this@PaymentActivity, PaymentWebViewActivity::class.java)
-            startActivity(intent)
+            orderViewModel.createOrder(
+                Order(
+                    amount = totalAmount,
+                    email = "test@gmail.com",
+                    items = selectedItems
+                )
+            )
+        }
+
+        lifecycleScope.launch {
+            orderViewModel.orderState.collect { orderState ->
+                when (orderState) {
+                    is OrderState.Loading -> {
+                        Toast.makeText(this@PaymentActivity, "Loading", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    is OrderState.Success -> {
+                        Toast.makeText(
+                            this@PaymentActivity,
+                            "Order Created Successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    is OrderState.SuccessPayment -> {
+                        val intent = Intent(this@PaymentActivity, PaymentWebViewActivity::class.java).apply {
+                            putExtra("url_payment", orderState.paymentUrl)
+                        }
+                        startActivity(intent)
+                    }
+                    is OrderState.Error -> {
+                        Toast.makeText(
+                            this@PaymentActivity,
+                            "Error: ${orderState.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
     }
 

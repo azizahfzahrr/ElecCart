@@ -34,15 +34,6 @@
             android:textSize="14sp"
             android:fontFamily="@font/poppins_medium" />
 
-        <TextView
-            android:id="@+id/tv_product_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:background="#ddd"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:fontFamily="@font/poppins_semibold" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

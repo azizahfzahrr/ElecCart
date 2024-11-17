@@ -37,6 +37,7 @@ class PaymentWebViewActivity : AppCompatActivity() {
             finish()
         }
         binding.webviewPayment.settings.javaScriptEnabled = true
+
         binding.webviewPayment.webViewClient = object : WebViewClient(){
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {

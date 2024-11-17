@@ -12,10 +12,12 @@ class NetworkConfig {
             val chain = it.request()
             val logging = HttpLoggingInterceptor()
             logging.level = HttpLoggingInterceptor.Level.BODY
+
             val token = "n..\$kYi[a4vWeZVhyDp3H4M|:*c<7]"
             val requestHeaders = chain.newBuilder()
                 .addHeader("accept", "/")
                 .addHeader("x-secret-app", token)
+                .addHeader("x-user-id", "1")
                 .build()
             it.proceed(requestHeaders)
         }

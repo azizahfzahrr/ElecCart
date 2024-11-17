@@ -1,214 +1,220 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".presentation.view.home.HomeFragment">
 
-    <ImageView
-        android:id="@+id/iv_icon_app"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/elec_cart"
-        app:layout_constraintTop_toTopOf="@id/tv_title_app"
-        app:layout_constraintStart_toStartOf="@id/et_search"/>
-
-    <TextView
-        android:id="@+id/tv_title_app"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/poppins_medium"
-        android:text="ElecCart"
-        android:textColor="@color/black_200"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/iv_icon_app"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/et_search"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/rounded_edittext"
-        android:drawablePadding="8dp"
-        android:drawableStart="@drawable/searchh"
-        android:hint="@string/search_here"
-        android:imeOptions="actionSearch"
-        android:maxLines="1"
-        android:padding="12dp"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title_app"
-        tools:ignore="Autofill" />
-
-    <TextView
-        android:id="@+id/tv_category_product_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Category"
-        android:fontFamily="@font/poppins_bold"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/et_search"
-        app:layout_constraintStart_toStartOf="@id/et_search"/>
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chip_group_categories"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:singleSelection="true"
-        app:layout_constraintTop_toBottomOf="@id/tv_category_product_home"
-        app:layout_constraintStart_toStartOf="@id/tv_category_product_home">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_category_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_margin="4dp"
-            android:text="TV"
-            android:textSize="12sp"
-            app:chipIconVisible="false"
-            style="@style/Widget.MaterialComponents.Chip.Action" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_category_audio"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginStart="4dp"
-            android:text="Audio"
-            android:textSize="12sp"
-            app:chipIconVisible="false"
-            style="@style/Widget.MaterialComponents.Chip.Action" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_category_smartphone"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginStart="4dp"
-            android:text="Smartphone"
-            android:textSize="12sp"
-            app:chipIconVisible="false"
-            style="@style/Widget.MaterialComponents.Chip.Action" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_category_gaming"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginStart="4dp"
-            android:text="Gaming"
-            android:textSize="12sp"
-            app:chipIconVisible="false"
-            style="@style/Widget.MaterialComponents.Chip.Action" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_category_appliance"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginStart="4dp"
-            android:text="Appliance"
-            android:textSize="12sp"
-            app:chipIconVisible="false"
-            style="@style/Widget.MaterialComponents.Chip.Action" />
-    </com.google.android.material.chip.ChipGroup>
-
-    <TextView
-        android:id="@+id/tv_list_product"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/list_products"
-        android:fontFamily="@font/poppins_bold"
-        android:textSize="14sp"
-        android:textColor="@color/black"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/chip_group_categories"
-        app:layout_constraintStart_toStartOf="@id/chip_group_categories"/>
-
-    <ImageView
-        android:id="@+id/iv_filter"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/filterr"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_list_product"
-        app:layout_constraintBottom_toBottomOf="@id/tv_list_product"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_list_products"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="20dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/tv_list_product"
-        app:layout_constraintStart_toStartOf="@+id/tv_list_product"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:spanCount="2"
-        tools:itemCount="6"
-        tools:listitem="@layout/item_list_product" />
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmer_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_list_product">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/iv_icon_app"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/elec_cart"
+            app:layout_constraintTop_toTopOf="@id/tv_title_app"
+            app:layout_constraintStart_toStartOf="@id/et_search"/>
+
+        <TextView
+            android:id="@+id/tv_title_app"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="ElecCart"
+            android:textColor="@color/black_200"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/iv_icon_app"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <include layout="@layout/item_list_product_shimmer" />
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/rounded_edittext"
+            android:drawablePadding="8dp"
+            android:drawableStart="@drawable/searchh"
+            android:hint="@string/search_here"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_app"
+            tools:ignore="Autofill" />
 
-            <include layout="@layout/item_list_product_shimmer" />
+        <TextView
+            android:id="@+id/tv_category_product_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/et_search"
+            app:layout_constraintStart_toStartOf="@id/et_search"/>
 
-            <include layout="@layout/item_list_product_shimmer" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_categories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:singleSelection="true"
+            app:layout_constraintTop_toBottomOf="@id/tv_category_product_home"
+            app:layout_constraintStart_toStartOf="@id/tv_category_product_home">
 
-            <include layout="@layout/item_list_product_shimmer" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_category_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_margin="4dp"
+                android:text="TV"
+                android:textSize="12sp"
+                app:chipIconVisible="false"
+                style="@style/Widget.MaterialComponents.Chip.Action" />
 
-        </LinearLayout>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_category_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="4dp"
+                android:text="Audio"
+                android:textSize="12sp"
+                app:chipIconVisible="false"
+                style="@style/Widget.MaterialComponents.Chip.Action" />
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_category_smartphone"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="4dp"
+                android:text="Smartphone"
+                android:textSize="12sp"
+                app:chipIconVisible="false"
+                style="@style/Widget.MaterialComponents.Chip.Action" />
 
-    <ImageView
-        android:id="@+id/iv_home_data_empty"
-        android:layout_width="360dp"
-        android:layout_height="360dp"
-        android:src="@drawable/not_found"
-        android:visibility="gone"
-        android:layout_gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_category_gaming"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="4dp"
+                android:text="Gaming"
+                android:textSize="12sp"
+                app:chipIconVisible="false"
+                style="@style/Widget.MaterialComponents.Chip.Action" />
 
-    <TextView
-        android:id="@+id/tv_no_data_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Products is empty"
-        android:visibility="invisible"
-        android:fontFamily="@font/poppins_bold"
-        android:textSize="20sp"
-        android:textColor="@color/color_secondary"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/iv_home_data_empty"
-        app:layout_constraintStart_toStartOf="@id/iv_home_data_empty"
-        app:layout_constraintEnd_toEndOf="@id/iv_home_data_empty"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_category_appliance"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="4dp"
+                android:text="Appliance"
+                android:textSize="12sp"
+                app:chipIconVisible="false"
+                style="@style/Widget.MaterialComponents.Chip.Action" />
+        </com.google.android.material.chip.ChipGroup>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_list_product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/list_products"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/chip_group_categories"
+            app:layout_constraintStart_toStartOf="@id/chip_group_categories"/>
+
+        <ImageView
+            android:id="@+id/iv_filter"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/filterr"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_list_product"
+            app:layout_constraintBottom_toBottomOf="@id/tv_list_product"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_list_products"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="20dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintTop_toBottomOf="@+id/tv_list_product"
+            app:layout_constraintStart_toStartOf="@+id/tv_list_product"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:spanCount="2"
+            tools:itemCount="6"
+            tools:listitem="@layout/item_list_product" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_list_product">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include layout="@layout/item_list_product_shimmer" />
+
+                <include layout="@layout/item_list_product_shimmer" />
+
+                <include layout="@layout/item_list_product_shimmer" />
+
+                <include layout="@layout/item_list_product_shimmer" />
+
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <ImageView
+            android:id="@+id/iv_home_data_empty"
+            android:layout_width="360dp"
+            android:layout_height="360dp"
+            android:src="@drawable/not_found"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_no_data_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Products is empty"
+            android:visibility="invisible"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="20sp"
+            android:textColor="@color/color_secondary"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/iv_home_data_empty"
+            app:layout_constraintStart_toStartOf="@id/iv_home_data_empty"
+            app:layout_constraintEnd_toEndOf="@id/iv_home_data_empty"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
