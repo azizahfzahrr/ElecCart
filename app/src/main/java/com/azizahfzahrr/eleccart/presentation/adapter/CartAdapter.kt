@@ -31,17 +31,10 @@ class CartAdapter(
                 .load(product.image)
                 .into(binding.ivProductCart)
 
+            binding.checkboxProductCart.setOnCheckedChangeListener(null)
             binding.checkboxProductCart.isChecked = product.isSelected
             binding.checkboxProductCart.setOnCheckedChangeListener { _, isChecked ->
                 onCheckboxClick(product, isChecked)
-
-                binding.cardviewDeleteCart.isEnabled = isChecked
-                binding.cardviewMinusCart.isEnabled = isChecked
-                binding.cardviewPlusCart.isEnabled = isChecked
-
-                binding.root.post {
-                    notifyItemChanged(bindingAdapterPosition)
-                }
             }
             binding.cardviewDeleteCart.setOnClickListener {
                 onRemoveClick(product)
@@ -67,7 +60,7 @@ class CartAdapter(
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         val product = getItem(position)
-        holder.bind(product.copy(isSelected = false))
+        holder.bind(product)
     }
 
     fun getSelectedItems(): List<CartItem> = selectedItems

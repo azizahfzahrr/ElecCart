@@ -94,8 +94,9 @@ class CartViewModel @Inject constructor(
     }
 
     private fun updateOrderSummary(cartItems: List<CartItem>) {
-        val totalAmount = cartItems.sumOf { it.price?.times(it.quantity ?: 1) ?: 0 }
-        val totalItems = cartItems.sumOf { it.quantity ?: 0 }
+        val selectedItems = cartItems.filter { it.isSelected }
+        val totalAmount = selectedItems.sumOf { it.price?.times(it.quantity ?: 1) ?: 0 }
+        val totalItems = selectedItems.sumOf { it.quantity ?: 0 }
 
         _totalAmount.value = totalAmount
         _totalItems.value = totalItems

@@ -164,23 +164,33 @@ class CartFragment : Fragment() {
         val updatedItem = product.copy(isSelected = isChecked)
 
         viewModel.updateItemInCart(updatedItem)
+
         if (isChecked) {
-            if (!selectedItems.contains(updatedItem)) {
+            if (!selectedItems.any { it.productId == updatedItem.productId }) {
                 selectedItems.add(updatedItem)
             }
         } else {
-            selectedItems.remove(updatedItem)
+            selectedItems.removeIf { it.productId == updatedItem.productId }
         }
         updateOrderSummary()
         updatePaymentButtonState()
     }
 
     private fun updateOrderSummary() {
+        val hasSelectedItems = selectedItems.isNotEmpty()
         val totalAmount = selectedItems.sumOf { it.price?.times(it.quantity ?: 1) ?: 0 }
         val totalItems = selectedItems.sumOf { it.quantity ?: 1 }
 
         binding.tvTotalPriceCart.text = "$${totalAmount}"
         binding.tvFillTotalItemsCart.text = "$totalItems items"
+
+        if (!hasSelectedItems){
+            binding.tvTotalPriceCart.visibility = View.GONE
+            binding.tvFillTotalItemsCart.visibility = View.GONE
+        } else {
+            binding.tvTotalPriceCart.visibility = View.VISIBLE
+            binding.tvFillTotalItemsCart.visibility = View.VISIBLE
+        }
         updatePaymentButtonState()
     }
 
