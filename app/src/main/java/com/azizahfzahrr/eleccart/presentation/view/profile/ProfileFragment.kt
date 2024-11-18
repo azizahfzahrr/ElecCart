@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import com.azizahfzahrr.eleccart.LoginActivity
 import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.databinding.FragmentProfileBinding
+import com.azizahfzahrr.eleccart.presentation.view.address.ChooseAddressActivity
 import com.azizahfzahrr.eleccart.presentation.view.orders.MyOrdersActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -48,6 +49,7 @@ class ProfileFragment : Fragment() {
                 binding.ivProfile.setImageResource(R.drawable.human)
             }
         }
+
         binding.ivArrowRightProfile.setOnClickListener {
             val firebaseUser = FirebaseAuth.getInstance().currentUser
             val photoUrl = firebaseUser?.photoUrl
@@ -67,8 +69,14 @@ class ProfileFragment : Fragment() {
         binding.arrowLogout.setOnClickListener {
             showLogoutConfirmationDialog()
         }
+
         binding.arrowMyOrders.setOnClickListener {
             val intent = Intent(requireContext(), MyOrdersActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.arrowAddress.setOnClickListener {
+            val intent = Intent(requireContext(), ChooseAddressActivity::class.java)
             startActivity(intent)
         }
     }

@@ -1,5 +1,7 @@
 package com.azizahfzahrr.eleccart.presentation.view.cart
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.azizahfzahrr.eleccart.data.local.entity.CartItem
@@ -28,6 +30,9 @@ class CartViewModel @Inject constructor(
 
     private val _totalItems = MutableStateFlow<Int>(0)
     val totalItems: StateFlow<Int> get() = _totalItems
+
+    private val _paymentStatus = MutableLiveData<Boolean>(false)
+    val paymentStatus: LiveData<Boolean> get() = _paymentStatus
 
     init {
         loadCartItems()
@@ -63,12 +68,19 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    fun deleteAllItemsFromCart() {
+    fun deleteItemsFromCart(cartItems: List<CartItem>) {
         viewModelScope.launch {
-            cartRepository.deleteAllCartItems()
+            cartItems.forEach { cartItem ->
+                cartRepository.deleteCartItem(cartItem)
+            }
             loadCartItems()
         }
     }
+
+    fun updatePaymentStatus(isPaymentSuccessful: Boolean) {
+        _paymentStatus.value = isPaymentSuccessful
+    }
+
 
     fun prepareOrderRequest(): Order {
         val orderItems = _allCartItems.value.mapNotNull { cartItem ->

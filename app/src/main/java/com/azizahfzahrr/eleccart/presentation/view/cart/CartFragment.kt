@@ -104,6 +104,10 @@ class CartFragment : Fragment() {
             ivArrowUpProductCart.visibility = View.VISIBLE
             btnPaymentNow.visibility = View.VISIBLE
         }
+        if (cartItems.isEmpty()) {
+            showEmptyCartUI()
+            return
+        }
         if (binding.rvProductCart.isComputingLayout) {
             binding.rvProductCart.post {
                 cartAdapter.submitList(cartItems)

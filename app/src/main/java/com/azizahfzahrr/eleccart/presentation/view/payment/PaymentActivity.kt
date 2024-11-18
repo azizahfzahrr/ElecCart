@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.azizahfzahrr.eleccart.R
+import com.azizahfzahrr.eleccart.data.local.entity.CartItem
 import com.azizahfzahrr.eleccart.data.model.Item
 import com.azizahfzahrr.eleccart.data.model.Order
 import com.azizahfzahrr.eleccart.data.source.local.AddressEntity
@@ -83,12 +84,40 @@ class PaymentActivity : AppCompatActivity() {
                             "Order Created Successfully",
                             Toast.LENGTH_SHORT
                         ).show()
+
+                        val cartItemsToDelete = selectedItems.map { item ->
+                            CartItem(
+                                productId = item.id.toString(),
+                                title = item.name,
+                                price = item.price,
+                                image = "",
+                                quantity = item.quantity,
+                                isSelected = false
+                            )
+                        }
+
+                        viewModel.deleteItemsFromCart(cartItemsToDelete)
+                        viewModel.updatePaymentStatus(true)
                     }
                     is OrderState.SuccessPayment -> {
                         val intent = Intent(this@PaymentActivity, PaymentWebViewActivity::class.java).apply {
                             putExtra("url_payment", orderState.paymentUrl)
                         }
                         startActivity(intent)
+
+                        lifecycleScope.launch {
+                            viewModel.deleteItemsFromCart(
+                                selectedItems.map { cartItem ->
+                                    CartItem(
+                                        productId = cartItem.id.toString(),
+                                        title = cartItem.name,
+                                        price = cartItem.price,
+                                        quantity = cartItem.quantity,
+                                        image = cartItem.name
+                                    )
+                                }
+                            )
+                        }
                     }
                     is OrderState.Error -> {
                         Toast.makeText(
