@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        binding.ivGoogleSignin.setOnClickListener {
+        binding.cvGoogleLogin.setOnClickListener {
             signInWithCredentialManager()
         }
     }
