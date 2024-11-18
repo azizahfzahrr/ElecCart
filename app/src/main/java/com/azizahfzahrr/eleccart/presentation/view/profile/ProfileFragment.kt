@@ -12,9 +12,12 @@ import androidx.fragment.app.viewModels
 import com.azizahfzahrr.eleccart.LoginActivity
 import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.databinding.FragmentProfileBinding
+import com.azizahfzahrr.eleccart.presentation.view.orders.MyOrdersActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
@@ -63,6 +66,10 @@ class ProfileFragment : Fragment() {
 
         binding.arrowLogout.setOnClickListener {
             showLogoutConfirmationDialog()
+        }
+        binding.arrowMyOrders.setOnClickListener {
+            val intent = Intent(requireContext(), MyOrdersActivity::class.java)
+            startActivity(intent)
         }
     }
 

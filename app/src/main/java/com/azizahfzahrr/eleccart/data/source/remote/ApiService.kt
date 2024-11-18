@@ -48,6 +48,9 @@ interface ApiService {
     @POST("products")
     suspend fun addProduct(@Body productRequest: ProductRequest)
 
+    @GET("orders")
+    suspend fun getAllOrdersTransaction(): OrderDto
+
     @POST("order/snap")
     suspend fun createOrder(
         @Body orderRequest: Order

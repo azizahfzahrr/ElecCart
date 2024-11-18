@@ -52,5 +52,6 @@
     <string name="no_address_selected">No Address Selected</string>
     <string name="choose_address">Choose Address</string>
     <string name="sign_in_with_google">Sign In with Google</string>
+    <string name="my_orders">My Orders</string>
     <string name="please_enter_your_email_password_to_sign_in"><![CDATA[Please enter your email & password to Sign In]]></string>
 </resources>

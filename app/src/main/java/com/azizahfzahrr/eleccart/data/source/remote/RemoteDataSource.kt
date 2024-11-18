@@ -3,9 +3,11 @@ package com.azizahfzahrr.eleccart.data.source.remote
 import android.util.Log
 import com.azizahfzahrr.eleccart.data.model.CartResponse
 import com.azizahfzahrr.eleccart.data.model.CategoryDto
+import com.azizahfzahrr.eleccart.data.model.OrderDto
 import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductRequest
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
+import com.azizahfzahrr.eleccart.domain.model.OrderTransaction
 import javax.inject.Inject
 
 interface RemoteDataSource {
@@ -14,6 +16,7 @@ interface RemoteDataSource {
     suspend fun fetchProductsByCategory(category: String): CategoryDto
     suspend fun fetchAllCategories(): List<String>
     suspend fun postProduct(productRequest: ProductRequest)
+    suspend fun getAllOrdersTransaction(): OrderDto
 }
 
 class RemoteDataSourceImpl @Inject constructor(
@@ -48,6 +51,10 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun postProduct(productRequest: ProductRequest) {
         apiService.addProduct(productRequest)
+    }
+
+    override suspend fun getAllOrdersTransaction(): OrderDto {
+        return apiService.getAllOrdersTransaction()
     }
 }
 

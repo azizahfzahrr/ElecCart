@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.azizahfzahrr.eleccart.data.repository.AddressRepository
 import com.azizahfzahrr.eleccart.data.repository.CartRepository
+import com.azizahfzahrr.eleccart.data.repository.OrderTransactionRepository
+import com.azizahfzahrr.eleccart.data.repository.OrderTransactionRepositoryImpl
 import com.azizahfzahrr.eleccart.data.repository.ProductRepository
 import com.azizahfzahrr.eleccart.data.repository.ProductRepositoryImpl
 import com.azizahfzahrr.eleccart.data.repository.WishlistRepository
@@ -60,11 +62,13 @@ object AppModule {
     }
 
     @Provides
+    @Singleton
     fun provideCartDao(cartDatabase: CartDatabase): CartDao {
         return cartDatabase.cartDao()
     }
 
     @Provides
+    @Singleton
     fun provideCartRepository(cartDao: CartDao): CartRepository {
         return CartRepository(cartDao)
     }
@@ -76,28 +80,41 @@ object AppModule {
     }
 
     @Provides
+    @Singleton
     fun provideWishlistDao(wishlistDatabase: WishlistDatabase): WishlistDao {
         return wishlistDatabase.wishlistDao()
     }
 
     @Provides
+    @Singleton
     fun provideWishlistRepository(wishlistDao: WishlistDao): WishlistRepository {
         return WishlistRepository(wishlistDao)
     }
 
     @Provides
+    @Singleton
     fun provideAddressDatabase(@ApplicationContext context: Context): AddressDatabase {
         return Room.databaseBuilder(context, AddressDatabase::class.java, "address_database").build()
     }
 
     @Provides
+    @Singleton
     fun provideAddressDao(addressDatabase: AddressDatabase): AddressDao {
         return addressDatabase.addressDao()
     }
 
     @Provides
+    @Singleton
     fun provideAddressRepository(addressDao: AddressDao): AddressRepository {
         return AddressRepository(addressDao)
     }
+
+    @Provides
+    @Singleton
+    fun provideOrderTransactionRepository(remoteDataSource: RemoteDataSource): OrderTransactionRepository {
+        return OrderTransactionRepositoryImpl(remoteDataSource)
+
+    }
+
 
 }
