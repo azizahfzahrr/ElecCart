@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import com.azizahfzahrr.eleccart.MainActivity
 import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.data.local.entity.CartItem
 import com.azizahfzahrr.eleccart.data.model.ProductDto
@@ -72,6 +73,9 @@ class DetailProductActivity : AppCompatActivity() {
         )
         viewModel.addItemToCart(cartItem)
         Toast.makeText(this, "${product.pdName} added to cart", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("navigateTo", "cart")
+        startActivity(intent)
     }
 
     private fun toggleWishlist(product: ProductDto.Data) {
