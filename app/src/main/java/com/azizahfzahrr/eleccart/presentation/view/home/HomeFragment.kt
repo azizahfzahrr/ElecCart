@@ -6,17 +6,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.presentation.view.detailproduct.DetailProductActivity
 import com.azizahfzahrr.eleccart.databinding.FragmentHomeBinding
 import com.azizahfzahrr.eleccart.presentation.adapter.HomeFragmentAdapter
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.data.source.local.CartManager
+import com.azizahfzahrr.eleccart.presentation.view.search.SearchProductActivity
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -29,6 +32,16 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var homeFragmentAdapter: HomeFragmentAdapter
     private lateinit var cartManager: CartManager
+
+    companion object {
+        fun newInstance(selectedType: String?): HomeFragment {
+            val fragment = HomeFragment()
+            val args = Bundle()
+            args.putString("selectedType", selectedType)
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +59,11 @@ class HomeFragment : Fragment() {
         observeViewModel()
         viewModel.loadAllProducts()
         setupCategoryChips()
+
+        binding.searchProduct.setOnClickListener {
+            val intent = Intent(requireContext(), SearchProductActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupCategoryChips() {
@@ -58,27 +76,33 @@ class HomeFragment : Fragment() {
         )
 
         chips.forEach { (chip, category) ->
-            chip.setOnClickListener { onCategorySelected(category.uppercase(), chip) }
+            if (chip.isChecked) {
+                setChipSelectedStyle(chip)
+                viewModel.loadProductsByCategory(category.uppercase())
+            } else {
+                setChipDefaultStyle(chip)
+            }
+            
+            chip.setOnClickListener {
+                chips.forEach { (c, _) -> setChipDefaultStyle(c) }
+                setChipSelectedStyle(chip)
+                viewModel.clearProducts()
+                viewModel.resetPagination()
+                viewModel.loadProductsByCategory(category.uppercase())
+            }
         }
     }
 
-    private fun onCategorySelected(category: String, selectedChip: Chip) {
-        clearAllChipSelections()
-        selectedChip.isChecked = true
-        viewModel.clearProducts()
-        viewModel.resetPagination()
-        Log.d("HomeFragment", "Category selected: $category")
-        viewModel.loadProductsByCategory(category)
+    private fun setChipSelectedStyle(chip: Chip) {
+        chip.setChipBackgroundColorResource(R.color.chip_selected_background)
+        chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.chip_selected_text))
+        chip.isChecked = true
     }
 
-    private fun clearAllChipSelections() {
-        listOf(
-            binding.chipCategoryTv,
-            binding.chipCategoryAudio,
-            binding.chipCategorySmartphone,
-            binding.chipCategoryGaming,
-            binding.chipCategoryAppliance
-        ).forEach { it.isChecked = false }
+    private fun setChipDefaultStyle(chip: Chip) {
+        chip.setChipBackgroundColorResource(R.color.chip_default_background)
+        chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.chip_default_text))
+        chip.isChecked = false
     }
 
     private fun setupUI() {

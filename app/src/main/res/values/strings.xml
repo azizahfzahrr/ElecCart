@@ -54,4 +54,8 @@
     <string name="sign_in_with_google">Sign In with Google</string>
     <string name="my_orders">My Orders</string>
     <string name="please_enter_your_email_password_to_sign_in"><![CDATA[Please enter your email & password to Sign In]]></string>
+    <string name="your_wishlist_is_empty">Your Wishlist is Empty!</string>
+    <string name="search_product_here">Search Product Here</string>
+    <string name="my_orders_detail">My Orders Detail</string>
+    <string name="welcome_to_eleccart">Welcome to ElecCart!</string>
 </resources>

@@ -102,22 +102,9 @@ class PaymentActivity : AppCompatActivity() {
                     is OrderState.SuccessPayment -> {
                         val intent = Intent(this@PaymentActivity, PaymentWebViewActivity::class.java).apply {
                             putExtra("url_payment", orderState.paymentUrl)
+                            putExtra("product", ArrayList(selectedItems))
                         }
                         startActivity(intent)
-
-                        lifecycleScope.launch {
-                            viewModel.deleteItemsFromCart(
-                                selectedItems.map { cartItem ->
-                                    CartItem(
-                                        productId = cartItem.id.toString(),
-                                        title = cartItem.name,
-                                        price = cartItem.price,
-                                        quantity = cartItem.quantity,
-                                        image = cartItem.name
-                                    )
-                                }
-                            )
-                        }
                     }
                     is OrderState.Error -> {
                         Toast.makeText(

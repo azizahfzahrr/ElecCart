@@ -1,14 +1,13 @@
-package com.azizahfzahrr.eleccart
+package com.azizahfzahrr.eleccart.presentation.view.splashscreen
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.databinding.ActivitySplashScreenBinding
+import com.azizahfzahrr.eleccart.presentation.view.onboard.OnboardActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

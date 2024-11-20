@@ -7,7 +7,7 @@ import javax.inject.Inject
 class OrderTransactionDetailById @Inject constructor(
     private val orderTransactionRepository: OrderTransactionRepository
 ){
-    suspend operator fun invoke(id: String): OrderTransactionDetail {
-        return orderTransactionRepository.getOrderTransactionById(id)
-    }
+//    suspend operator fun invoke(id: String): OrderTransactionDetail {
+//        return orderTransactionRepository.getOrderTransactionById(id)
+//    }
 }

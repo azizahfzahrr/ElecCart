@@ -1,6 +1,7 @@
 package com.azizahfzahrr.eleccart.di
 
 import android.content.Context
+import android.preference.PreferenceDataStore
 import androidx.room.Room
 import com.azizahfzahrr.eleccart.data.repository.AddressRepository
 import com.azizahfzahrr.eleccart.data.repository.CartRepository
@@ -13,8 +14,10 @@ import com.azizahfzahrr.eleccart.data.source.local.AddressDao
 import com.azizahfzahrr.eleccart.data.source.local.AddressDatabase
 import com.azizahfzahrr.eleccart.data.source.local.CartDao
 import com.azizahfzahrr.eleccart.data.source.local.CartDatabase
+import com.azizahfzahrr.eleccart.data.source.local.PreferencedDataStore
 import com.azizahfzahrr.eleccart.data.source.local.WishlistDao
 import com.azizahfzahrr.eleccart.data.source.local.WishlistDatabase
+import com.azizahfzahrr.eleccart.data.source.local.dataStore
 import com.azizahfzahrr.eleccart.data.source.remote.ApiService
 import com.azizahfzahrr.eleccart.data.source.remote.NetworkConfig
 import com.azizahfzahrr.eleccart.data.source.remote.RemoteDataSource
@@ -35,6 +38,12 @@ object AppModule {
     @Singleton
     fun provideApiService(): ApiService {
         return NetworkConfig().getApiService()
+    }
+
+    @Provides
+    @Singleton
+    fun providePreferenceDataStore(@ApplicationContext context: Context): PreferencedDataStore {
+        return PreferencedDataStore.getInstance(context.dataStore)
     }
 
     @Provides

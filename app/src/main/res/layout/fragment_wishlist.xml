@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/iv_left_arrow_wishlist"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/left_arrow"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,24 +22,64 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/poppins"
+        android:fontFamily="@font/poppins_bold"
         android:text="@string/wishlist"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/iv_left_arrow_wishlist"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_left_arrow_wishlist"
-        app:layout_constraintTop_toTopOf="@id/iv_left_arrow_wishlist" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_product_wishlist"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title_wishlist"
-        tools:itemCount="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:itemCount="6"
         tools:listitem="@layout/item_wishlist_product" />
+
+    <ImageView
+        android:id="@+id/iv_data_empty_wishlist"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:src="@drawable/wishlist_vector_grey"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_no_data_wishlist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="@string/your_wishlist_is_empty"
+        android:textColor="@color/grey_300"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@id/iv_data_empty_wishlist"
+        app:layout_constraintStart_toStartOf="@id/iv_data_empty_wishlist"
+        app:layout_constraintTop_toBottomOf="@id/iv_data_empty_wishlist" />
+
+    <TextView
+        android:id="@+id/tv_no_data_detail_wishlist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="When you add products to Wishlist, they'll appear here"
+        android:gravity="center"
+        android:textColor="@color/grey_300"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/tv_no_data_wishlist"
+        app:layout_constraintStart_toStartOf="@id/tv_no_data_wishlist"
+        app:layout_constraintEnd_toEndOf="@id/tv_no_data_wishlist"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

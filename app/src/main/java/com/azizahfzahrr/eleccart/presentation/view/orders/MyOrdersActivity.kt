@@ -2,6 +2,7 @@ package com.azizahfzahrr.eleccart.presentation.view.orders
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -13,6 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.databinding.ActivityMyOrdersBinding
+import com.azizahfzahrr.eleccart.domain.model.MyOrderResponse
+import com.azizahfzahrr.eleccart.domain.model.MyOrderState
 import com.azizahfzahrr.eleccart.domain.model.OrderTransaction
 import com.azizahfzahrr.eleccart.domain.model.OrderTransactionDetail
 import com.azizahfzahrr.eleccart.domain.model.OrderTransactionState
@@ -53,13 +56,13 @@ class MyOrdersActivity : AppCompatActivity(), ItemOrdersListener {
         lifecycleScope.launch {
             viewModel.orderTransactionState.collect { state ->
                 when (state) {
-                    is OrderTransactionState.Loading -> showLoading()
-                    is OrderTransactionState.Success -> showData(state.transactionOrder)
-                    is OrderTransactionState.SuccessDetail -> {
+                    is MyOrderState.Loading -> showLoading()
+                    is MyOrderState.Success -> showData(state.transactionOrder)
+                    is MyOrderState.SuccessDetail -> {
                         // Handle or ignore the SuccessDetail case
                         // This activity doesn't need to do anything with detailed data
                     }
-                    is OrderTransactionState.Error -> showError(state.message)
+                    is MyOrderState.Error -> showError(state.message)
                 }
             }
         }
@@ -72,7 +75,7 @@ class MyOrdersActivity : AppCompatActivity(), ItemOrdersListener {
         binding.rvMyTransaction.isVisible = false
     }
 
-    private fun showData(orders: List<OrderTransaction>) {
+    private fun showData(orders: List<MyOrderResponse.Data?>) {
         binding.shimmerLayout.stopShimmer()
         binding.shimmerLayout.isVisible = false
         binding.rvMyTransaction.isVisible = true
@@ -84,6 +87,8 @@ class MyOrdersActivity : AppCompatActivity(), ItemOrdersListener {
         binding.shimmerLayout.isVisible = false
         binding.rvMyTransaction.isVisible = false
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+        Log.d("Message", message)
     }
 
     override fun onClick(id: String) {

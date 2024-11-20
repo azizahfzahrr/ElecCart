@@ -11,12 +11,15 @@ import androidx.fragment.app.viewModels
 import com.azizahfzahrr.eleccart.MainActivity
 import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.data.local.entity.CartItem
+import com.azizahfzahrr.eleccart.data.model.Item
+import com.azizahfzahrr.eleccart.data.model.Order
 import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.data.source.local.WishlistEntity
 import com.azizahfzahrr.eleccart.databinding.ActivityDetailProductBinding
 import com.azizahfzahrr.eleccart.presentation.view.cart.CartFragment
 import com.azizahfzahrr.eleccart.presentation.view.cart.CartViewModel
+import com.azizahfzahrr.eleccart.presentation.view.payment.PaymentActivity
 import com.azizahfzahrr.eleccart.presentation.view.wishlist.WishlistViewModel
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +37,6 @@ class DetailProductActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val product = intent.getSerializableExtra("product") as? ProductDto.Data
-
         product?.let {
             displayProductDetails(it)
         }
@@ -62,12 +64,42 @@ class DetailProductActivity : AppCompatActivity() {
         binding.btnAddToCartDetailProduct.setOnClickListener {
             product?.let { addToCart(it) }
         }
+        binding.btnBuyNowDetailProduct.setOnClickListener {
+            product?.let { navigateToPayment(it) }
+        }
+    }
+
+    private fun navigateToPayment(product: ProductDto.Data) {
+        if (product == null) {
+            Toast.makeText(this, "Please select a product to proceed", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val orderItem = Item(
+            id = product.pdId ?: 0,
+            name = product.pdName?.take(20) ?: "",
+            price = product.pdPrice ?: 0,
+            url = product.pdImageUrl ?: "",
+            quantity = 1
+        )
+
+        val totalAmount = product.pdPrice ?: 0
+
+        val orderRequest = Order(
+            amount = totalAmount,
+            email = "user@example.com",
+            items = listOf(orderItem)
+        )
+
+        val intent = Intent(this, PaymentActivity::class.java)
+        intent.putExtra("order_request", orderRequest)
+        startActivity(intent)
     }
 
     private fun addToCart(product: ProductDto.Data) {
         val cartItem = CartItem(
             productId = product.pdId.toString(),
-            title = product.pdName,
+            title = product.pdName?.take(20),
             price = product.pdPrice,
             image = product.pdImageUrl
         )
@@ -100,14 +132,21 @@ class DetailProductActivity : AppCompatActivity() {
                     .show()
             }
             updateWishlistIcon(productId)
+
+            val intent = Intent(this, MainActivity::class.java).apply {
+                putExtra("navigateTo", "wishlist")
+            }
+            startActivity(intent)
         }
     }
 
 
     private fun updateWishlistIcon(productId: String?) {
-        wishlistViewModel.isInWishlist(productId).observe(this) { isInWishlist ->
-            val color = if (isInWishlist) R.color.wishlist_filled else R.color.wishlist_empty
-            binding.wishlistDetailProduct.setColorFilter(ContextCompat.getColor(this, color))
+        if (productId != null) {
+            wishlistViewModel.isInWishlist(productId).observe(this) { isInWishlist ->
+                val color = if (isInWishlist) R.color.wishlist_filled else R.color.wishlist_empty
+                binding.wishlistDetailProduct.setColorFilter(ContextCompat.getColor(this, color))
+            }
         }
     }
 }

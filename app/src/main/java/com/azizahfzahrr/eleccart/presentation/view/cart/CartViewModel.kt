@@ -90,6 +90,7 @@ class CartViewModel @Inject constructor(
                     id = productIdInt,
                     name = cartItem.title ?: "",
                     price = cartItem.price ?: 0,
+                    url = cartItem.image ?: "",
                     quantity = cartItem.quantity ?: 1
                 )
             } else {

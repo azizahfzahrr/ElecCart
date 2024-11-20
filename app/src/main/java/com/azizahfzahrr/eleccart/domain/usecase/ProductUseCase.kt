@@ -5,17 +5,22 @@ import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductRequest
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.data.repository.ProductRepository
+import com.azizahfzahrr.eleccart.domain.model.Products
 import javax.inject.Inject
 
 class ProductUseCase @Inject constructor(
     private val productRepository: ProductRepository
 ) {
 
+    suspend operator fun invoke(search: String?, limit: Int?): List<Products>{
+        return productRepository.getAllProductsSearch(search, limit)
+    }
+
     suspend fun getAllProducts(): ProductDto {
         return productRepository.getAllProducts()
     }
 
-    suspend fun getProductDetail(id: Int): ProductsResponse.Product {
+    suspend fun getProductDetail(id: Int): ProductDto {
         return productRepository.getProductDetail(id)
     }
 

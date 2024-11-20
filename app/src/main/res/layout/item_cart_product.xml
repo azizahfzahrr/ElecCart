@@ -43,30 +43,6 @@
             app:layout_constraintTop_toTopOf="@id/cv_image_cart" />
 
         <TextView
-            android:id="@+id/tv_model_product_cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_medium"
-            android:text="Model:"
-            android:textColor="@color/grey_300"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@id/tv_name_product_cart"
-            app:layout_constraintTop_toBottomOf="@id/tv_name_product_cart" />
-
-        <TextView
-            android:id="@+id/tv_fill_model_product_cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:fontFamily="@font/poppins_medium"
-            android:text="Sony"
-            android:textColor="@color/grey_300"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_model_product_cart"
-            app:layout_constraintStart_toEndOf="@+id/tv_model_product_cart"
-            app:layout_constraintTop_toTopOf="@+id/tv_model_product_cart" />
-
-        <TextView
             android:id="@+id/tv_price_product_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,8 +51,8 @@
             android:text="$199,99"
             android:textColor="@color/black_200"
             android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@id/tv_model_product_cart"
-            app:layout_constraintTop_toBottomOf="@id/tv_model_product_cart" />
+            app:layout_constraintStart_toStartOf="@id/tv_name_product_cart"
+            app:layout_constraintTop_toBottomOf="@id/tv_name_product_cart" />
 
         <View
             android:id="@+id/divider_product_cart"

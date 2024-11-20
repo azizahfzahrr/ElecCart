@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.azizahfzahrr.eleccart.data.model.Item
 import com.azizahfzahrr.eleccart.databinding.ItemPaymentProductBinding
+import com.bumptech.glide.Glide
 
 class PaymentProductAdapter :
     ListAdapter<Item, PaymentProductAdapter.PaymentProductViewHolder>(PaymentProductDiffCallback()) {
@@ -28,6 +29,9 @@ class PaymentProductAdapter :
             binding.tvNameProductPayment.text = item.name
             binding.tvPriceProductPayment.text = "$${item.price}"
             binding.tvAmountQtyPayment.text = item.quantity.toString()
+            Glide.with(binding.root.context)
+                .load(item.url)
+                .into(binding.ivProductPayment)
         }
     }
 

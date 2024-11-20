@@ -2,6 +2,7 @@ package com.azizahfzahrr.eleccart.presentation.view.orders
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.azizahfzahrr.eleccart.domain.model.MyOrderState
 import com.azizahfzahrr.eleccart.domain.model.OrderTransactionState
 import com.azizahfzahrr.eleccart.domain.usecase.OrderTransactionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,21 +16,21 @@ class MyOrdersViewModel @Inject constructor(
     private val orderTransactionUseCase: OrderTransactionUseCase
 ): ViewModel(){
 
-    private val _orderTransactionState = MutableStateFlow<OrderTransactionState>(OrderTransactionState.Loading)
-    val orderTransactionState: StateFlow<OrderTransactionState> = _orderTransactionState
+    private val _orderTransactionState = MutableStateFlow<MyOrderState>(MyOrderState.Loading)
+    val orderTransactionState: StateFlow<MyOrderState> = _orderTransactionState
 
     fun loadAllOrderTransaction() {
-        _orderTransactionState.value = OrderTransactionState.Loading
+        _orderTransactionState.value = MyOrderState.Loading
         viewModelScope.launch {
             try {
                 val transactionOrder = orderTransactionUseCase()
                 _orderTransactionState.value = if (transactionOrder.isNotEmpty()) {
-                    OrderTransactionState.Success(transactionOrder)
+                    MyOrderState.Success(transactionOrder)
                 } else {
-                    OrderTransactionState.Error("No Transaction")
+                    MyOrderState.Error("No Transaction")
                 }
             } catch (e: Exception) {
-                _orderTransactionState.value = OrderTransactionState.Error(e.message ?: "Error")
+                _orderTransactionState.value = MyOrderState.Error(e.message ?: "Error")
             }
         }
     }

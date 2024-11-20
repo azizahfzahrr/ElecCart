@@ -15,5 +15,6 @@ data class OrderTransactionDetail(
         val id: String,
         val name: String,
         val price: Int,
+        val quantity: Int,
     ): Parcelable
 }

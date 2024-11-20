@@ -7,30 +7,34 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class NetworkConfig {
-    private fun Interceptor(): Interceptor {
-        return Interceptor {
-            val chain = it.request()
-            val logging = HttpLoggingInterceptor()
-            logging.level = HttpLoggingInterceptor.Level.BODY
-
+    private fun getInterceptor(): Interceptor {
+        return Interceptor { chain ->
             val token = "n..\$kYi[a4vWeZVhyDp3H4M|:*c<7]"
-            val requestHeaders = chain.newBuilder()
-                .addHeader("accept", "/")
+            val originalRequest = chain.request()
+            val request = originalRequest.newBuilder()
+                .addHeader("accept", "*/*")
                 .addHeader("x-secret-app", token)
                 .addHeader("x-user-id", "1")
+                .addHeader("Content-Type", "application/json")
                 .build()
-            it.proceed(requestHeaders)
+            chain.proceed(request)
         }
     }
 
-    private fun getIntraCeptor(): OkHttpClient {
-        return OkHttpClient.Builder().addInterceptor(Interceptor()).build()
+    private fun getOkHttpClient(): OkHttpClient {
+        val logging = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+        return OkHttpClient.Builder()
+            .addInterceptor(getInterceptor())
+            .addInterceptor(logging) // Add logging interceptor for debugging
+            .build()
     }
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://phincon-academy-api.onrender.com/phincon/api/")
-            .client(getIntraCeptor())
+            .client(getOkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

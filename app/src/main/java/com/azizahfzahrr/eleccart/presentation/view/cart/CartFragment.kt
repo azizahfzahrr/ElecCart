@@ -1,11 +1,14 @@
 package com.azizahfzahrr.eleccart.presentation.view.cart
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -30,14 +33,52 @@ class CartFragment : Fragment() {
     private val selectedItems = mutableListOf<CartItem>()
     private var cartItems: List<CartItem> = emptyList()
     private var isOrderSummaryVisible = false
+    private lateinit var paymentLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCartBinding.inflate(inflater, container, false)
+
+        paymentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                lifecycleScope.launch {
+                    selectedItems.forEach { item ->
+                        viewModel.deleteItemFromCart(item)
+                    }
+                    selectedItems.clear()
+                    updateOrderSummary()
+                    Toast.makeText(requireContext(), "Payment Successful. Cart updated.", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Payment failed or canceled.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         setupRecyclerView()
+        handleIncomingArguments()
         return binding.root
+    }
+
+    private fun handleIncomingArguments() {
+        val productId = arguments?.getString("productId")
+        val title = arguments?.getString("title")
+        val price = arguments?.getString("price")?.toIntOrNull()
+        val image = arguments?.getString("image")
+
+        if (!productId.isNullOrEmpty() && !title.isNullOrEmpty() && price != null) {
+            val newItem = CartItem(
+                productId = productId,
+                title = title,
+                price = price,
+                quantity = 1,
+                image = image,
+                isSelected = false
+            )
+            viewModel.addItemToCart(newItem)
+            Toast.makeText(requireContext(), "$title added to cart", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setupRecyclerView() {
@@ -130,7 +171,8 @@ class CartFragment : Fragment() {
                 id = cartItem.productId.toIntOrNull() ?: 0,
                 name = cartItem.title ?: "",
                 price = cartItem.price ?: 0,
-                quantity = cartItem.quantity ?: 1
+                url = cartItem.image ?: "",
+                quantity = 1
             )
         }
 
@@ -143,7 +185,8 @@ class CartFragment : Fragment() {
 
         val intent = Intent(context, PaymentActivity::class.java)
         intent.putExtra("order_request", orderRequest)
-        startActivity(intent)
+
+        paymentLauncher.launch(intent)
     }
 
     private fun removeProductFromCart(product: CartItem) {

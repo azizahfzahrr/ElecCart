@@ -9,6 +9,8 @@ import com.azizahfzahrr.eleccart.data.model.ProductRequest
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.data.model.UserRequest
 import com.azizahfzahrr.eleccart.data.model.UserResponse
+import com.azizahfzahrr.eleccart.domain.model.MyOrderResponse
+import com.azizahfzahrr.eleccart.domain.model.Products
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -16,6 +18,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -29,13 +32,19 @@ interface ApiService {
     @GET("/phincon/api/products")
     suspend fun getAllProducts(): ProductDto
 
+    @GET("/phincon/api/products")
+    suspend fun getAllProductsSearch(
+        @Query("search") search: String?,
+        @Query("limit") limit: Int?
+    ): ProductDto
+
     @GET("/phincon/api/products/category/{category}")
     suspend fun getCategory(
         @Path ("category") category: String
     ): CategoryDto
 
-    @GET("products/{id}")
-    suspend fun getProductsDetail(@Path("id") id: Int): ProductsResponse.Product
+    @GET("/products/{id}")
+    suspend fun getProductsDetail(@Path("id") id: Int): ProductDto
 
 //    @GET("products/category")
 //    suspend fun getProductsByCategory(
@@ -49,7 +58,7 @@ interface ApiService {
     suspend fun addProduct(@Body productRequest: ProductRequest)
 
     @GET("orders")
-    suspend fun getAllOrdersTransaction(): OrderDto
+    suspend fun getAllOrdersTransaction(): MyOrderResponse
 
     @POST("order/snap")
     suspend fun createOrder(

@@ -7,28 +7,37 @@ import com.azizahfzahrr.eleccart.data.model.OrderDto
 import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductRequest
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
+import com.azizahfzahrr.eleccart.data.model.TransactionOrderDetailResponse
+import com.azizahfzahrr.eleccart.domain.model.MyOrderResponse
 import com.azizahfzahrr.eleccart.domain.model.OrderTransaction
+import com.azizahfzahrr.eleccart.domain.model.Products
 import javax.inject.Inject
 
 interface RemoteDataSource {
+    suspend fun getAllProductsSearch(search: String?, limit: Int?): ProductDto
     suspend fun fetchAllProducts(): ProductDto
-    suspend fun fetchProductDetail(id: Int): ProductsResponse.Product
+    suspend fun fetchProductDetail(id: Int): ProductDto
     suspend fun fetchProductsByCategory(category: String): CategoryDto
     suspend fun fetchAllCategories(): List<String>
     suspend fun postProduct(productRequest: ProductRequest)
-    suspend fun getAllOrdersTransaction(): OrderDto
+    suspend fun getAllOrdersTransaction(): MyOrderResponse
+//    suspend fun getOrderTransactionById(id: String): TransactionOrderDetailResponse
 }
 
 class RemoteDataSourceImpl @Inject constructor(
     private val apiService: ApiService
 ) : RemoteDataSource {
 
+    override suspend fun getAllProductsSearch(search: String?, limit: Int?): ProductDto {
+        return apiService.getAllProductsSearch(search, limit)
+    }
+
     override suspend fun fetchAllProducts(): ProductDto {
         val response = apiService.getAllProducts()
         return response
     }
 
-    override suspend fun fetchProductDetail(id: Int): ProductsResponse.Product {
+    override suspend fun fetchProductDetail(id: Int): ProductDto {
         return apiService.getProductsDetail(id)
     }
 
@@ -53,7 +62,7 @@ class RemoteDataSourceImpl @Inject constructor(
         apiService.addProduct(productRequest)
     }
 
-    override suspend fun getAllOrdersTransaction(): OrderDto {
+    override suspend fun getAllOrdersTransaction(): MyOrderResponse {
         return apiService.getAllOrdersTransaction()
     }
 }

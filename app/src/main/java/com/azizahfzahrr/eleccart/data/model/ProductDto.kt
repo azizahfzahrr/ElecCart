@@ -36,7 +36,7 @@ data class ProductDto(
         @SerializedName("pd_quantity")
         val pdQuantity: Int?,
         @SerializedName("total_average_rating")
-        val totalAverageRating: Any?,
+        val totalAverageRating: Double?,
         @SerializedName("total_reviews")
         val totalReviews: String?
     ): Serializable {

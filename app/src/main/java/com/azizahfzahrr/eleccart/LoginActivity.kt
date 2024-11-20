@@ -2,6 +2,7 @@ package com.azizahfzahrr.eleccart
 
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceDataStore
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -14,6 +15,7 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.lifecycleScope
+import com.azizahfzahrr.eleccart.data.source.local.PreferencedDataStore
 import com.azizahfzahrr.eleccart.databinding.ActivityLoginBinding
 import com.azizahfzahrr.eleccart.presentation.view.home.HomeFragment
 import com.google.android.gms.tasks.OnCompleteListener
@@ -26,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
@@ -89,18 +92,24 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    @Inject
+    lateinit var preferencedDataStore: PreferencedDataStore
+
     private fun firebaseAuthWithGoogle(idToken: String?) {
         if (idToken != null) {
             val credential = GoogleAuthProvider.getCredential(idToken, null)
             auth.signInWithCredential(credential)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        Log.d("TAG", "signInWithCredential:success")
-                        Toast.makeText(this@LoginActivity, "Login Success!", Toast.LENGTH_SHORT)
-                            .show()
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                        lifecycleScope.launch {
+                            Log.d("TAG", "signInWithCredential:success")
+                            Toast.makeText(this@LoginActivity, "Login Success!", Toast.LENGTH_SHORT)
+                                .show()
+                            preferencedDataStore.setUserLoggedIn(true)
+                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
                     } else {
                         Log.w("TAG", "signInWithCredential:failure", task.exception)
                         Toast.makeText(this@LoginActivity, "Login Failed! Check again your connection", Toast.LENGTH_SHORT).show()

@@ -1,13 +1,14 @@
-package com.azizahfzahrr.eleccart
+package com.azizahfzahrr.eleccart.presentation.view.onboard
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.azizahfzahrr.eleccart.LoginActivity
+import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.databinding.ActivityOnboardBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnboardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOnboardBinding
 

@@ -10,7 +10,7 @@ class WishlistRepository @Inject constructor(private val wishlistDao: WishlistDa
         wishlistDao.addProductToWishlist(product)
     }
 
-     fun getAllWishlistProducts(): List<WishlistEntity> {
+    suspend fun getAllWishlistProducts(): List<WishlistEntity> {
         return wishlistDao.getAllWishlistProducts()
     }
 
@@ -22,5 +22,3 @@ class WishlistRepository @Inject constructor(private val wishlistDao: WishlistDa
         return wishlistDao.isProductInWishlist(productId)
     }
 }
-
-

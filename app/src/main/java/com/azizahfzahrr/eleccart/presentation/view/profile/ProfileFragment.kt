@@ -40,7 +40,7 @@ class ProfileFragment : Fragment() {
             binding.tvEmailProfile.text = userInfo.email
             binding.tvPhoneProfile.text = userInfo.phone
 
-            if (userInfo.imageUrl!= null) {
+            if (userInfo.imageUrl != null) {
                 Glide.with(requireContext())
                     .load(userInfo.imageUrl)
                     .circleCrop()
@@ -48,22 +48,16 @@ class ProfileFragment : Fragment() {
             } else {
                 binding.ivProfile.setImageResource(R.drawable.human)
             }
-        }
 
-        binding.ivArrowRightProfile.setOnClickListener {
-            val firebaseUser = FirebaseAuth.getInstance().currentUser
-            val photoUrl = firebaseUser?.photoUrl
-
-            if (photoUrl != null) {
-                Log.d("ProfileFragment", "Photo URL: $photoUrl")
-            } else {
-                Log.d("ProfileFragment", "Photo URL is null")
+            binding.ivArrowRightProfile.setOnClickListener {
+                val intent = Intent(requireContext(), DetailProfileActivity::class.java).apply {
+                    putExtra("USER_NAME", userInfo.name)
+                    putExtra("USER_EMAIL", userInfo.email)
+                    putExtra("USER_PHONE", userInfo.phone)
+                    putExtra("USER_IMAGE_URL", userInfo.imageUrl)
+                }
+                startActivity(intent)
             }
-
-            val intent = Intent(requireContext(), DetailProfileActivity::class.java).apply {
-                putExtra("USER_PHOTO_URL", photoUrl.toString())
-            }
-            startActivity(intent)
         }
 
         binding.arrowLogout.setOnClickListener {
@@ -71,6 +65,11 @@ class ProfileFragment : Fragment() {
         }
 
         binding.arrowMyOrders.setOnClickListener {
+            val intent = Intent(requireContext(), MyOrdersActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.tvMyOrdersProfile.setOnClickListener {
             val intent = Intent(requireContext(), MyOrdersActivity::class.java)
             startActivity(intent)
         }

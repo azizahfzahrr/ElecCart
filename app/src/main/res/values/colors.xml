@@ -10,6 +10,13 @@
     <color name="grey_200">#C8C8CB</color>
     <color name="color_primary">#16C782</color>
     <color name="color_secondary">#0ACF83</color>
+    <color name="color_bottom_navigation_1">#44D49E</color>
+    <color name="color_bottom_navigation_2">#A3E4C7</color>
     <color name="wishlist_filled">#DC143C</color>
     <color name="wishlist_empty">#FFFFFF</color>
+    <color name="chip_default_background">#E8F5E9</color>
+    <color name="chip_default_text">#16C782</color>
+    <color name="chip_selected_background">#16C782</color>
+    <color name="chip_selected_text">#FFFFFF</color>
+
 </resources>

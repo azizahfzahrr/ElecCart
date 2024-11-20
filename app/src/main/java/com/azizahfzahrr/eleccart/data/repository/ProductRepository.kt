@@ -8,11 +8,13 @@ import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductRequest
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.data.source.remote.RemoteDataSource
+import com.azizahfzahrr.eleccart.domain.model.Products
 import javax.inject.Inject
 
 interface ProductRepository {
+    suspend fun getAllProductsSearch(search: String?, limit: Int?): List<Products>
     suspend fun getAllProducts(): ProductDto
-    suspend fun getProductDetail(id: Int): ProductsResponse.Product
+    suspend fun getProductDetail(id: Int): ProductDto
     suspend fun getCategory(category: String): CategoryDto
     suspend fun getAllCategories(): List<String>
     suspend fun addProduct(productRequest: ProductRequest)
@@ -21,6 +23,10 @@ interface ProductRepository {
 class ProductRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) : ProductRepository {
+
+    override suspend fun getAllProductsSearch(search: String?, limit: Int?): List<Products> {
+        return remoteDataSource.getAllProductsSearch(search, limit).data?.mapNotNull { it?.toProduct() } ?: emptyList()
+    }
 
     override suspend fun getAllProducts(): ProductDto {
         return try {
@@ -32,7 +38,7 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getProductDetail(id: Int): ProductsResponse.Product {
+    override suspend fun getProductDetail(id: Int): ProductDto {
         return try {
             remoteDataSource.fetchProductDetail(id)
         } catch (e: Exception) {
@@ -66,5 +72,19 @@ class ProductRepositoryImpl @Inject constructor(
             Log.e("ProductRepositoryImpl", "Error posting new product: ${e.message}")
             throw e
         }
+    }
+
+    fun ProductDto.Data.toProduct(): Products {
+        return Products(
+            id = this.pdId ?: 0,
+            name = this.pdName ?: "",
+            price = this.pdPrice ?: 0,
+            description = this.pdDescription ?: "",
+            category = this.categories?.firstOrNull()?.ctName ?: "No Category",
+            image = this.pdImageUrl ?: "",
+            quantity = this.pdQuantity ?: 0,
+            averageRating = this.totalAverageRating ?: 0.0,
+            totalReviews = this.totalReviews ?: ""
+        )
     }
 }

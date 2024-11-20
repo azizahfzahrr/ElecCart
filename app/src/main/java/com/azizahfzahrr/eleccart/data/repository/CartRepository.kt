@@ -3,8 +3,9 @@ package com.azizahfzahrr.eleccart.data.repository
 import com.azizahfzahrr.eleccart.data.local.entity.CartItem
 import com.azizahfzahrr.eleccart.data.source.local.CartDao
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class CartRepository(private val cartDao: CartDao) {
+class CartRepository @Inject constructor(private val cartDao: CartDao) {
 
     fun getAllCartItems(): Flow<List<CartItem>> = cartDao.getAllCartItems()
 

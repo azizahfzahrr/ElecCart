@@ -73,7 +73,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/cart_is_empty"
-                android:textColor="@color/color_secondary"
+                android:textColor="@color/grey_300"
                 android:textSize="20sp"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="@id/iv_data_empty"

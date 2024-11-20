@@ -17,7 +17,7 @@
             android:layout_height="24dp"
             android:src="@drawable/elec_cart"
             app:layout_constraintTop_toTopOf="@id/tv_title_app"
-            app:layout_constraintStart_toStartOf="@id/et_search"/>
+            app:layout_constraintStart_toStartOf="@id/search_product"/>
 
         <TextView
             android:id="@+id/tv_title_app"
@@ -32,26 +32,16 @@
             app:layout_constraintStart_toStartOf="@id/iv_icon_app"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/et_search"
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/search_product"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/rounded_edittext"
-            android:drawablePadding="8dp"
-            android:drawableStart="@drawable/searchh"
-            android:hint="@string/search_here"
-            android:imeOptions="actionSearch"
-            android:maxLines="1"
-            android:padding="12dp"
-            android:textColor="@color/black"
-            android:textSize="14sp"
+            android:layout_marginTop="0dp"
+            android:backgroundTint="@color/grey_100"
+            android:hint="@string/search_product_here"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_title_app"
-            tools:ignore="Autofill" />
+            app:layout_constraintTop_toBottomOf="@id/tv_title_app"/>
 
         <TextView
             android:id="@+id/tv_category_product_home"
@@ -62,15 +52,16 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/et_search"
-            app:layout_constraintStart_toStartOf="@id/et_search"/>
+            app:layout_constraintTop_toBottomOf="@id/search_product"
+            app:layout_constraintStart_toStartOf="@id/search_product"/>
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chip_group_categories"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:singleSelection="true"
+            app:checkedIconVisible="false"
             app:layout_constraintTop_toBottomOf="@id/tv_category_product_home"
             app:layout_constraintStart_toStartOf="@id/tv_category_product_home">
 
@@ -136,18 +127,6 @@
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/chip_group_categories"
             app:layout_constraintStart_toStartOf="@id/chip_group_categories"/>
-
-        <ImageView
-            android:id="@+id/iv_filter"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/filterr"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="28dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_list_product"
-            app:layout_constraintBottom_toBottomOf="@id/tv_list_product"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_list_products"

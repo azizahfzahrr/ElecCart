@@ -1,7 +1,12 @@
 package com.azizahfzahrr.eleccart
 
+import android.app.Activity
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.azizahfzahrr.eleccart.databinding.ActivityMainBinding
 import com.azizahfzahrr.eleccart.presentation.view.cart.CartFragment
@@ -20,36 +25,50 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val navigateTo = intent.getStringExtra("navigateTo")
-        if (navigateTo == "cart") {
-            replaceFragment(CartFragment())
-        } else {
-            replaceFragment(HomeFragment())
+        when (navigateTo) {
+            "cart" -> replaceFragment(CartFragment(), R.id.nav_cart)
+            "wishlist" -> replaceFragment(WishlistFragment(), R.id.nav_wishlist)
+            else -> replaceFragment(HomeFragment(), R.id.nav_home)
         }
 
         binding.bottomNavigationView.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId){
+            when (menuItem.itemId) {
                 R.id.nav_home -> {
-                    replaceFragment(HomeFragment())
+                    ContextCompat.getColorStateList(this, R.color.bottom_navigation_item_color)
+                    replaceFragment(HomeFragment(), R.id.nav_home)
                     true
                 }
+
                 R.id.nav_cart -> {
-                    replaceFragment(CartFragment())
+                    ContextCompat.getColorStateList(this, R.color.bottom_navigation_item_color)
+                    replaceFragment(CartFragment(), R.id.nav_cart)
                     true
                 }
+
                 R.id.nav_wishlist -> {
-                    replaceFragment(WishlistFragment())
+                    ContextCompat.getColorStateList(this, R.color.bottom_navigation_item_color)
+                    replaceFragment(WishlistFragment(), R.id.nav_wishlist)
                     true
                 }
+
                 R.id.nav_profile -> {
-                    replaceFragment(ProfileFragment())
+                    ContextCompat.getColorStateList(this, R.color.bottom_navigation_item_color)
+                    replaceFragment(ProfileFragment(), R.id.nav_profile)
                     true
                 }
+
                 else -> false
             }
         }
+
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    private fun replaceFragment(fragment: Fragment, menuItemId: Int) {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment?.javaClass == fragment.javaClass) {
+            return
+        }
+        binding.bottomNavigationView.menu.findItem(menuItemId).isChecked = true
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()

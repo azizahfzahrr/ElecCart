@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OnboardActivity">
+    tools:context=".presentation.view.onboard.OnboardActivity">
 
     <ImageView
         android:id="@+id/iv_onboard"

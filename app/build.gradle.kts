@@ -72,6 +72,8 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     implementation("androidx.viewpager2:viewpager2:1.1.0")
+    implementation(libs.datastore.preferences)
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
