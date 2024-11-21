@@ -13,6 +13,7 @@ class OrderTransactionAdapter(
     private val itemOrdersListener: ItemOrdersListener
 ) : RecyclerView.Adapter<OrderTransactionAdapter.OrderTransactionViewHolder>() {
 
+
     fun submitList(newItems: List<MyOrderResponse.Data?>) {
         orderTransactions = newItems
         notifyDataSetChanged()
@@ -41,11 +42,11 @@ class OrderTransactionAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(orderTransaction: MyOrderResponse.Data) {
-            binding.tvIdOrderTransaction.text = orderTransaction.orId.toString()
+            binding.tvIdOrderTransaction.text = orderTransaction.orPlatformId.toString()
             binding.tvStatusTransaction.text = orderTransaction.orStatus
             binding.tvNumberTotalPriceTransaction.text = "$${orderTransaction.orTotalPrice}"
             itemView.setOnClickListener {
-                itemOrdersListener.onClick(orderTransaction.orId.toString())
+                itemOrdersListener.onClick(orderTransaction.orPlatformId.toString())
             }
         }
     }

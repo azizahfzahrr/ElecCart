@@ -11,60 +11,48 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:padding="16dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cl_order_summary"
-        android:padding="16dp">
+        app:layout_constraintBottom_toTopOf="@id/cl_order_summary">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/iv_left_arrow_cart"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/left_arrow"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                 android:id="@+id/tv_your_cart"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/my_cart"
                 android:textColor="@color/black_200"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@id/iv_left_arrow_cart"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/iv_left_arrow_cart"
-                app:layout_constraintTop_toTopOf="@id/iv_left_arrow_cart" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_product_cart"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_your_cart"
                 tools:itemCount="3"
-                tools:listitem="@layout/item_cart_product"
-                android:layout_marginBottom="16dp"/>
+                tools:listitem="@layout/item_cart_product" />
 
             <ImageView
                 android:id="@+id/iv_data_empty"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:layout_gravity="center"
                 android:src="@drawable/not_found"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <TextView
                 android:id="@+id/tv_no_data"
@@ -76,8 +64,8 @@
                 android:textColor="@color/grey_300"
                 android:textSize="20sp"
                 android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="@id/iv_data_empty"
                 app:layout_constraintStart_toStartOf="@id/iv_data_empty"
+                app:layout_constraintEnd_toEndOf="@id/iv_data_empty"
                 app:layout_constraintTop_toBottomOf="@id/iv_data_empty" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
@@ -164,13 +152,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/color_secondary"
-            android:text="@string/payment_now"
             android:enabled="false"
+            android:text="@string/payment_now"
             app:cornerRadius="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_total_items_cart" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_total_items_cart"
+            app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

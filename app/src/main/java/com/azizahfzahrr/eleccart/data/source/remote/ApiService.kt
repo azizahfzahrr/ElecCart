@@ -2,6 +2,7 @@ package com.azizahfzahrr.eleccart.data.source.remote
 
 import com.azizahfzahrr.eleccart.data.model.CategoryDto
 import com.azizahfzahrr.eleccart.data.model.CategoryResponse
+import com.azizahfzahrr.eleccart.data.model.MyOrderDetailResponse
 import com.azizahfzahrr.eleccart.data.model.Order
 import com.azizahfzahrr.eleccart.data.model.OrderDto
 import com.azizahfzahrr.eleccart.data.model.ProductDto
@@ -59,6 +60,11 @@ interface ApiService {
 
     @GET("orders")
     suspend fun getAllOrdersTransaction(): MyOrderResponse
+
+    @GET("order/{id}")
+    suspend fun getOrderTransactionById(
+        @Path("id") orderId: String
+    ): MyOrderDetailResponse
 
     @POST("order/snap")
     suspend fun createOrder(

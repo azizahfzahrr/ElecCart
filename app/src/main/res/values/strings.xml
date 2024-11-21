@@ -58,4 +58,10 @@
     <string name="search_product_here">Search Product Here</string>
     <string name="my_orders_detail">My Orders Detail</string>
     <string name="welcome_to_eleccart">Welcome to ElecCart!</string>
+    <string name="all">All</string>
+    <string name="tv">TV</string>
+    <string name="audio">Audio</string>
+    <string name="smartphone">Smartphone</string>
+    <string name="gaming">Gaming</string>
+    <string name="appliance">Appliance</string>
 </resources>

@@ -3,6 +3,7 @@ package com.azizahfzahrr.eleccart.data.source.remote
 import android.util.Log
 import com.azizahfzahrr.eleccart.data.model.CartResponse
 import com.azizahfzahrr.eleccart.data.model.CategoryDto
+import com.azizahfzahrr.eleccart.data.model.MyOrderDetailResponse
 import com.azizahfzahrr.eleccart.data.model.OrderDto
 import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductRequest
@@ -21,7 +22,7 @@ interface RemoteDataSource {
     suspend fun fetchAllCategories(): List<String>
     suspend fun postProduct(productRequest: ProductRequest)
     suspend fun getAllOrdersTransaction(): MyOrderResponse
-//    suspend fun getOrderTransactionById(id: String): TransactionOrderDetailResponse
+    suspend fun getOrderTransactionById(orderId: String): MyOrderDetailResponse
 }
 
 class RemoteDataSourceImpl @Inject constructor(
@@ -41,11 +42,6 @@ class RemoteDataSourceImpl @Inject constructor(
         return apiService.getProductsDetail(id)
     }
 
-//    override suspend fun fetchProductsByCategory(category: String): ProductsResponse {
-//        val response = apiService.getProductsByCategory(category)
-//        Log.d("RemoteDataSourceImpl", "Fetched products for category $category: ${response.products}")
-//        return response
-//    }
     override suspend fun fetchProductsByCategory(category: String): CategoryDto {
         val response = apiService.getCategory(category)
         val products = response.data?.filterNotNull() ?: emptyList()
@@ -64,6 +60,10 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getAllOrdersTransaction(): MyOrderResponse {
         return apiService.getAllOrdersTransaction()
+    }
+
+    override suspend fun getOrderTransactionById(orderId: String): MyOrderDetailResponse {
+        return apiService.getOrderTransactionById(orderId)
     }
 }
 

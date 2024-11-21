@@ -17,6 +17,7 @@ import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.data.source.local.WishlistEntity
 import com.azizahfzahrr.eleccart.databinding.ActivityDetailProductBinding
+import com.azizahfzahrr.eleccart.domain.model.Products
 import com.azizahfzahrr.eleccart.presentation.view.cart.CartFragment
 import com.azizahfzahrr.eleccart.presentation.view.cart.CartViewModel
 import com.azizahfzahrr.eleccart.presentation.view.payment.PaymentActivity
@@ -33,18 +34,57 @@ class DetailProductActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var searchedProduct: Products?
         binding = ActivityDetailProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val product = intent.getSerializableExtra("product") as? ProductDto.Data
-        product?.let {
-            displayProductDetails(it)
+        if (product == null){
+            searchedProduct = intent.getParcelableExtra("product")
+            if (searchedProduct != null) {
+                displaySearchedProductDetails(searchedProduct)
+            }
+        } else {
+            displayProductDetails(product)
         }
 
         binding.ivLeftArrowDetailProduct.setOnClickListener {
             onBackPressed()
         }
+
+        binding.ivShareDetailProduct.setOnClickListener {
+            product?.let {
+                shareToAllPlatforms(
+                    context = this,
+                    title = it.pdName,
+                    description = it.pdDescription,
+                    imageUrl = it.pdImageUrl,
+                    price = it.pdPrice
+                )
+            }
+        }
+
+
     }
+
+    private fun shareToAllPlatforms(context: DetailProductActivity, title: String?, description: String?, imageUrl: String?, price: Int?) {
+        val shareText = buildString {
+            append("Check out this product!\n")
+            append("Name: $title\n")
+            price?.let { append("Price: $$it\n") }
+            description?.let { append("Description: $description\n") }
+            imageUrl?.let { append("Image: $it\n") }
+        }
+
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, shareText)
+        }
+
+        val chooser = Intent.createChooser(shareIntent, "Share product via")
+        context.startActivity(chooser)
+    }
+
 
     private fun displayProductDetails(product: ProductDto.Data) {
         binding.tvTitleNameProductDetail.text = product.pdName
@@ -66,6 +106,62 @@ class DetailProductActivity : AppCompatActivity() {
         }
         binding.btnBuyNowDetailProduct.setOnClickListener {
             product?.let { navigateToPayment(it) }
+        }
+    }
+
+    private fun displaySearchedProductDetails(product: Products) {
+        binding.tvTitleNameProductDetail.text = product.name
+        binding.tvPriceProductDetail.text = "$${product.price}"
+        binding.tvDescriptionFillDetailProduct.text = product.description ?: "No description available"
+
+        Glide.with(this)
+            .load(product.image)
+            .error(R.drawable.not_found)
+            .into(binding.ivDetailProduct)
+
+        updateWishlistIcon(product.id?.toString())
+
+        binding.cardWishlistDetailProduct.setOnClickListener {
+            toggleWishlist(ProductDto.Data(
+                pdId = product.id,
+                pdName = product.name,
+                pdPrice = product.price,
+                pdDescription = product.description,
+                pdImageUrl = product.image,
+                pdQuantity = product.quantity,
+                totalAverageRating = product.averageRating,
+                totalReviews = product.totalReviews,
+                categories = null,
+                pdData = null
+            ))
+        }
+        binding.btnAddToCartDetailProduct.setOnClickListener {
+            product?.let { addToCart(ProductDto.Data(
+                pdId = product.id,
+                pdName = product.name,
+                pdPrice = product.price,
+                pdDescription = product.description,
+                pdImageUrl = product.image,
+                pdQuantity = product.quantity,
+                totalAverageRating = product.averageRating,
+                totalReviews = product.totalReviews,
+                categories = null,
+                pdData = null
+            )) }
+        }
+        binding.btnBuyNowDetailProduct.setOnClickListener {
+            product?.let { navigateToPayment(ProductDto.Data(
+                pdId = product.id,
+                pdName = product.name,
+                pdPrice = product.price,
+                pdDescription = product.description,
+                pdImageUrl = product.image,
+                pdQuantity = product.quantity,
+                totalAverageRating = product.averageRating,
+                totalReviews = product.totalReviews,
+                categories = null,
+                pdData = null
+            )) }
         }
     }
 

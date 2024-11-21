@@ -1,5 +1,6 @@
 package com.azizahfzahrr.eleccart.data.repository
 
+import com.azizahfzahrr.eleccart.data.model.MyOrderDetailResponse
 import com.azizahfzahrr.eleccart.data.source.remote.RemoteDataSource
 import com.azizahfzahrr.eleccart.domain.model.MyOrderResponse
 import com.azizahfzahrr.eleccart.domain.model.OrderTransaction
@@ -8,7 +9,7 @@ import javax.inject.Inject
 
 interface OrderTransactionRepository {
     suspend fun getAllOrderTransaction(): List<MyOrderResponse.Data?>
-  //  suspend fun getOrderTransactionById(id: String): OrderTransactionDetail
+    suspend fun getOrderTransactionById(orderId: String): MyOrderDetailResponse.Data?
 }
 
 class OrderTransactionRepositoryImpl @Inject constructor(
@@ -21,7 +22,8 @@ class OrderTransactionRepositoryImpl @Inject constructor(
         return response.data ?: emptyList()
     }
 
-//    override suspend fun getOrderTransactionById(id: String): OrderTransactionDetail {
-//        val response = remoteDataSource.
-//    }
+    override suspend fun getOrderTransactionById(orderId: String): MyOrderDetailResponse.Data? {
+        val response = remoteDataSource.getOrderTransactionById(orderId)
+        return response.data
+    }
 }

@@ -7,37 +7,26 @@
     android:padding="16dp"
     tools:context=".presentation.view.wishlist.WishlistFragment">
 
-    <ImageView
-        android:id="@+id/iv_left_arrow_wishlist"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/left_arrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/tv_title_wishlist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/poppins_bold"
+        android:fontFamily="@font/poppins_semibold"
         android:text="@string/wishlist"
-        android:textColor="@color/black"
+        android:textColor="@color/black_200"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@id/iv_left_arrow_wishlist"
-        app:layout_constraintStart_toEndOf="@id/iv_left_arrow_wishlist"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_product_wishlist"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title_wishlist"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:itemCount="6"
         tools:listitem="@layout/item_wishlist_product" />
@@ -64,13 +53,13 @@
         android:textColor="@color/grey_300"
         android:textSize="20sp"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@id/iv_data_empty_wishlist"
-        app:layout_constraintStart_toStartOf="@id/iv_data_empty_wishlist"
-        app:layout_constraintTop_toBottomOf="@id/iv_data_empty_wishlist" />
+        app:layout_constraintTop_toBottomOf="@id/iv_data_empty_wishlist"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/tv_no_data_detail_wishlist"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/poppins_medium"
@@ -79,7 +68,7 @@
         android:textColor="@color/grey_300"
         android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/tv_no_data_wishlist"
-        app:layout_constraintStart_toStartOf="@id/tv_no_data_wishlist"
-        app:layout_constraintEnd_toEndOf="@id/tv_no_data_wishlist"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

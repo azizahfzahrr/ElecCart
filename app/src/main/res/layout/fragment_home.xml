@@ -60,60 +60,72 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:singleSelection="true"
             app:checkedIconVisible="false"
+            app:layout_constraintEnd_toEndOf="@+id/search_product"
+            app:layout_constraintStart_toStartOf="@id/tv_category_product_home"
             app:layout_constraintTop_toBottomOf="@id/tv_category_product_home"
-            app:layout_constraintStart_toStartOf="@id/tv_category_product_home">
+            app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_category_tv"
+                android:id="@+id/chip_category_all"
+                style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:layout_margin="4dp"
-                android:text="TV"
+                android:text="@string/all"
                 android:textSize="12sp"
-                app:chipIconVisible="false"
-                style="@style/Widget.MaterialComponents.Chip.Action" />
+                app:chipIconVisible="false" />
+
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_category_tv"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_margin="4dp"
+                android:text="@string/tv"
+                android:textSize="12sp"
+                app:chipIconVisible="false" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_category_audio"
+                style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:layout_marginStart="4dp"
-                android:text="Audio"
+                android:text="@string/audio"
                 android:textSize="12sp"
-                app:chipIconVisible="false"
-                style="@style/Widget.MaterialComponents.Chip.Action" />
+                app:chipIconVisible="false" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_category_smartphone"
+                style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:layout_marginStart="4dp"
-                android:text="Smartphone"
+                android:text="@string/smartphone"
                 android:textSize="12sp"
-                app:chipIconVisible="false"
-                style="@style/Widget.MaterialComponents.Chip.Action" />
+                app:chipIconVisible="false" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_category_gaming"
+                style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:layout_marginStart="4dp"
-                android:text="Gaming"
+                android:text="@string/gaming"
                 android:textSize="12sp"
-                app:chipIconVisible="false"
-                style="@style/Widget.MaterialComponents.Chip.Action" />
+                app:chipIconVisible="false" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_category_appliance"
+                style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:layout_marginStart="4dp"
-                android:text="Appliance"
+                android:text="@string/appliance"
                 android:textSize="12sp"
-                app:chipIconVisible="false"
-                style="@style/Widget.MaterialComponents.Chip.Action" />
+                app:chipIconVisible="false" />
         </com.google.android.material.chip.ChipGroup>
 
         <TextView

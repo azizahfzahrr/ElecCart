@@ -25,7 +25,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
-        android:id="@+id/tv_name_product_payment"
+        android:id="@+id/tv_name_product_payment_order_detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="@id/cv_image_payment" />
 
     <TextView
-        android:id="@+id/tv_price_product_payment"
+        android:id="@+id/tv_price_product_payment_order_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -47,11 +47,11 @@
         android:text="$199,99"
         android:textColor="@color/black_200"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@id/tv_name_product_payment"
-        app:layout_constraintTop_toBottomOf="@id/tv_name_product_payment" />
+        app:layout_constraintStart_toStartOf="@id/tv_name_product_payment_order_detail"
+        app:layout_constraintTop_toBottomOf="@id/tv_name_product_payment_order_detail" />
 
     <TextView
-        android:id="@+id/tv_quantity_payment"
+        android:id="@+id/tv_quantity_payment_order_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/quantity"
@@ -59,9 +59,9 @@
         android:textSize="12sp"
         android:textColor="@color/grey_300"
         android:layout_marginStart="100dp"
-        app:layout_constraintStart_toEndOf="@id/tv_price_product_payment"
-        app:layout_constraintTop_toTopOf="@id/tv_price_product_payment"
-        app:layout_constraintBottom_toBottomOf="@id/tv_price_product_payment"/>
+        app:layout_constraintStart_toEndOf="@id/tv_price_product_payment_order_detail"
+        app:layout_constraintTop_toTopOf="@id/tv_price_product_payment_order_detail"
+        app:layout_constraintBottom_toBottomOf="@id/tv_price_product_payment_order_detail"/>
 
     <TextView
         android:id="@+id/tv_amount_qty_payment"
@@ -72,9 +72,9 @@
         android:text="1"
         android:textColor="@color/grey_300"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@id/tv_quantity_payment"
-        app:layout_constraintStart_toEndOf="@id/tv_quantity_payment"
-        app:layout_constraintTop_toTopOf="@id/tv_quantity_payment" />
+        app:layout_constraintBottom_toBottomOf="@id/tv_quantity_payment_order_detail"
+        app:layout_constraintStart_toEndOf="@id/tv_quantity_payment_order_detail"
+        app:layout_constraintTop_toTopOf="@id/tv_quantity_payment_order_detail" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

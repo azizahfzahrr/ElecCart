@@ -68,6 +68,7 @@ class HomeFragment : Fragment() {
 
     private fun setupCategoryChips() {
         val chips = listOf(
+            binding.chipCategoryAll to "All",
             binding.chipCategoryTv to "TV",
             binding.chipCategoryAudio to "Audio",
             binding.chipCategorySmartphone to "Smartphone",
@@ -78,17 +79,25 @@ class HomeFragment : Fragment() {
         chips.forEach { (chip, category) ->
             if (chip.isChecked) {
                 setChipSelectedStyle(chip)
-                viewModel.loadProductsByCategory(category.uppercase())
+                if (category.uppercase() == "ALL"){
+                    viewModel.loadAllProducts()
+                } else {
+                    viewModel.loadProductsByCategory(category.uppercase())
+                }
             } else {
                 setChipDefaultStyle(chip)
             }
-            
+
             chip.setOnClickListener {
                 chips.forEach { (c, _) -> setChipDefaultStyle(c) }
                 setChipSelectedStyle(chip)
                 viewModel.clearProducts()
                 viewModel.resetPagination()
-                viewModel.loadProductsByCategory(category.uppercase())
+                if (category.uppercase() == "ALL"){
+                    viewModel.loadAllProducts()
+                } else {
+                    viewModel.loadProductsByCategory(category.uppercase())
+                }
             }
         }
     }

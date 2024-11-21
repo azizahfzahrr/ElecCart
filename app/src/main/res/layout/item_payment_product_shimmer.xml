@@ -21,7 +21,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/airpodsmax" />
+            android:background="#ddd" />
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
@@ -32,7 +32,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/poppins_bold"
         android:maxLines="2"
-        android:text="Apple Airpods Max"
+        android:background="#ddd"
         android:textColor="@color/black_200"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@id/cv_image_payment"
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="$199,99"
+        android:background="#ddd"
         android:textColor="@color/black_200"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@id/tv_name_product_payment"
@@ -54,7 +54,7 @@
         android:id="@+id/tv_quantity_payment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/quantity"
+        android:background="#ddd"
         android:fontFamily="@font/poppins"
         android:textSize="12sp"
         android:textColor="@color/grey_300"
@@ -69,12 +69,20 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/poppins"
-        android:text="1"
+        android:background="#ddd"
         android:textColor="@color/grey_300"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@id/tv_quantity_payment"
         app:layout_constraintStart_toEndOf="@id/tv_quantity_payment"
         app:layout_constraintTop_toTopOf="@id/tv_quantity_payment" />
 
+
+    <View
+        android:id="@+id/divider_product_payment"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="12dp"
+        android:background="#E0E0E0"
+        app:layout_constraintTop_toBottomOf="@+id/cv_image_payment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

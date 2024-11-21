@@ -51,10 +51,6 @@ class WishlistFragment : Fragment(), ItemWishlistListener {
         })
 
         wishlistViewModel.loadWishlistProducts()
-
-        binding.ivLeftArrowWishlist.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
     }
 
     private fun showWishlistUI(products: List<WishlistEntity>) {

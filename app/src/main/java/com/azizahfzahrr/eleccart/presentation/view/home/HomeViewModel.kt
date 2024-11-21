@@ -21,8 +21,8 @@ class HomeViewModel @Inject constructor(
     private val _products = MutableLiveData<List<ProductDto.Data?>>()
     val products: LiveData<List<ProductDto.Data?>> = _products
 
-    private val _categoryData = MutableLiveData<List<CategoryData.Product?>>()
-    val categoryData: LiveData<List<CategoryData.Product?>> = _categoryData
+    private val _categoryData = MutableLiveData<List<CategoryData.Product?>?>()
+    val categoryData: MutableLiveData<List<CategoryData.Product?>?> = _categoryData
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading

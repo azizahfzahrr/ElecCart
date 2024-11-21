@@ -1,5 +1,6 @@
 package com.azizahfzahrr.eleccart.domain.usecase
 
+import com.azizahfzahrr.eleccart.data.model.MyOrderDetailResponse
 import com.azizahfzahrr.eleccart.data.repository.OrderTransactionRepository
 import com.azizahfzahrr.eleccart.domain.model.MyOrderResponse
 import com.azizahfzahrr.eleccart.domain.model.OrderTransaction
@@ -10,5 +11,8 @@ class OrderTransactionUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): List<MyOrderResponse.Data?>{
         return orderTransactionRepository.getAllOrderTransaction()
+    }
+    suspend fun getOrderDetailsById(orderId: String): MyOrderDetailResponse.Data? {
+        return orderTransactionRepository.getOrderTransactionById(orderId)
     }
 }

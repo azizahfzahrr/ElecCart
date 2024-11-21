@@ -43,6 +43,8 @@ class MyOrdersActivity : AppCompatActivity(), ItemOrdersListener {
 
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbarMyOrders)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = getString(R.string.my_orders)
     }
 
@@ -92,6 +94,7 @@ class MyOrdersActivity : AppCompatActivity(), ItemOrdersListener {
     }
 
     override fun onClick(id: String) {
+        Log.d("OrderTransactionID", id)
         val intent = Intent(this, MyOrdersDetailActivity::class.java)
         intent.putExtra("id_transaction_order", id)
         startActivity(intent)
