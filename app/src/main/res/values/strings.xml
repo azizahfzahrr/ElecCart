@@ -64,4 +64,5 @@
     <string name="smartphone">Smartphone</string>
     <string name="gaming">Gaming</string>
     <string name="appliance">Appliance</string>
+    <string name="continue_payment">Continue</string>
 </resources>

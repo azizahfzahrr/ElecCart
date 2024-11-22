@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
@@ -114,9 +115,17 @@ class LoginActivity : AppCompatActivity() {
                         Log.w("TAG", "signInWithCredential:failure", task.exception)
                         Toast.makeText(this@LoginActivity, "Login Failed! Check again your connection", Toast.LENGTH_SHORT).show()
                     }
+                    resetLoginState()
                 }
         } else {
             Log.e("TAG", "ID Token is null")
+            resetLoginState()
         }
+    }
+
+    private fun resetLoginState() {
+        binding.loadingLayout.isVisible = false
+        binding.ivGoogleSignin.isVisible = true
+        binding.tvSignInWithGoogle.isVisible = true
     }
 }

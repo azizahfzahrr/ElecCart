@@ -93,9 +93,12 @@ class CartFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.allCartItems.collect { items ->
-                val updatedItems = items.map { it.copy(isSelected = false) }
+                val updatedItems = items.map { existingItem ->
+                    existingItem.copy(
+                        isSelected = selectedItems.any { it.productId == existingItem.productId }
+                    )
+                }
                 cartItems = updatedItems
-            //    cartItems = items
                 if (cartItems.isNullOrEmpty()) {
                     showEmptyCartUI()
                 } else {
@@ -145,19 +148,8 @@ class CartFragment : Fragment() {
             ivArrowUpProductCart.visibility = View.VISIBLE
             btnPaymentNow.visibility = View.VISIBLE
         }
-        if (cartItems.isEmpty()) {
-            showEmptyCartUI()
-            return
-        }
-        if (binding.rvProductCart.isComputingLayout) {
-            binding.rvProductCart.post {
-                cartAdapter.submitList(cartItems)
-                updateOrderSummary()
-            }
-        } else {
-            cartAdapter.submitList(cartItems)
-            updateOrderSummary()
-        }
+        cartAdapter.submitList(cartItems)
+        updateOrderSummary()
     }
 
     private fun navigateToPayment() {
@@ -172,7 +164,7 @@ class CartFragment : Fragment() {
                 name = cartItem.title ?: "",
                 price = cartItem.price ?: 0,
                 url = cartItem.image ?: "",
-                quantity = 1
+                quantity = cartItem.quantity ?: 1
             )
         }
 
@@ -191,7 +183,7 @@ class CartFragment : Fragment() {
 
     private fun removeProductFromCart(product: CartItem) {
         viewModel.deleteItemFromCart(product)
-        selectedItems.remove(product)
+        selectedItems.removeIf { it.productId == product.productId }
         updateOrderSummary()
     }
 
@@ -201,7 +193,9 @@ class CartFragment : Fragment() {
             val updatedItem = product.copy(quantity = updatedQuantity)
             viewModel.updateItemInCart(updatedItem)
             if (product.isSelected) {
-                selectedItems.find { it.productId == product.productId }?.quantity = updatedQuantity
+                selectedItems.find { it.productId == product.productId }?.apply {
+                    quantity = updatedQuantity
+                }
                 updateOrderSummary()
             }
         }
@@ -209,7 +203,6 @@ class CartFragment : Fragment() {
 
     private fun toggleProductSelection(product: CartItem, isChecked: Boolean) {
         val updatedItem = product.copy(isSelected = isChecked)
-
         viewModel.updateItemInCart(updatedItem)
 
         if (isChecked) {
@@ -231,7 +224,7 @@ class CartFragment : Fragment() {
         binding.tvTotalPriceCart.text = "$${totalAmount}"
         binding.tvFillTotalItemsCart.text = "$totalItems items"
 
-        if (!hasSelectedItems){
+        if (!hasSelectedItems) {
             binding.tvTotalPriceCart.visibility = View.GONE
             binding.tvFillTotalItemsCart.visibility = View.GONE
         } else {
@@ -257,13 +250,11 @@ class CartFragment : Fragment() {
             binding.tvTotalPriceCart.visibility = View.VISIBLE
             binding.tvTotalItemsCart.visibility = View.VISIBLE
             binding.tvFillTotalItemsCart.visibility = View.VISIBLE
-            binding.ivArrowUpProductCart.setImageResource(R.drawable.arrow_up)
         } else {
             binding.tvTotalProductCart.visibility = View.GONE
             binding.tvTotalPriceCart.visibility = View.GONE
             binding.tvTotalItemsCart.visibility = View.GONE
             binding.tvFillTotalItemsCart.visibility = View.GONE
-            binding.ivArrowUpProductCart.setImageResource(R.drawable.arrow_down)
         }
     }
 }

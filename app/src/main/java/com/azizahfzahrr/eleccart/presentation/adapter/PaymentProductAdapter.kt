@@ -7,13 +7,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.azizahfzahrr.eleccart.data.model.Item
 import com.azizahfzahrr.eleccart.databinding.ItemPaymentProductBinding
+import com.azizahfzahrr.eleccart.databinding.ItemPaymentProductOrderDetailBinding
 import com.bumptech.glide.Glide
 
 class PaymentProductAdapter :
     ListAdapter<Item, PaymentProductAdapter.PaymentProductViewHolder>(PaymentProductDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PaymentProductViewHolder {
-        val binding = ItemPaymentProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemPaymentProductOrderDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PaymentProductViewHolder(binding)
     }
 
@@ -22,12 +23,12 @@ class PaymentProductAdapter :
         holder.bind(item)
     }
 
-    inner class PaymentProductViewHolder(private val binding: ItemPaymentProductBinding) :
+    inner class PaymentProductViewHolder(private val binding: ItemPaymentProductOrderDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Item) {
-            binding.tvNameProductPayment.text = item.name
-            binding.tvPriceProductPayment.text = "$${item.price}"
+            binding.tvNameProductPaymentOrderDetail.text = item.name
+            binding.tvPriceProductPaymentOrderDetail.text = "$${item.price}"
             binding.tvAmountQtyPayment.text = item.quantity.toString()
             Glide.with(binding.root.context)
                 .load(item.url)

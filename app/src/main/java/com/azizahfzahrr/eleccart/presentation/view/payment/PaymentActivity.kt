@@ -2,6 +2,7 @@ package com.azizahfzahrr.eleccart.presentation.view.payment
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +31,7 @@ class PaymentActivity : AppCompatActivity() {
     private var selectedItems: List<Item> = emptyList()
     private var totalAmount = 0
     private var totalItems = 0
+    private var isOrderSummaryVisible = false
 
     companion object {
         private const val REQUEST_CHOOSE_ADDRESS = 1001
@@ -56,7 +58,7 @@ class PaymentActivity : AppCompatActivity() {
         if (orderRequest != null) {
             selectedItems = orderRequest.items
             totalAmount = orderRequest.amount
-            totalItems = selectedItems.size
+            totalItems = calculateTotalItems(selectedItems) // Updated to calculate total items based on quantity
             updateUI()
         }
         setupRecyclerView()
@@ -130,6 +132,27 @@ class PaymentActivity : AppCompatActivity() {
         binding.rvProductPayment.apply {
             layoutManager = LinearLayoutManager(this@PaymentActivity)
             adapter = paymentProductAdapter
+
+            binding.ivArrowUpProductPayment.setOnClickListener {
+                isOrderSummaryVisible = !isOrderSummaryVisible
+                updatePaymentSummaryVisibility()
+            }
+        }
+    }
+
+    private fun updatePaymentSummaryVisibility() {
+        if(isOrderSummaryVisible) {
+            binding.tvTotalProductPayment.visibility = View.VISIBLE
+            binding.tvTotalPricePayment.visibility = View.VISIBLE
+            binding.tvTotalItemsPayment.visibility = View.VISIBLE
+            binding.tvFillTotalItemsPayment.visibility = View.VISIBLE
+            binding.ivArrowUpProductPayment.setImageResource(R.drawable.arrow_up)
+        } else {
+            binding.tvTotalProductPayment.visibility = View.GONE
+            binding.tvTotalPricePayment.visibility = View.GONE
+            binding.tvTotalItemsPayment.visibility = View.GONE
+            binding.tvFillTotalItemsPayment.visibility = View.GONE
+            binding.ivArrowUpProductPayment.setImageResource(R.drawable.arrow_down)
         }
     }
 
@@ -140,6 +163,7 @@ class PaymentActivity : AppCompatActivity() {
             tvTotalPricePayment.text = "$${totalAmount}"
         }
         paymentProductAdapter.submitList(selectedItems)
+        updatePaymentSummaryVisibility()
     }
 
     private fun updateAddressDetails(address: AddressEntity) {
@@ -148,5 +172,9 @@ class PaymentActivity : AppCompatActivity() {
         binding.tvFullAddressPayment.text = address.addressRecipientFullAddress
         binding.tvProvincePayment.text = address.addressRecipientProvince
         binding.tvPostalCode.text = address.addressRecipientPostalCode
+    }
+
+    private fun calculateTotalItems(items: List<Item>): Int {
+        return items.sumOf { it.quantity }
     }
 }
