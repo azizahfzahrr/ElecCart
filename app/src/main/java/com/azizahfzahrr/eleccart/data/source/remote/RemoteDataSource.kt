@@ -3,14 +3,10 @@ package com.azizahfzahrr.eleccart.data.source.remote
 import android.util.Log
 import com.azizahfzahrr.eleccart.data.model.CategoryDto
 import com.azizahfzahrr.eleccart.data.model.MyOrderDetailResponse
-import com.azizahfzahrr.eleccart.data.model.OrderDto
 import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductRequest
-import com.azizahfzahrr.eleccart.data.model.ProductsResponse
-import com.azizahfzahrr.eleccart.data.model.TransactionOrderDetailResponse
 import com.azizahfzahrr.eleccart.domain.model.MyOrderResponse
-import com.azizahfzahrr.eleccart.domain.model.OrderTransaction
-import com.azizahfzahrr.eleccart.domain.model.Products
+
 import javax.inject.Inject
 
 interface RemoteDataSource {
