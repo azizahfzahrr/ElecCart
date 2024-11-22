@@ -67,7 +67,7 @@
         android:layout_marginStart="80dp"
         android:backgroundTint="@color/color_secondary"
         android:fontFamily="@font/poppins_semibold"
-        android:text="Get Started"
+        android:text="@string/get_started"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:cornerRadius="10dp"

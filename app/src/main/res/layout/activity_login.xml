@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".LoginActivity">
+    tools:context=".presentation.view.login.LoginActivity">
 
     <TextView
         android:id="@+id/tv_title_login"
@@ -70,7 +70,7 @@
                     android:id="@+id/loading_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Please wait, be patient...."
+                    android:text="@string/please_wait_be_patient"
                     android:textColor="@color/black_200"
                     android:textSize="14sp"
                     android:textStyle="bold" />

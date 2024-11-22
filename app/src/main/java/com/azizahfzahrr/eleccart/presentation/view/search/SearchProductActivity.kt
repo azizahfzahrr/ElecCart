@@ -32,7 +32,6 @@ class SearchProductActivity : AppCompatActivity(), ItemProductListener {
 
     private lateinit var binding: ActivitySearchProductBinding
     private val viewModel: SearchProductViewModel by viewModels()
-
     private val adapter by lazy {
         ItemProductAdapter { id ->
             onClick(id)

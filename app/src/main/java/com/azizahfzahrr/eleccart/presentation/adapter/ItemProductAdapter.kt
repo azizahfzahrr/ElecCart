@@ -8,16 +8,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.azizahfzahrr.eleccart.databinding.ItemListProductBinding
 import com.azizahfzahrr.eleccart.domain.model.Products
 import com.bumptech.glide.Glide
+import java.text.NumberFormat
+import java.util.Locale
 
 class ItemProductAdapter(
-    private val listener: (Int) -> Unit
+    private val listener: (Int) -> Unit,
 ) : ListAdapter<Products, ItemProductAdapter.MyViewHolder>(DiffCallback()) {
+
+    private fun formatRupiah(amount: Int): String {
+        val localeID = Locale("in", "ID")
+        val formatter = NumberFormat.getNumberInstance(localeID)
+        return formatter.format(amount)
+    }
 
     class MyViewHolder(private val binding: ItemListProductBinding) : RecyclerView.ViewHolder(binding.root) {
 
+        private val adapter = ItemProductAdapter(listener = {})
+
         fun bind(product: Products, listener: (Int) -> Unit) {
             binding.tvProductTitle.text = product.name
-            binding.tvProductPrice.text = "$${product.price}"
+
+            val formattedPrice = product.price?.let { "Rp${adapter.formatRupiah(it * 15000)}" } ?: "Rp0"
+            binding.tvProductPrice.text = formattedPrice
 
             Glide.with(binding.root.context)
                 .load(product.image)

@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/poppins_medium"
-        android:text="When you add products to Wishlist, they'll appear here"
+        android:text="@string/no_data_wishlist"
         android:gravity="center"
         android:textColor="@color/grey_300"
         android:visibility="invisible"

@@ -9,6 +9,8 @@ import com.azizahfzahrr.eleccart.databinding.ActivityMyOrdersDetailBinding
 import com.azizahfzahrr.eleccart.databinding.ItemPaymentProductBinding
 import com.azizahfzahrr.eleccart.domain.model.OrderTransactionDetail
 import com.bumptech.glide.Glide
+import java.text.NumberFormat
+import java.util.Locale
 
 class ProductOrderDetailAdapter(
     private var productList: List<MyOrderDetailResponse.Data.Detail.OdProduct?>?
@@ -44,7 +46,7 @@ class ProductOrderDetailAdapter(
         fun bind(product: MyOrderDetailResponse.Data.Detail.OdProduct) {
 
             binding.tvNameProductPayment.text = product.name ?: "Unknown Product"
-            binding.tvPriceProductPayment.text = "$${product.price}"
+            binding.tvPriceProductPayment.text = formatRupiah(product.price ?: 0)
             binding.tvAmountQtyPayment.text = product.quantity.toString()
 
             val imageUrl = product?.imageUrl?.pdImageUrl
@@ -54,6 +56,10 @@ class ProductOrderDetailAdapter(
                     .into(binding.ivProductPayment)
             }
         }
-
+        private fun formatRupiah(amount: Int): String {
+            val localeID = Locale("in", "ID")
+            val formatter = NumberFormat.getNumberInstance(localeID).apply { maximumFractionDigits = 0 }
+            return "Rp${formatter.format(amount)}"
+        }
     }
 }

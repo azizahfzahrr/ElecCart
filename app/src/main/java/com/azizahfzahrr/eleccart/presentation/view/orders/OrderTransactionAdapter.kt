@@ -7,6 +7,8 @@ import com.azizahfzahrr.eleccart.databinding.ItemListTransactionBinding
 import com.azizahfzahrr.eleccart.domain.model.MyOrderResponse
 import com.azizahfzahrr.eleccart.domain.model.OrderTransaction
 import com.azizahfzahrr.eleccart.presentation.listener.ItemOrdersListener
+import java.text.NumberFormat
+import java.util.Locale
 
 class OrderTransactionAdapter(
     private var orderTransactions: List<MyOrderResponse.Data?>,
@@ -44,10 +46,20 @@ class OrderTransactionAdapter(
         fun bind(orderTransaction: MyOrderResponse.Data) {
             binding.tvIdOrderTransaction.text = orderTransaction.orPlatformId.toString()
             binding.tvStatusTransaction.text = orderTransaction.orStatus
-            binding.tvNumberTotalPriceTransaction.text = "$${orderTransaction.orTotalPrice}"
+            binding.tvNumberTotalPriceTransaction.text = orderTransaction.orTotalPrice?.let {
+                formatRupiah(
+                    it
+                )
+            }
             itemView.setOnClickListener {
                 itemOrdersListener.onClick(orderTransaction.orPlatformId.toString())
             }
         }
+    }
+
+    private fun formatRupiah(amount: Int): String {
+        val localeID = Locale("in", "ID")
+        val formatter = NumberFormat.getNumberInstance(localeID).apply { maximumFractionDigits = 0 }
+        return "Rp${formatter.format(amount)}"
     }
 }

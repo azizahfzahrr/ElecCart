@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.azizahfzahrr.eleccart.data.local.entity.CartItem
 import com.azizahfzahrr.eleccart.databinding.ItemCartProductBinding
 import com.bumptech.glide.Glide
+import java.text.NumberFormat
+import java.util.Locale
 
 class CartAdapter(
     private var products: List<CartItem>,
@@ -23,8 +25,11 @@ class CartAdapter(
 
         fun bind(product: CartItem) {
             binding.tvNameProductCart.text = product.title
-            val totalPrice = (product.price ?: 0) * (product.quantity ?: 1)
-            binding.tvPriceProductCart.text = "$${totalPrice}"
+            val totalPrice = product.price ?: 0
+
+            val formattedPrice = formatToRupiah(totalPrice)
+            binding.tvPriceProductCart.text = formattedPrice
+
             binding.tvFillAmountProductCart.text = product.quantity.toString()
 
             Glide.with(binding.ivProductCart.context)
@@ -49,6 +54,12 @@ class CartAdapter(
             binding.cardviewPlusCart.setOnClickListener {
                 onQuantityChange(product, 1)
             }
+        }
+
+        private fun formatToRupiah(price: Int): String {
+            val rupiahFormat = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
+            rupiahFormat.maximumFractionDigits = 0
+            return rupiahFormat.format(price)
         }
     }
 

@@ -2,11 +2,9 @@ package com.azizahfzahrr.eleccart.data.repository
 
 import android.util.Log
 import android.widget.Toast
-import com.azizahfzahrr.eleccart.data.model.CartResponse
 import com.azizahfzahrr.eleccart.data.model.CategoryDto
 import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductRequest
-import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.data.source.remote.RemoteDataSource
 import com.azizahfzahrr.eleccart.domain.model.Products
 import javax.inject.Inject

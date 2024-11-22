@@ -1,14 +1,10 @@
-package com.azizahfzahrr.eleccart
+package com.azizahfzahrr.eleccart.presentation.view.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceDataStore
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
@@ -16,25 +12,22 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.lifecycleScope
+import com.azizahfzahrr.eleccart.presentation.view.mainactivity.MainActivity
 import com.azizahfzahrr.eleccart.data.source.local.PreferencedDataStore
 import com.azizahfzahrr.eleccart.databinding.ActivityLoginBinding
-import com.azizahfzahrr.eleccart.presentation.view.home.HomeFragment
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
+
+    @Inject
+    lateinit var preferenceDataStore: PreferencedDataStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,12 +36,22 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
+        lifecycleScope.launch {
+            if (preferenceDataStore.isUserLoggedIn()) {
+                navigateToMain()
+            }
+        }
+
         binding.cvGoogleLogin.setOnClickListener {
             signInWithCredentialManager()
         }
     }
 
     private fun signInWithCredentialManager() {
+        binding.loadingLayout.isVisible = true
+        binding.ivGoogleSignin.isVisible = false
+        binding.tvSignInWithGoogle.isVisible = false
+
         val credentialManager = CredentialManager.create(this)
 
         val googleIdOption = GetGoogleIdOption.Builder()
@@ -69,6 +72,7 @@ class LoginActivity : AppCompatActivity() {
                 handleSignIn(result)
             } catch (e: GetCredentialException) {
                 Log.d("Error", e.message.toString())
+                resetLoginState()
             }
         }
     }
@@ -82,19 +86,19 @@ class LoginActivity : AppCompatActivity() {
                         firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
                     } catch (e: Exception) {
                         Log.e("TAG", "Error parsing Google ID token", e)
+                        resetLoginState()
                     }
                 } else {
                     Log.e("TAG", "Unexpected credential type")
+                    resetLoginState()
                 }
             }
             else -> {
                 Log.e("TAG", "Unexpected credential type")
+                resetLoginState()
             }
         }
     }
-
-    @Inject
-    lateinit var preferencedDataStore: PreferencedDataStore
 
     private fun firebaseAuthWithGoogle(idToken: String?) {
         if (idToken != null) {
@@ -103,19 +107,14 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         lifecycleScope.launch {
-                            Log.d("TAG", "signInWithCredential:success")
-                            Toast.makeText(this@LoginActivity, "Login Success!", Toast.LENGTH_SHORT)
-                                .show()
-                            preferencedDataStore.setUserLoggedIn(true)
-                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                            preferenceDataStore.setUserLoggedIn(true)
+                            navigateToMain()
                         }
                     } else {
                         Log.w("TAG", "signInWithCredential:failure", task.exception)
                         Toast.makeText(this@LoginActivity, "Login Failed! Check again your connection", Toast.LENGTH_SHORT).show()
+                        resetLoginState()
                     }
-                    resetLoginState()
                 }
         } else {
             Log.e("TAG", "ID Token is null")
@@ -127,5 +126,11 @@ class LoginActivity : AppCompatActivity() {
         binding.loadingLayout.isVisible = false
         binding.ivGoogleSignin.isVisible = true
         binding.tvSignInWithGoogle.isVisible = true
+    }
+
+    private fun navigateToMain() {
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

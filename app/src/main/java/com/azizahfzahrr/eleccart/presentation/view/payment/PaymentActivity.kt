@@ -2,6 +2,7 @@ package com.azizahfzahrr.eleccart.presentation.view.payment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -18,9 +19,10 @@ import com.azizahfzahrr.eleccart.domain.model.OrderState
 import com.azizahfzahrr.eleccart.presentation.adapter.PaymentProductAdapter
 import com.azizahfzahrr.eleccart.presentation.view.address.ChooseAddressActivity
 import com.azizahfzahrr.eleccart.presentation.view.cart.CartViewModel
-import com.azizahfzahrr.eleccart.presentation.view.order.OrderViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.Locale
 
 @AndroidEntryPoint
 class PaymentActivity : AppCompatActivity() {
@@ -31,7 +33,7 @@ class PaymentActivity : AppCompatActivity() {
     private var selectedItems: List<Item> = emptyList()
     private var totalAmount = 0
     private var totalItems = 0
-    private var isOrderSummaryVisible = false
+    private var isOrderSummaryVisible = true
 
     companion object {
         private const val REQUEST_CHOOSE_ADDRESS = 1001
@@ -57,9 +59,11 @@ class PaymentActivity : AppCompatActivity() {
         val orderRequest = intent.getSerializableExtra("order_request") as? Order
         if (orderRequest != null) {
             selectedItems = orderRequest.items
-            totalAmount = orderRequest.amount
-            totalItems = calculateTotalItems(selectedItems) // Updated to calculate total items based on quantity
+            totalAmount = calculateTotalAmount(selectedItems)
+            totalItems = calculateTotalItems(selectedItems)
             updateUI()
+        } else {
+            Log.e("PaymentActivity", "Order request is null!")
         }
         setupRecyclerView()
 
@@ -77,8 +81,7 @@ class PaymentActivity : AppCompatActivity() {
             orderViewModel.orderState.collect { orderState ->
                 when (orderState) {
                     is OrderState.Loading -> {
-                        Toast.makeText(this@PaymentActivity, "Loading", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(this@PaymentActivity, "Loading", Toast.LENGTH_SHORT).show()
                     }
                     is OrderState.Success -> {
                         Toast.makeText(
@@ -141,7 +144,7 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun updatePaymentSummaryVisibility() {
-        if(isOrderSummaryVisible) {
+        if (isOrderSummaryVisible) {
             binding.tvTotalProductPayment.visibility = View.VISIBLE
             binding.tvTotalPricePayment.visibility = View.VISIBLE
             binding.tvTotalItemsPayment.visibility = View.VISIBLE
@@ -158,13 +161,21 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun updateUI() {
         binding.apply {
-            tvTotalProductPayment.text = "Total"
             tvFillTotalItemsPayment.text = "$totalItems items"
-            tvTotalPricePayment.text = "$${totalAmount}"
+            val formattedTotalPrice = "Rp${formatRupiah(totalAmount)}"
+            tvTotalPricePayment.text = formattedTotalPrice
         }
         paymentProductAdapter.submitList(selectedItems)
         updatePaymentSummaryVisibility()
     }
+
+
+    private fun formatRupiah(amount: Int): String {
+        val localeID = Locale("in", "ID")
+        val formatter = NumberFormat.getNumberInstance(localeID).apply { maximumFractionDigits = 0 }
+        return formatter.format(amount)
+    }
+
 
     private fun updateAddressDetails(address: AddressEntity) {
         binding.tvFullNamePayment.text = address.addressRecipientName
@@ -172,6 +183,10 @@ class PaymentActivity : AppCompatActivity() {
         binding.tvFullAddressPayment.text = address.addressRecipientFullAddress
         binding.tvProvincePayment.text = address.addressRecipientProvince
         binding.tvPostalCode.text = address.addressRecipientPostalCode
+    }
+
+    private fun calculateTotalAmount(items: List<Item>): Int {
+        return items.sumOf { it.price * it.quantity }
     }
 
     private fun calculateTotalItems(items: List<Item>): Int {

@@ -4,12 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.data.source.local.AddressEntity
@@ -20,16 +18,15 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChooseAddressActivity : AppCompatActivity(), ItemAddressListener, ItemAddressAdapter.SelectedAddressListener {
+
     private lateinit var binding: ActivityChooseAddressBinding
     private val viewModel: ChooseAddressViewModel by viewModels()
     private lateinit var adapter: ItemAddressAdapter
+    private var selectedAddress: AddressEntity? = null
 
-    private val addAddressResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val addAddressResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val addressAdded = result.data?.getBooleanExtra("address_added", false) ?: false
-            if (addressAdded) {
-                viewModel.loadAddress()
-            }
+            viewModel.loadAddress()
         }
     }
 
@@ -38,8 +35,8 @@ class ChooseAddressActivity : AppCompatActivity(), ItemAddressListener, ItemAddr
         binding = ActivityChooseAddressBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        addressRecyclerView()
-        addressObserve()
+        setupRecyclerView()
+        observeAddressList()
 
         binding.ivLeftArrowChooseAddress.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -47,23 +44,52 @@ class ChooseAddressActivity : AppCompatActivity(), ItemAddressListener, ItemAddr
 
         binding.btnAddAddress.setOnClickListener {
             val intent = Intent(this@ChooseAddressActivity, CreateAddressActivity::class.java)
-            addAddressResultLauncher.launch(intent)
+            addAddressResult.launch(intent)
+        }
+
+        binding.btnConfirmAddress.isEnabled = false
+
+        binding.btnConfirmAddress.setOnClickListener {
+            if (selectedAddress != null) {
+                Toast.makeText(this, "Address selected", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent().apply {
+                    putExtra("selected_address", selectedAddress)
+                }
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            } else {
+                Toast.makeText(this, "Please select an address", Toast.LENGTH_SHORT).show()
+            }
         }
 
         viewModel.loadAddress()
     }
 
-    private fun addressObserve() {
+    private fun observeAddressList() {
         viewModel.listAddress.observe(this) { addressList ->
             adapter.updateDataAddress(addressList)
+            val selectedAddress = adapter.getSelectedAddress()
+            onAddressSelected(selectedAddress)
         }
-
     }
 
-    private fun addressRecyclerView() {
+    private fun setupRecyclerView() {
         adapter = ItemAddressAdapter(emptyList(), this, this)
-        binding.rvChooseAddress.layoutManager = LinearLayoutManager(this@ChooseAddressActivity)
+        binding.rvChooseAddress.layoutManager = LinearLayoutManager(this)
         binding.rvChooseAddress.adapter = adapter
+    }
+
+    override fun onAddressSelected(address: AddressEntity?) {
+        selectedAddress = address
+        binding.btnConfirmAddress.isEnabled = address != null
+
+        val background = if (address == null){
+            ContextCompat.getColor(this, R.color.grey_200)
+        }else{
+            ContextCompat.getColor(this, R.color.color_primary)
+        }
+        binding.btnConfirmAddress.setCardBackgroundColor(background)
     }
 
     override fun onDelete(address: AddressEntity) {
@@ -76,13 +102,5 @@ class ChooseAddressActivity : AppCompatActivity(), ItemAddressListener, ItemAddr
         val intent = Intent(this@ChooseAddressActivity, CreateAddressActivity::class.java)
         intent.putExtra("addressToEdit", address)
         startActivity(intent)
-    }
-
-    override fun onAddressSelected(address: AddressEntity) {
-        val intent = Intent().apply {
-            putExtra("selected_address", address)
-        }
-        setResult(Activity.RESULT_OK, intent)
-        finish()
     }
 }

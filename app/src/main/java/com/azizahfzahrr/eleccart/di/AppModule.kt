@@ -5,6 +5,8 @@ import android.preference.PreferenceDataStore
 import androidx.room.Room
 import com.azizahfzahrr.eleccart.data.repository.AddressRepository
 import com.azizahfzahrr.eleccart.data.repository.CartRepository
+import com.azizahfzahrr.eleccart.data.repository.FirebaseAuthRepository
+import com.azizahfzahrr.eleccart.data.repository.FirebaseAuthRepositoryImpl
 import com.azizahfzahrr.eleccart.data.repository.OrderTransactionRepository
 import com.azizahfzahrr.eleccart.data.repository.OrderTransactionRepositoryImpl
 import com.azizahfzahrr.eleccart.data.repository.ProductRepository
@@ -19,10 +21,13 @@ import com.azizahfzahrr.eleccart.data.source.local.WishlistDao
 import com.azizahfzahrr.eleccart.data.source.local.WishlistDatabase
 import com.azizahfzahrr.eleccart.data.source.local.dataStore
 import com.azizahfzahrr.eleccart.data.source.remote.ApiService
+import com.azizahfzahrr.eleccart.data.source.remote.FirebaseAuthDataSource
+import com.azizahfzahrr.eleccart.data.source.remote.FirebaseAuthDataSourceImpl
 import com.azizahfzahrr.eleccart.data.source.remote.NetworkConfig
 import com.azizahfzahrr.eleccart.data.source.remote.RemoteDataSource
 import com.azizahfzahrr.eleccart.data.source.remote.RemoteDataSourceImpl
 import com.azizahfzahrr.eleccart.domain.usecase.ProductUseCase
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +49,24 @@ object AppModule {
     @Singleton
     fun providePreferenceDataStore(@ApplicationContext context: Context): PreferencedDataStore {
         return PreferencedDataStore.getInstance(context.dataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth{
+        return FirebaseAuth.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFiebaseAuthDataSource(firebaseAuth: FirebaseAuth): FirebaseAuthDataSource {
+        return FirebaseAuthDataSourceImpl(firebaseAuth)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuthRepository(firebaseAuthDataSource: FirebaseAuthDataSource): FirebaseAuthRepository {
+        return FirebaseAuthRepositoryImpl(firebaseAuthDataSource)
     }
 
     @Provides
@@ -124,6 +147,4 @@ object AppModule {
         return OrderTransactionRepositoryImpl(remoteDataSource)
 
     }
-
-
 }

@@ -11,15 +11,11 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.azizahfzahrr.eleccart.MainActivity
-import com.azizahfzahrr.eleccart.R
+import com.azizahfzahrr.eleccart.presentation.view.mainactivity.MainActivity
 import com.azizahfzahrr.eleccart.data.local.entity.CartItem
 import com.azizahfzahrr.eleccart.data.model.Item
 import com.azizahfzahrr.eleccart.databinding.ActivityPaymentWebViewBinding

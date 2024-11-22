@@ -11,20 +11,17 @@ class ItemAddressAdapter(
     private var listAddress: List<AddressEntity>,
     private val listener: ItemAddressListener,
     private val selectedAddressListener: SelectedAddressListener
-): RecyclerView.Adapter<ItemAddressAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<ItemAddressAdapter.MyViewHolder>() {
 
-    private var selectedPosition = -1
+    private var selectedAddressPosition = -1
 
     class MyViewHolder(val binding: ItemListAddressBinding) : RecyclerView.ViewHolder(binding.root)
 
-    interface SelectedAddressListener{
-        fun onAddressSelected(address: AddressEntity)
+    interface SelectedAddressListener {
+        fun onAddressSelected(address: AddressEntity?)
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemListAddressBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
@@ -38,15 +35,24 @@ class ItemAddressAdapter(
         holder.binding.tvProvince.text = address.addressRecipientProvince
         holder.binding.tvPostalCode.text = address.addressRecipientPostalCode
 
-        holder.binding.rbSelectItem.setChecked(selectedPosition == position)
+        holder.binding.rbSelectItem.isChecked = selectedAddressPosition == position
+
         holder.binding.rbSelectItem.setOnClickListener {
-            selectedPosition = if (selectedPosition == position) {
+            val previousPosition = selectedAddressPosition
+            selectedAddressPosition = if (selectedAddressPosition == position) {
                 -1
             } else {
                 position
             }
-            notifyDataSetChanged()
-            selectedAddressListener.onAddressSelected(address)
+
+            notifyItemChanged(previousPosition)
+            notifyItemChanged(selectedAddressPosition)
+
+            if (selectedAddressPosition != -1) {
+                selectedAddressListener.onAddressSelected(listAddress[selectedAddressPosition])
+            } else {
+                selectedAddressListener.onAddressSelected(null)
+            }
         }
 
         holder.binding.ivEditAddress.setOnClickListener {
@@ -64,11 +70,8 @@ class ItemAddressAdapter(
         listAddress = newAddress
         notifyDataSetChanged()
     }
+
     fun getSelectedAddress(): AddressEntity? {
-        return if (selectedPosition != -1) {
-            listAddress[selectedPosition]
-        } else {
-            null
-        }
+        return listAddress.getOrNull(selectedAddressPosition)
     }
 }

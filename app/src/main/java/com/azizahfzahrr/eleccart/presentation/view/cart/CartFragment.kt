@@ -24,6 +24,8 @@ import com.azizahfzahrr.eleccart.presentation.view.payment.PaymentActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.Locale
 
 @AndroidEntryPoint
 class CartFragment : Fragment() {
@@ -34,6 +36,7 @@ class CartFragment : Fragment() {
     private var cartItems: List<CartItem> = emptyList()
     private var isOrderSummaryVisible = false
     private lateinit var paymentLauncher: ActivityResultLauncher<Intent>
+    private val USD_TO_IDR = 15000
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,7 +74,7 @@ class CartFragment : Fragment() {
             val newItem = CartItem(
                 productId = productId,
                 title = title,
-                price = price,
+                price = price * USD_TO_IDR,
                 quantity = 1,
                 image = image,
                 isSelected = false
@@ -133,6 +136,7 @@ class CartFragment : Fragment() {
             ivArrowUpProductCart.visibility = View.GONE
             btnPaymentNow.visibility = View.GONE
         }
+        updatePaymentButtonState()
     }
 
     private fun showCartWithDataUI(cartItems: List<CartItem>) {
@@ -221,7 +225,9 @@ class CartFragment : Fragment() {
         val totalAmount = selectedItems.sumOf { it.price?.times(it.quantity ?: 1) ?: 0 }
         val totalItems = selectedItems.sumOf { it.quantity ?: 1 }
 
-        binding.tvTotalPriceCart.text = "$${totalAmount}"
+        val formattedTotalAmount = formatWithThousandsSeparator(totalAmount)
+
+        binding.tvTotalPriceCart.text = "Rp$formattedTotalAmount"
         binding.tvFillTotalItemsCart.text = "$totalItems items"
 
         if (!hasSelectedItems) {
@@ -232,6 +238,12 @@ class CartFragment : Fragment() {
             binding.tvFillTotalItemsCart.visibility = View.VISIBLE
         }
         updatePaymentButtonState()
+    }
+
+    private fun formatWithThousandsSeparator(price: Int): String {
+        val formatter = NumberFormat.getNumberInstance(Locale("id", "ID"))
+        formatter.maximumFractionDigits = 0
+        return formatter.format(price)
     }
 
     private fun updatePaymentButtonState() {
@@ -245,16 +257,9 @@ class CartFragment : Fragment() {
     }
 
     private fun updateOrderSummaryVisibility() {
-        if (isOrderSummaryVisible) {
-            binding.tvTotalProductCart.visibility = View.VISIBLE
-            binding.tvTotalPriceCart.visibility = View.VISIBLE
-            binding.tvTotalItemsCart.visibility = View.VISIBLE
-            binding.tvFillTotalItemsCart.visibility = View.VISIBLE
-        } else {
-            binding.tvTotalProductCart.visibility = View.GONE
-            binding.tvTotalPriceCart.visibility = View.GONE
-            binding.tvTotalItemsCart.visibility = View.GONE
-            binding.tvFillTotalItemsCart.visibility = View.GONE
-        }
+        binding.tvOrderSummary.visibility = if (isOrderSummaryVisible) View.VISIBLE else View.GONE
+        binding.ivArrowUpProductCart.setImageResource(
+            if (isOrderSummaryVisible) R.drawable.arrow_up else R.drawable.arrow_down
+        )
     }
 }

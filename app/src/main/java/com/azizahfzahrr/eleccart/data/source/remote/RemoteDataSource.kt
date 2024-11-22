@@ -1,7 +1,6 @@
 package com.azizahfzahrr.eleccart.data.source.remote
 
 import android.util.Log
-import com.azizahfzahrr.eleccart.data.model.CartResponse
 import com.azizahfzahrr.eleccart.data.model.CategoryDto
 import com.azizahfzahrr.eleccart.data.model.MyOrderDetailResponse
 import com.azizahfzahrr.eleccart.data.model.OrderDto

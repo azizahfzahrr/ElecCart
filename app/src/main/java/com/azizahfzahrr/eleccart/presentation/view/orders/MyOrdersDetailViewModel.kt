@@ -3,7 +3,6 @@ package com.azizahfzahrr.eleccart.presentation.view.orders
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.azizahfzahrr.eleccart.domain.model.MyOrderDetailState
-import com.azizahfzahrr.eleccart.domain.usecase.OrderTransactionDetailById
 import com.azizahfzahrr.eleccart.domain.usecase.OrderTransactionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

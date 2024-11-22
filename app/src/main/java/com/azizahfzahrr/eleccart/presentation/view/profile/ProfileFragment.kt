@@ -2,14 +2,13 @@ package com.azizahfzahrr.eleccart.presentation.view.profile
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
-import com.azizahfzahrr.eleccart.LoginActivity
+import com.azizahfzahrr.eleccart.presentation.view.login.LoginActivity
 import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.databinding.FragmentProfileBinding
 import com.azizahfzahrr.eleccart.presentation.view.address.ChooseAddressActivity
@@ -60,6 +59,10 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        binding.tvLogoutProfile.setOnClickListener {
+            showLogoutConfirmationDialog()
+        }
+
         binding.arrowLogout.setOnClickListener {
             showLogoutConfirmationDialog()
         }
@@ -71,6 +74,11 @@ class ProfileFragment : Fragment() {
 
         binding.tvMyOrdersProfile.setOnClickListener {
             val intent = Intent(requireContext(), MyOrdersActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.tvAddressProfile.setOnClickListener {
+            val intent = Intent(requireContext(), ChooseAddressActivity::class.java)
             startActivity(intent)
         }
 

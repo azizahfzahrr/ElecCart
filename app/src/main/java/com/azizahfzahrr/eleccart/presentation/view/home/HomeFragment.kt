@@ -17,7 +17,6 @@ import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.presentation.view.detailproduct.DetailProductActivity
 import com.azizahfzahrr.eleccart.databinding.FragmentHomeBinding
 import com.azizahfzahrr.eleccart.presentation.adapter.HomeFragmentAdapter
-import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.data.source.local.CartManager
 import com.azizahfzahrr.eleccart.presentation.view.search.SearchProductActivity
 import com.google.android.material.chip.Chip
@@ -32,6 +31,7 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var homeFragmentAdapter: HomeFragmentAdapter
     private lateinit var cartManager: CartManager
+    private val USD_TO_IDR = 15000
 
     companion object {
         fun newInstance(selectedType: String?): HomeFragment {
@@ -79,7 +79,7 @@ class HomeFragment : Fragment() {
         chips.forEach { (chip, category) ->
             if (chip.isChecked) {
                 setChipSelectedStyle(chip)
-                if (category.uppercase() == "ALL"){
+                if (category.uppercase() == "ALL") {
                     viewModel.loadAllProducts()
                 } else {
                     viewModel.loadProductsByCategory(category.uppercase())
@@ -93,7 +93,7 @@ class HomeFragment : Fragment() {
                 setChipSelectedStyle(chip)
                 viewModel.clearProducts()
                 viewModel.resetPagination()
-                if (category.uppercase() == "ALL"){
+                if (category.uppercase() == "ALL") {
                     viewModel.loadAllProducts()
                 } else {
                     viewModel.loadProductsByCategory(category.uppercase())
@@ -138,7 +138,6 @@ class HomeFragment : Fragment() {
         })
 
         binding.rvListProducts.adapter = homeFragmentAdapter
-        binding.rvListProducts.adapter = homeFragmentAdapter
 
         binding.rvListProducts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -172,8 +171,8 @@ class HomeFragment : Fragment() {
                 homeFragmentAdapter.submitList(products)
             }
         }
-        viewModel.categoryData.observe(viewLifecycleOwner){items ->
 
+        viewModel.categoryData.observe(viewLifecycleOwner) { items ->
             binding.shimmerLayout.stopShimmer()
             binding.shimmerLayout.visibility = View.GONE
 
@@ -186,7 +185,7 @@ class HomeFragment : Fragment() {
                         pdId = product.pdId,
                         pdName = product.pdName,
                         pdImageUrl = product.pdImageUrl,
-                        pdPrice = product.pdPrice,
+                        pdPrice = product.pdPrice?.times(USD_TO_IDR),
                         pdDescription = product.pdDescription,
                         pdQuantity = product.pdQuantity,
                         totalAverageRating = product.totalAverageRating,
@@ -200,6 +199,7 @@ class HomeFragment : Fragment() {
                 homeFragmentAdapter.submitList(productList)
             }
         }
+
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
                 Log.e("HomeFragment", "Error: $it")
@@ -208,8 +208,9 @@ class HomeFragment : Fragment() {
                 binding.rvListProducts.visibility = View.GONE
             }
         }
-        viewModel.loading.observe(viewLifecycleOwner){ isLoading ->
-            if (isLoading){
+
+        viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
                 binding.shimmerLayout.startShimmer()
                 binding.shimmerLayout.visibility = View.VISIBLE
                 binding.rvListProducts.visibility = View.GONE

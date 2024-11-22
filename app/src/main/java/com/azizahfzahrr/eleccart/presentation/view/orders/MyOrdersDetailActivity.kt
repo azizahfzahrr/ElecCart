@@ -16,6 +16,8 @@ import com.azizahfzahrr.eleccart.domain.model.OrderTransactionDetail
 import com.azizahfzahrr.eleccart.presentation.adapter.ProductOrderDetailAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.Locale
 
 @AndroidEntryPoint
 class MyOrdersDetailActivity : AppCompatActivity() {
@@ -78,10 +80,9 @@ class MyOrdersDetailActivity : AppCompatActivity() {
         binding.shimmerLayout.stopShimmer()
         binding.shimmerLayout.isVisible = false
 
-        binding.tvOrderNameDetail.text = orderDetails?.orPlatformId.toString()
+        binding.tvOrderIdDetail.text = orderDetails?.orPlatformId.toString()
         binding.tvPaymentStatus.text = orderDetails?.orStatus
-        binding.tvPaymentStatusDetail.text = orderDetails?.orPaymentStatus
-        binding.tvTotalPriceOrderNumberDetail.text = "$${orderDetails?.orTotalPrice}"
+        binding.tvTotalPriceOrderNumberDetail.text = formatRupiah(orderDetails.orTotalPrice ?: 0)
 
         val details = orderDetails?.details?.filterNotNull().orEmpty()
         adapter.submitList(details[0].odProducts)
@@ -92,5 +93,11 @@ class MyOrdersDetailActivity : AppCompatActivity() {
         binding.shimmerLayout.stopShimmer()
         binding.shimmerLayout.isVisible = false
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun formatRupiah(amount: Int): String {
+        val localeID = Locale("in", "ID")
+        val formatter = NumberFormat.getNumberInstance(localeID).apply { maximumFractionDigits = 0 }
+        return "Rp${formatter.format(amount)}"
     }
 }

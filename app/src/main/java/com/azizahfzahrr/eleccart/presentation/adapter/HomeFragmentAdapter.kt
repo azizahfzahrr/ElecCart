@@ -8,6 +8,8 @@ import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductsResponse
 import com.azizahfzahrr.eleccart.databinding.ItemListProductBinding
 import com.bumptech.glide.Glide
+import java.text.NumberFormat
+import java.util.Locale
 
 class HomeFragmentAdapter(
     private val listener: OnAddToCartClickListener
@@ -20,9 +22,16 @@ class HomeFragmentAdapter(
 
     inner class ProductViewHolder(private val binding: ItemListProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        private val USD_TO_IDR = 15000
+
         fun bind(product: ProductDto.Data) {
             binding.tvProductTitle.text = product.pdName
-            binding.tvProductPrice.text = "$${product.pdPrice}"
+
+            val priceInIDR = product.pdPrice?.times(USD_TO_IDR)
+            val formattedPrice = NumberFormat.getCurrencyInstance(Locale("in", "ID")).apply { maximumFractionDigits = 0 }.format(priceInIDR)
+            binding.tvProductPrice.text = formattedPrice
+
             Glide.with(itemView.context)
                 .load(product.pdImageUrl)
                 .into(binding.ivProductImage)

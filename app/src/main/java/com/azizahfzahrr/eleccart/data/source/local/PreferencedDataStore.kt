@@ -15,9 +15,20 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "us
 
 object DataStoreConstant {
     val IS_LOGIN = booleanPreferencesKey("IS_LOGIN")
+    val IS_ONBOARD = booleanPreferencesKey("IS_ONBOARD")
 }
 
-class PreferencedDataStore private constructor(private val dataStore: DataStore<Preferences>) {
+class PreferencedDataStore constructor(private val dataStore: DataStore<Preferences>) {
+
+    suspend fun setOnboardStatus(onboarded: Boolean) {
+        dataStore.edit { preferences -> preferences[DataStoreConstant.IS_ONBOARD] = onboarded }
+    }
+
+    suspend fun getUserOnboard(): Boolean {
+        return withContext(Dispatchers.IO) {
+            dataStore.data.first()[DataStoreConstant.IS_ONBOARD] ?: false
+        }
+    }
 
     suspend fun setUserLoggedIn(isLoggedIn: Boolean) {
         dataStore.edit { preferences -> preferences[DataStoreConstant.IS_LOGIN] = isLoggedIn }
@@ -26,7 +37,10 @@ class PreferencedDataStore private constructor(private val dataStore: DataStore<
 
     suspend fun isUserLoggedIn(): Boolean {
         return withContext(Dispatchers.IO) {
-            dataStore.data.first()[DataStoreConstant.IS_LOGIN] ?: false
+            val preferences = dataStore.data.first()
+            val isLoggedIn = preferences[DataStoreConstant.IS_LOGIN] ?: false
+            Log.d("PreferenceDataStore", "isUserLoggedIn: $isLoggedIn")
+            isLoggedIn
         }
     }
 

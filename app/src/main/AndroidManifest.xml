@@ -40,7 +40,7 @@
             android:name=".presentation.view.payment.PaymentActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".presentation.view.login.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.view.detailproduct.DetailProductActivity"
@@ -60,7 +60,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.view.mainactivity.MainActivity"
             android:exported="false" />
 
         <meta-data

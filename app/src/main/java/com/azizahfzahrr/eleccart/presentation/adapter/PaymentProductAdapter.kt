@@ -6,12 +6,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.azizahfzahrr.eleccart.data.model.Item
-import com.azizahfzahrr.eleccart.databinding.ItemPaymentProductBinding
 import com.azizahfzahrr.eleccart.databinding.ItemPaymentProductOrderDetailBinding
 import com.bumptech.glide.Glide
+import java.text.NumberFormat
+import java.util.Locale
 
 class PaymentProductAdapter :
     ListAdapter<Item, PaymentProductAdapter.PaymentProductViewHolder>(PaymentProductDiffCallback()) {
+
+    private fun formatRupiah(amount: Int): String {
+        val localeID = Locale("in", "ID")
+        val formatter = NumberFormat.getNumberInstance(localeID)
+        return formatter.format(amount)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PaymentProductViewHolder {
         val binding = ItemPaymentProductOrderDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -28,7 +35,10 @@ class PaymentProductAdapter :
 
         fun bind(item: Item) {
             binding.tvNameProductPaymentOrderDetail.text = item.name
-            binding.tvPriceProductPaymentOrderDetail.text = "$${item.price}"
+
+            val formattedPrice = item.price?.let { "Rp${formatRupiah(it)}" } ?: "Rp0"
+            binding.tvPriceProductPaymentOrderDetail.text = formattedPrice
+
             binding.tvAmountQtyPayment.text = item.quantity.toString()
             Glide.with(binding.root.context)
                 .load(item.url)

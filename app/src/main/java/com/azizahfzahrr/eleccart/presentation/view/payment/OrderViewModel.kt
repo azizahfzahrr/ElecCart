@@ -1,10 +1,9 @@
-package com.azizahfzahrr.eleccart.presentation.view.order
+package com.azizahfzahrr.eleccart.presentation.view.payment
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.azizahfzahrr.eleccart.data.model.Order
-import com.azizahfzahrr.eleccart.data.model.OrderDto
 import com.azizahfzahrr.eleccart.data.repository.OrderRepository
 import com.azizahfzahrr.eleccart.domain.model.OrderState
 import dagger.hilt.android.lifecycle.HiltViewModel
