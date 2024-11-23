@@ -6,6 +6,7 @@ import com.azizahfzahrr.eleccart.data.model.MyOrderDetailResponse
 import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.model.ProductRequest
 import com.azizahfzahrr.eleccart.domain.model.MyOrderResponse
+import com.google.firebase.auth.FirebaseUser
 
 import javax.inject.Inject
 
@@ -16,7 +17,7 @@ interface RemoteDataSource {
     suspend fun fetchProductsByCategory(category: String): CategoryDto
     suspend fun fetchAllCategories(): List<String>
     suspend fun postProduct(productRequest: ProductRequest)
-    suspend fun getAllOrdersTransaction(): MyOrderResponse
+    suspend fun getAllOrdersTransaction(email: String): MyOrderResponse
     suspend fun getOrderTransactionById(orderId: String): MyOrderDetailResponse
 }
 
@@ -53,8 +54,8 @@ class RemoteDataSourceImpl @Inject constructor(
         apiService.addProduct(productRequest)
     }
 
-    override suspend fun getAllOrdersTransaction(): MyOrderResponse {
-        return apiService.getAllOrdersTransaction()
+    override suspend fun getAllOrdersTransaction(email: String): MyOrderResponse {
+        return apiService.getAllOrdersTransaction(email)
     }
 
     override suspend fun getOrderTransactionById(orderId: String): MyOrderDetailResponse {

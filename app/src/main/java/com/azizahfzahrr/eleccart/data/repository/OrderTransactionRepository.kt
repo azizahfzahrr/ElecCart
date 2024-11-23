@@ -8,7 +8,7 @@ import com.azizahfzahrr.eleccart.domain.model.OrderTransactionDetail
 import javax.inject.Inject
 
 interface OrderTransactionRepository {
-    suspend fun getAllOrderTransaction(): List<MyOrderResponse.Data?>
+    suspend fun getAllOrderTransaction(email: String): List<MyOrderResponse.Data?>
     suspend fun getOrderTransactionById(orderId: String): MyOrderDetailResponse.Data?
 }
 
@@ -16,8 +16,8 @@ class OrderTransactionRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ): OrderTransactionRepository {
 
-    override suspend fun getAllOrderTransaction(): List<MyOrderResponse.Data?> {
-        val response = remoteDataSource.getAllOrdersTransaction()
+    override suspend fun getAllOrderTransaction(email: String): List<MyOrderResponse.Data?> {
+        val response = remoteDataSource.getAllOrdersTransaction(email)
 
         return response.data ?: emptyList()
     }

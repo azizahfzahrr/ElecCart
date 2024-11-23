@@ -19,6 +19,7 @@ import com.azizahfzahrr.eleccart.domain.model.OrderState
 import com.azizahfzahrr.eleccart.presentation.adapter.PaymentProductAdapter
 import com.azizahfzahrr.eleccart.presentation.view.address.ChooseAddressActivity
 import com.azizahfzahrr.eleccart.presentation.view.cart.CartViewModel
+import com.azizahfzahrr.eleccart.presentation.view.profile.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
@@ -30,6 +31,7 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var paymentProductAdapter: PaymentProductAdapter
     private val viewModel: CartViewModel by viewModels()
     private val orderViewModel: OrderViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
     private var selectedItems: List<Item> = emptyList()
     private var totalAmount = 0
     private var totalItems = 0
@@ -44,6 +46,11 @@ class PaymentActivity : AppCompatActivity() {
 
         binding = ActivityPaymentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        var email = ""
+        getCurrentUserEmail {
+            email = it
+        }
 
         binding.ivArrowRightPayment.setOnClickListener {
             val intent = Intent(this@PaymentActivity, ChooseAddressActivity::class.java)
@@ -71,7 +78,7 @@ class PaymentActivity : AppCompatActivity() {
             orderViewModel.createOrder(
                 Order(
                     amount = totalAmount,
-                    email = "test@gmail.com",
+                    email = email,
                     items = selectedItems
                 )
             )
@@ -128,6 +135,12 @@ class PaymentActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CHOOSE_ADDRESS && resultCode == RESULT_OK) {
             val selectedAddress = data?.getParcelableExtra<AddressEntity>("selected_address")
             selectedAddress?.let { updateAddressDetails(it) }
+        }
+    }
+
+    private fun getCurrentUserEmail(callback: (String) -> Unit) {
+        profileViewModel.user.observe(this) { user ->
+            callback(user.email)
         }
     }
 

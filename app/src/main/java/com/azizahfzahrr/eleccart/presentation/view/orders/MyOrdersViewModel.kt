@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.azizahfzahrr.eleccart.domain.model.MyOrderState
 import com.azizahfzahrr.eleccart.domain.model.OrderTransactionState
 import com.azizahfzahrr.eleccart.domain.usecase.OrderTransactionUseCase
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,17 +14,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyOrdersViewModel @Inject constructor(
-    private val orderTransactionUseCase: OrderTransactionUseCase
+    private val orderTransactionUseCase: OrderTransactionUseCase,
 ): ViewModel(){
 
     private val _orderTransactionState = MutableStateFlow<MyOrderState>(MyOrderState.Loading)
     val orderTransactionState: StateFlow<MyOrderState> = _orderTransactionState
 
-    fun loadAllOrderTransaction() {
+    fun loadAllOrderTransaction(email: String) {
         _orderTransactionState.value = MyOrderState.Loading
         viewModelScope.launch {
             try {
-                val transactionOrder = orderTransactionUseCase()
+                val transactionOrder = orderTransactionUseCase(email)
                 _orderTransactionState.value = if (transactionOrder.isNotEmpty()) {
                     MyOrderState.Success(transactionOrder)
                 } else {

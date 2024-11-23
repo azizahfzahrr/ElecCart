@@ -21,6 +21,7 @@ import com.azizahfzahrr.eleccart.domain.model.OrderTransaction
 import com.azizahfzahrr.eleccart.domain.model.OrderTransactionDetail
 import com.azizahfzahrr.eleccart.domain.model.OrderTransactionState
 import com.azizahfzahrr.eleccart.presentation.listener.ItemOrdersListener
+import com.azizahfzahrr.eleccart.presentation.view.profile.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -29,6 +30,7 @@ class MyOrdersActivity : AppCompatActivity(), ItemOrdersListener {
 
     private lateinit var binding: ActivityMyOrdersBinding
     private val viewModel: MyOrdersViewModel by viewModels()
+    private val userViewModel: ProfileViewModel by viewModels()
     private lateinit var adapter: OrderTransactionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +41,9 @@ class MyOrdersActivity : AppCompatActivity(), ItemOrdersListener {
         setupToolbar()
         setupRecyclerView()
         observeViewModel()
-        viewModel.loadAllOrderTransaction()
+        getCurrentUserEmail { email ->
+            viewModel.loadAllOrderTransaction(email)
+        }
     }
 
     private fun setupToolbar() {
@@ -103,6 +107,13 @@ class MyOrdersActivity : AppCompatActivity(), ItemOrdersListener {
 
         Log.d("Message", message)
     }
+
+    private fun getCurrentUserEmail(callback: (String) -> Unit) {
+        userViewModel.user.observe(this) { user ->
+            callback(user.email)
+        }
+    }
+
 
     override fun onClick(id: String) {
         Log.d("OrderTransactionID", id)

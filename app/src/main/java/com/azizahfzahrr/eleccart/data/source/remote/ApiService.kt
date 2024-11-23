@@ -59,7 +59,9 @@ interface ApiService {
     suspend fun addProduct(@Body productRequest: ProductRequest)
 
     @GET("orders")
-    suspend fun getAllOrdersTransaction(): MyOrderResponse
+    suspend fun getAllOrdersTransaction(
+        @Query("search") email: String
+    ): MyOrderResponse
 
     @GET("order/{id}")
     suspend fun getOrderTransactionById(

@@ -14,6 +14,9 @@ import com.azizahfzahrr.eleccart.R
 import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.presentation.listener.ItemWishlistListener
 import com.azizahfzahrr.eleccart.presentation.view.detailproduct.DetailProductActivity
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 class WishlistAdapter(
     private val wishlistViewModel: WishlistViewModel,
@@ -21,7 +24,7 @@ class WishlistAdapter(
 ) : RecyclerView.Adapter<WishlistAdapter.WishlistViewHolder>() {
 
     var wishlistProducts: List<WishlistEntity> = listOf()
-        set(value){
+        set(value) {
             field = value
             notifyDataSetChanged()
         }
@@ -41,18 +44,12 @@ class WishlistAdapter(
     inner class WishlistViewHolder(private val binding: ItemWishlistProductBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(product: WishlistEntity) {
-            binding.tvAmountProductWishlist.text = "$${product.price}"
+            binding.tvAmountProductWishlist.text = formatPrice(product.price?.toDouble() ?: 0.0)
             binding.tvTitleProductWishlist.text = product.title
 
             Glide.with(binding.ivProductCart.context)
                 .load(product.image)
                 .into(binding.ivProductCart)
-
-            binding.root.setOnClickListener {
-                val context = itemView.context
-                val intent = Intent(context, DetailProductActivity::class.java)
-
-            }
 
             binding.cardViewCartWishlist.setOnClickListener {
                 itemWishlistListener.onAddToCartClicked(product)
@@ -61,6 +58,13 @@ class WishlistAdapter(
             binding.cardViewDeleteWishlist.setOnClickListener {
                 itemWishlistListener.onDeleteFromWishlistClicked(product.productId)
             }
+        }
+
+        private fun formatPrice(price: Double): String {
+            val symbols = DecimalFormatSymbols(Locale("id", "ID"))
+            symbols.groupingSeparator = '.'
+            val format = DecimalFormat("#,###", symbols)
+            return "Rp${format.format(price)}"
         }
     }
 }

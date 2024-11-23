@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -80,21 +81,12 @@ class WishlistFragment : Fragment(), ItemWishlistListener {
     override fun onAddToCartClicked(product: WishlistEntity) {
         wishlistViewModel.addProductToCart(product)
 
-        val cartFragment = CartFragment()
-        val args = Bundle().apply {
-            putString("productId", product.productId)
-            putString("title", product.title)
-            putString("price", product.price.toString())
-            putString("image", product.image)
-        }
-        cartFragment.arguments = args
-
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, cartFragment)
-            .addToBackStack(null)
-            .commit()
+        Toast.makeText(
+            requireContext(),
+            "${product.title} berhasil ditambahkan ke keranjang!",
+            Toast.LENGTH_SHORT
+        ).show()
     }
-
 
     override fun onDeleteFromWishlistClicked(productId: String) {
         wishlistViewModel.removeProductFromWishlist(productId)

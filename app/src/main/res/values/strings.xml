@@ -94,4 +94,6 @@
     <string name="number_total_transaction">000</string>
     <string name="amount_product_wishlist">$349.99</string>
     <string name="product_wishlist">Apple Airpods Max</string>
+    <string name="time_payment">Time Payment</string>
+    <string name="_00_00">00:00</string>
 </resources>

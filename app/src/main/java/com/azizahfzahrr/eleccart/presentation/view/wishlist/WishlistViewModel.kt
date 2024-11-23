@@ -1,12 +1,15 @@
 package com.azizahfzahrr.eleccart.presentation.view.wishlist
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.azizahfzahrr.eleccart.data.local.entity.CartItem
+import com.azizahfzahrr.eleccart.data.model.ProductDto
 import com.azizahfzahrr.eleccart.data.repository.CartRepository
+import com.azizahfzahrr.eleccart.data.repository.ProductRepository
 import com.azizahfzahrr.eleccart.data.repository.WishlistRepository
 import com.azizahfzahrr.eleccart.data.source.local.WishlistEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class WishlistViewModel @Inject constructor(
     private val wishlistRepository: WishlistRepository,
-    private val cartRepository: CartRepository
+    private val cartRepository: CartRepository,
+    private val productRepository: ProductRepository
 ) : ViewModel() {
 
     private val _wishlistProducts = MutableLiveData<List<WishlistEntity>>()
@@ -31,7 +35,6 @@ class WishlistViewModel @Inject constructor(
             }
             cachedWishlist = products
             _wishlistProducts.postValue(products)
-
         }
     }
 
@@ -67,9 +70,9 @@ class WishlistViewModel @Inject constructor(
             val productToRemove = cachedWishlist.find { it.productId == productId }
             if (productToRemove != null) {
                 wishlistRepository.removeProductFromWishlist(productToRemove)
-                val updateList = cachedWishlist.filter { it.productId != productId }
-                _wishlistProducts.value = updateList
-                cachedWishlist = updateList
+                val updatedList = cachedWishlist.filter { it.productId != productId }
+                _wishlistProducts.value = updatedList
+                cachedWishlist = updatedList
             }
         }
     }

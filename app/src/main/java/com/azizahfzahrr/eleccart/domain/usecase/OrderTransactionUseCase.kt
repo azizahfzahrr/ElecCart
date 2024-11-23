@@ -9,8 +9,8 @@ import javax.inject.Inject
 class OrderTransactionUseCase @Inject constructor(
     private val orderTransactionRepository: OrderTransactionRepository
 ) {
-    suspend operator fun invoke(): List<MyOrderResponse.Data?>{
-        return orderTransactionRepository.getAllOrderTransaction()
+    suspend operator fun invoke(email: String): List<MyOrderResponse.Data?>{
+        return orderTransactionRepository.getAllOrderTransaction(email)
     }
     suspend fun getOrderDetailsById(orderId: String): MyOrderDetailResponse.Data? {
         return orderTransactionRepository.getOrderTransactionById(orderId)
