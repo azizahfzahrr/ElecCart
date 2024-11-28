@@ -1,6 +1,6 @@
 # ElecCart 
 
-![tech stack](https://github.com/user-attachments/assets/83041abb-d7e4-4d00-9e6e-40a64b9ebbdc)
+![eleccart opening](https://github.com/user-attachments/assets/60e5d709-449b-401e-8ed1-2fc547d22f66)
 
 ElecCart is your go-to app for exploring and purchasing a wide range of electronic products, from the latest smartphones and laptops to home appliances and accessories. Shop effortlessly with a secure transaction experience, complete with real-time payment status updates. ElecCart brings convenience and cutting-edge technology to your fingertips.
 
@@ -21,7 +21,7 @@ ElecCart is your go-to app for exploring and purchasing a wide range of electron
 
 ## Tech Stack
 
-![eleccart tech stack](https://github.com/user-attachments/assets/87f6a447-ff2b-4b54-8400-99a9f8958712)
+![tech stack](https://github.com/user-attachments/assets/83041abb-d7e4-4d00-9e6e-40a64b9ebbdc)
 
 
 ## Features 
