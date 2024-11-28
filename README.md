@@ -1,6 +1,7 @@
 # ElecCart 
 
-![eleccart opening](https://github.com/user-attachments/assets/60e5d709-449b-401e-8ed1-2fc547d22f66)
+![image eleccart](https://github.com/user-attachments/assets/e09ce982-ec5f-462e-b585-c6640fd38617)
+
 
 ElecCart is your go-to app for exploring and purchasing a wide range of electronic products, from the latest smartphones and laptops to home appliances and accessories. Shop effortlessly with a secure transaction experience, complete with real-time payment status updates. ElecCart brings convenience and cutting-edge technology to your fingertips.
 
@@ -84,27 +85,24 @@ This project utilizes Dagger Hilt for dependency injection. Dependency injection
 
 
 ## Prerequisites to Run This Project
-
 To build and run the project locally, ensure you have the following installed:
 
-- Java 8
-- Gradle 7.8
-- Android Studio
-- *Java Development Kit (JDK)* 11 atau lebih baru
-- Koneksi internet yang baik untuk mengunduh dependensi proyek
+- *Java 8*
+- *Gradle 7.8*
+- *Android Studio*
 
-### Clone the Project
-```bash
+*Clone Project*
+bash
 gh repo clone azizahfzahrr/ElecCart
 
-``` bash
+
+*Build the Debug APK*
+bash
 ./gradlew assembleDebug
 
-### Important Notes 
 
+*Important Notes*
 - Using Android Studio to build the project is highly encouraged for an optimal development experience. Before creating the APK, ensure you have configured your Firebase project and included the `google-services.json` file, as Firebase integration is essential for this project. Additionally, remember to set up the SHA-1 key for proper configuration.
 
-
 ## Installation
-
-The minimum device requirements to run this application are Android 10 (API 29)
+The minimum device requirements to run this application are Android 10 (API 29).
