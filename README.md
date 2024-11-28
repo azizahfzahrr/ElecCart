@@ -13,7 +13,7 @@ ElecCart is your go-to app for exploring and purchasing a wide range of electron
 - [Tech Stack](#tech-stack)
 - [Features](#features)
 - [Library](#library)
-- [Project Modules](#project-modules)
+- [Project Layers](#project-layers)
 - [Design Pattern](#design-pattern)
 - [Dependency Injection](#dependency-injection)
 
