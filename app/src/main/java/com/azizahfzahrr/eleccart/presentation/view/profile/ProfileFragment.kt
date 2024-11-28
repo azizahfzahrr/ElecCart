@@ -8,20 +8,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.azizahfzahrr.eleccart.presentation.view.login.LoginActivity
 import com.azizahfzahrr.eleccart.R
+import com.azizahfzahrr.eleccart.data.source.local.PreferencedDataStore
 import com.azizahfzahrr.eleccart.databinding.FragmentProfileBinding
 import com.azizahfzahrr.eleccart.presentation.view.address.ChooseAddressActivity
 import com.azizahfzahrr.eleccart.presentation.view.orders.MyOrdersActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ProfileViewModel by viewModels()
+
+    @Inject
+    lateinit var preferenceDataStore: PreferencedDataStore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,12 +109,17 @@ class ProfileFragment : Fragment() {
 
     private fun logoutUser() {
         clearUserData()
-        startActivity(Intent(requireContext(), LoginActivity::class.java))
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        startActivity(intent)
         requireActivity().finish()
     }
 
     private fun clearUserData() {
         FirebaseAuth.getInstance().signOut()
+
+        lifecycleScope.launch {
+            preferenceDataStore.setUserLoggedIn(false)
+        }
     }
 
     override fun onDestroyView() {

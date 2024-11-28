@@ -32,7 +32,8 @@ class SplashScreen : AppCompatActivity() {
         binding.ivSplashScreen.setImageResource(R.drawable.elec_cart)
 
         lifecycleScope.launch {
-            delay(1500L)
+            delay(3000L)
+
             val isLoggedIn = preferenceDataStore.isUserLoggedIn()
             val isOnboard = preferenceDataStore.getUserOnboard()
 

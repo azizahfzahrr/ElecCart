@@ -1,17 +1,3 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
-
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-
 # Retrofit and OkHttp
 -keep class retrofit2.** { *; }
 -keep interface retrofit2.** { *; }
@@ -43,20 +29,30 @@
 -keepclassmembers class * extends androidx.room.RoomDatabase {
     public static **_Impl();
 }
+-dontwarn androidx.room.**
+-dontwarn androidx.sqlite.db.**
 
 # Kotlin Coroutines
 -dontwarn kotlinx.coroutines.**
 -keep class kotlinx.coroutines.** { *; }
 
 # Google Sign-In and Firebase
--keep class androidx.credentials.** { *; }
--keep class com.google.android.libraries.identity.googleid.** { *; }
 -keep class com.google.android.gms.** { *; }
 -keep class com.google.firebase.** { *; }
+-keep class androidx.credentials.** { *; }
 -keep class com.google.android.libraries.identity.** { *; }
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable { *; }
+-keep public enum com.google.android.gms.common.annotation.KeepName { *; }
+-keep class com.google.android.gms.common.util.DynamiteApi { *; }
+-keep class com.google.android.gms.measurement.** { *; }
+-keepattributes Signature
 
-# LoginActivity
--keep class com.azizahfzahrr.eleccart.presentation.view.login.LoginActivity
+# Firebase Crashlytics
+-keep class com.google.firebase.crashlytics.** { *; }
+-keep class com.google.firebase.components.ComponentRegistrar { *; }
+-keepclassmembers class com.google.firebase.crashlytics.** { *; }
+-keepattributes SourceFile,LineNumberTable
+-dontwarn com.google.firebase.crashlytics.**
 
 # Annotation
 -keepattributes *Annotation*
@@ -66,14 +62,13 @@
     public static final android.os.Parcelable$Creator *;
 }
 
-# Android Classes
+# Android Framework Classes
 -keep public class * extends android.app.Application { *; }
 -keep public class * extends android.app.Activity { *; }
 -keep public class * extends android.app.Service { *; }
--keep public class * extends android.app.Fragment { *; }
--keep public class * extends androidx.fragment.app.Fragment { *; }
 -keep public class * extends android.content.BroadcastReceiver { *; }
 -keep public class * extends android.content.ContentProvider { *; }
+-keep public class * extends androidx.fragment.app.Fragment { *; }
 
 # Hilt and Dagger
 -keep class dagger.hilt.** { *; }
@@ -81,7 +76,6 @@
 -dontwarn dagger.hilt.**
 -dontwarn javax.inject.**
 -dontwarn dagger.internal.**
-
 -keep @dagger.hilt.InstallIn class * { *; }
 -keep @dagger.hilt.android.HiltAndroidApp class * { *; }
 -keepclassmembers class * {
@@ -89,31 +83,19 @@
     @dagger.Binds <methods>;
 }
 
-# Preserve line number information for debugging stack traces
-# Uncomment if debugging stack trace information is needed
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
-
 # Custom Models (Domain and Data Layers)
 -keep class com.azizahfzahrr.eleccart.data.model.** { *; }
 -keep class com.azizahfzahrr.eleccart.domain.model.** { *; }
 
-# General Keep Rules for Project Classes
--keep class ** {
-    <init>(...);
-}
+# General Keep Rules
 -keep class **.R$* { *; }
 -keep class **.R { *; }
 -keepclassmembers class ** {
     *;
 }
-
-# Additional Rules for Room
--dontwarn androidx.sqlite.db.**
--dontwarn androidx.room.**
+-keep class ** {
+    <init>(...);
+}
 
 # Prevent Obfuscation of Methods Called via Reflection
 -keepnames class ** {

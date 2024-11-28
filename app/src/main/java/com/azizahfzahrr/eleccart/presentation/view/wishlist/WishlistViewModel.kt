@@ -56,7 +56,7 @@ class WishlistViewModel @Inject constructor(
         viewModelScope.launch {
             val cartItem = CartItem(
                 productId = product.productId,
-                title = product.title,
+                title = product.title?.take(20),
                 price = product.price,
                 image = product.image,
                 quantity = 1

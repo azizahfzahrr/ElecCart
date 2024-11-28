@@ -5,17 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="@color/white"
     tools:context=".presentation.view.profile.ProfileFragment">
 
     <TextView
         android:id="@+id/tv_my_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_bold"
+        android:fontFamily="@font/poppins_semibold"
         android:text="My Profile"
         android:layout_marginTop="16dp"
         android:textColor="@color/black_200"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/card_profile"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="@color/white"
     tools:context=".presentation.view.login.LoginActivity">
 
     <TextView
@@ -38,6 +39,7 @@
         android:layout_height="60dp"
         android:layout_marginTop="100dp"
         app:cardCornerRadius="8dp"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_title_login"
         app:layout_constraintStart_toStartOf="@+id/tv_title_login"

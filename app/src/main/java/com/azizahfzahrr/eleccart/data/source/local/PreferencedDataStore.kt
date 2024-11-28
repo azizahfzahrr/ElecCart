@@ -7,9 +7,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
 
@@ -20,28 +20,34 @@ object DataStoreConstant {
 
 class PreferencedDataStore constructor(private val dataStore: DataStore<Preferences>) {
 
+    val userOnboardStatus: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[DataStoreConstant.IS_ONBOARD] ?: false
+    }
+
+    val userLoginStatus: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[DataStoreConstant.IS_LOGIN] ?: false
+    }
+
     suspend fun setOnboardStatus(onboarded: Boolean) {
-        dataStore.edit { preferences -> preferences[DataStoreConstant.IS_ONBOARD] = onboarded }
+        dataStore.edit { preferences ->
+            preferences[DataStoreConstant.IS_ONBOARD] = onboarded
+        }
+        Log.d("PreferencedDataStore", "Onboard status set to: $onboarded")
     }
 
     suspend fun getUserOnboard(): Boolean {
-        return withContext(Dispatchers.IO) {
-            dataStore.data.first()[DataStoreConstant.IS_ONBOARD] ?: false
-        }
+        return userOnboardStatus.firstOrNull() ?: false
     }
 
     suspend fun setUserLoggedIn(isLoggedIn: Boolean) {
-        dataStore.edit { preferences -> preferences[DataStoreConstant.IS_LOGIN] = isLoggedIn }
-        Log.d("PreferenceDataStore", "User logged in: $isLoggedIn")
+        dataStore.edit { preferences ->
+            preferences[DataStoreConstant.IS_LOGIN] = isLoggedIn
+        }
+        Log.d("PreferencedDataStore", "Login status set to: $isLoggedIn")
     }
 
     suspend fun isUserLoggedIn(): Boolean {
-        return withContext(Dispatchers.IO) {
-            val preferences = dataStore.data.first()
-            val isLoggedIn = preferences[DataStoreConstant.IS_LOGIN] ?: false
-            Log.d("PreferenceDataStore", "isUserLoggedIn: $isLoggedIn")
-            isLoggedIn
-        }
+        return userLoginStatus.firstOrNull() ?: false
     }
 
     companion object {

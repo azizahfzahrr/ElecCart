@@ -47,12 +47,14 @@ class PaymentActivity : AppCompatActivity() {
         binding = ActivityPaymentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.btnContinuePayment.isEnabled = binding.tvFullAddressPayment.text.isNotEmpty()
+
         var email = ""
         getCurrentUserEmail {
             email = it
         }
 
-        binding.ivArrowRightPayment.setOnClickListener {
+        binding.clickableAddress.setOnClickListener {
             val intent = Intent(this@PaymentActivity, ChooseAddressActivity::class.java)
             startActivityForResult(intent, REQUEST_CHOOSE_ADDRESS)
         }
@@ -75,6 +77,7 @@ class PaymentActivity : AppCompatActivity() {
         setupRecyclerView()
 
         binding.btnContinuePayment.setOnClickListener {
+            binding.progressBarPayment.visibility = View.VISIBLE
             orderViewModel.createOrder(
                 Order(
                     amount = totalAmount,
@@ -91,6 +94,7 @@ class PaymentActivity : AppCompatActivity() {
                         Toast.makeText(this@PaymentActivity, "Loading", Toast.LENGTH_SHORT).show()
                     }
                     is OrderState.Success -> {
+                        binding.progressBarPayment.visibility = View.GONE
                         Toast.makeText(
                             this@PaymentActivity,
                             "Order Created Successfully",
@@ -112,6 +116,7 @@ class PaymentActivity : AppCompatActivity() {
                         viewModel.updatePaymentStatus(true)
                     }
                     is OrderState.SuccessPayment -> {
+                        binding.progressBarPayment.visibility = View.GONE
                         val intent = Intent(this@PaymentActivity, PaymentWebViewActivity::class.java).apply {
                             putExtra("url_payment", orderState.paymentUrl)
                             putExtra("product", ArrayList(selectedItems))
@@ -119,6 +124,7 @@ class PaymentActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                     is OrderState.Error -> {
+                        binding.progressBarPayment.visibility = View.GONE
                         Toast.makeText(
                             this@PaymentActivity,
                             "Error: ${orderState.message}",
@@ -204,5 +210,10 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun calculateTotalItems(items: List<Item>): Int {
         return items.sumOf { it.quantity }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.btnContinuePayment.isEnabled = binding.tvFullAddressPayment.text.isNotEmpty()
     }
 }

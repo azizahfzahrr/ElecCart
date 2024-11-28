@@ -73,6 +73,7 @@
                 android:layout_height="32dp"
                 android:layout_margin="4dp"
                 android:text="@string/all"
+                android:checked="true"
                 android:textSize="12sp"
                 app:chipIconVisible="false" />
 

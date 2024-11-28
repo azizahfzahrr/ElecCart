@@ -77,13 +77,9 @@ class HomeFragment : Fragment() {
         )
 
         chips.forEach { (chip, category) ->
-            if (chip.isChecked) {
+            println("saya == $category, ${chip.isChecked}")
+            if (category.uppercase() == "ALL") {
                 setChipSelectedStyle(chip)
-                if (category.uppercase() == "ALL") {
-                    viewModel.loadAllProducts()
-                } else {
-                    viewModel.loadProductsByCategory(category.uppercase())
-                }
             } else {
                 setChipDefaultStyle(chip)
             }
@@ -185,7 +181,7 @@ class HomeFragment : Fragment() {
                         pdId = product.pdId,
                         pdName = product.pdName,
                         pdImageUrl = product.pdImageUrl,
-                        pdPrice = product.pdPrice?.times(USD_TO_IDR),
+                        pdPrice = product.pdPrice,
                         pdDescription = product.pdDescription,
                         pdQuantity = product.pdQuantity,
                         totalAverageRating = product.totalAverageRating,
