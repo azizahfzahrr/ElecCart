@@ -92,13 +92,13 @@ To build and run the project locally, ensure you have the following installed:
 - *Gradle 7.8*
 - *Android Studio*
 
-*Clone Project*
+### Clone Project
 ```bash
 gh repo clone azizahfzahrr/ElecCart
 
 
 *Build the Debug APK*
-```bash
+bash
 ./gradlew assembleDebug
 
 
