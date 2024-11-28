@@ -20,6 +20,7 @@ ElecCart is your go-to app for exploring and purchasing a wide range of electron
 
 ## Demo 
 
+https://github.com/user-attachments/assets/6cba0e43-478b-44f6-8484-3e11d08241d3
 
 ## Tech Stack
 
