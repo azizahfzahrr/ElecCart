@@ -90,20 +90,16 @@ To build and run the project locally, ensure you have the following installed:
 
 - *Java 8*
 - *Gradle 7.8*
-- *Android Studio*
+- *Java Development Kit (JDK)*
 
-### Clone Project
-```bash
-gh repo clone azizahfzahrr/ElecCart
-
-
-*Build the Debug APK*
-bash
-./gradlew assembleDebug
-
+## Installation
+Follow these steps to run this project on your local machine:
+- Clone repositori ini:
+   ```bash
+   git clone (https://github.com/azizahfzahrr/ElecCart.git)
+- Open the project in Android Studio.
+- Sync the project with Gradle files.
+- Run the project on an emulator or a physical device.
 
 *Important Notes*
 - Using Android Studio to build the project is highly encouraged for an optimal development experience. Before creating the APK, ensure you have configured your Firebase project and included the `google-services.json` file, as Firebase integration is essential for this project. Additionally, remember to set up the SHA-1 key for proper configuration.
-
-## Installation
-The minimum device requirements to run this application are Android 10 (API 29).
