@@ -12,6 +12,7 @@ ElecCart is your go-to app for exploring and purchasing a wide range of electron
 - [Demo](#demo)
 - [Tech Stack](#tech-stack)
 - [Features](#features)
+- [Library](#library)
 - [Project Modules](#project-modules)
 - [Design Pattern](#design-pattern)
 - [Dependency Injection](#dependency-injection)
@@ -92,12 +93,12 @@ To build and run the project locally, ensure you have the following installed:
 - *Android Studio*
 
 *Clone Project*
-bash
+```bash
 gh repo clone azizahfzahrr/ElecCart
 
 
 *Build the Debug APK*
-bash
+```bash
 ./gradlew assembleDebug
 
 
