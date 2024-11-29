@@ -20,6 +20,7 @@ ElecCart is your go-to app for exploring and purchasing a wide range of electron
 
 ## Demo 
 
+Please click on the image below to see the demo video
 [![Watch the video](https://github.com/user-attachments/assets/2262f60d-f79f-4294-9288-781897aaa963)](https://youtu.be/cQKazhXlAyo)
 
 
