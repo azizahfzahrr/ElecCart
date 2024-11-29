@@ -91,9 +91,9 @@ This project utilizes Dagger Hilt for dependency injection. Dependency injection
 ## Prerequisites to Run This Project
 To build and run the project locally, ensure you have the following installed:
 
-- *Java 8*
-- *Gradle 7.8*
-- *Java Development Kit (JDK)*
+- Java 8
+- Gradle 7.8
+- Java Development Kit (JDK)
 
 ## Installation
 Follow these steps to run this project on your local machine:
@@ -104,5 +104,5 @@ Follow these steps to run this project on your local machine:
 - Sync the project with Gradle files.
 - Run the project on an emulator or a physical device.
 
-*Important Notes*
+Important Notes
 - Using Android Studio to build the project is highly encouraged for an optimal development experience. Before creating the APK, ensure you have configured your Firebase project and included the `google-services.json` file, as Firebase integration is essential for this project. Additionally, remember to set up the SHA-1 key for proper configuration.
